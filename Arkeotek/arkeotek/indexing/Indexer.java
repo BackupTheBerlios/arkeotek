@@ -23,6 +23,7 @@ import arkeotek.ontology.Ontology;
  * @author Czerny Jean
  *
  */
+// modif commit
 public abstract class Indexer
 {
 	/**
