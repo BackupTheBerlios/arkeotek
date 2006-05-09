@@ -24,7 +24,7 @@ public interface IService
 	 * @param object object to save
 	 * @throws Exception 
 	 */
-	public void save(LinkableElement object) throws Exception;
+	//public void save(LinkableElement object) throws Exception;
 	
 	/**
 	 * Save objects in parameter into the persistent layer

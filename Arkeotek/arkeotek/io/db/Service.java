@@ -66,6 +66,8 @@ public class Service implements IService
 	 * @throws Exception 
 	 * @see arkeotek.io.IService#save(arkeotek.ontology.LinkableElement)
 	 */
+	// jamais utilisé
+	/*
 	public void save(LinkableElement object) throws Exception
 	{
 		System.out.println("deja sauvé");
@@ -130,7 +132,8 @@ public class Service implements IService
 			transaction.commit();
 			object.setSaved();
 	}
-
+	*/
+	
 	private void saveLinks(DTO dto) throws SQLException
 	{
 		if (dto.getElement() instanceof Concept)
@@ -253,12 +256,14 @@ public class Service implements IService
 			
 			for (LinkableElement object : list)
 			{
-				System.out.println(object.getClass());
+				// on crée une dto pour l'objet courant (transaction + objet)
 				dto = new DTO(transaction, object);
 				// links with ontology
 				saveLinks(dto);
+				// on met la variable dirty à true
 				object.setSaved();
 			}
+			// on commite
 			transaction.commit();
 	}
 
