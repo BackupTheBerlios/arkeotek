@@ -1,0 +1,13 @@
+rule.depth=1
+rule.type=arkeotek.indexing.scd.SCDRule
+
+rule.target.category=arkeotek.ontology.DocumentPart
+rule.target.number=1
+
+rule.condition.action=arkeotek.indexing.scd.SCDAction
+rule.condition.type=contains
+rule.condition.value=PROPOSITION
+rule.condition.target_number=
+rule.condition.target.rule=arkeotek.indexing.
+
+rule.condition.target.type=arkeotek.ontology.DocumentPart
