@@ -80,7 +80,6 @@ public class Ontology extends LinkableElement {
 			this.importProperties();
 
 			this.elements = this.dataAccessor.retrieveOntology();
-
 			for (int ctg : this.elements.keySet())
 				Collections.sort(this.elements.get(ctg));
 			

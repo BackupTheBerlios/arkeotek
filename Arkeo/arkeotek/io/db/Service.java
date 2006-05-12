@@ -327,6 +327,10 @@ public class Service implements IService
 			
 			// retrieves links between concepts
 			ArrayList<ArrayList<Object>> concept_conceptRelation = IOPerformer.retrieveLinks(transaction, "Concept", "Concept");
+			if (concept_conceptRelation.size()!=0)
+			{
+				this.owner.setEnBase(true);
+			}
 			for (ArrayList<Object> array : concept_conceptRelation)
 			{
 				Relation rel = (Relation) relations.get(array.get(2));
