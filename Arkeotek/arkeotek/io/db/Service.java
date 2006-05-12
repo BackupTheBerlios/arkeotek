@@ -5,10 +5,21 @@
  */
 package arkeotek.io.db;
 
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import ontologyEditor.ApplicationManager;
 
 import arkeotek.io.IService;
 import arkeotek.ontology.Concept;
@@ -138,15 +149,15 @@ public class Service implements IService
 	{
 		if (dto.getElement() instanceof Concept)
 		{
-			IOPerformer.updateConceptLinks(dto);
+			IOPerformer.updateConceptLinks(dto,this.owner.isEnBase());
 		}
 		else if (dto.getElement() instanceof Lemma)
 		{
-			IOPerformer.updateTermLinks(dto);
+			IOPerformer.updateTermLinks(dto,this.owner.isEnBase());
 		}
 		else if (dto.getElement() instanceof DocumentPart)
 		{
-			IOPerformer.updateDocElemLinks(dto);
+			IOPerformer.updateDocElemLinks(dto,this.owner.isEnBase());
 		}
 	}
 
@@ -189,16 +200,24 @@ public class Service implements IService
 	 * Saves the <code>IIndexable</code> elements specified in <code>list</code> from the database.
 	 * @param list A <code>List</code> of <code>LinkableElement</code> to be saved. 
 	 * @throws SQLException 
+	 * @throws IOException 
+	 * @throws InvalidAlgorithmParameterException 
+	 * @throws BadPaddingException 
+	 * @throws IllegalBlockSizeException 
+	 * @throws NoSuchPaddingException 
+	 * @throws InvalidKeySpecException 
+	 * @throws NoSuchAlgorithmException 
+	 * @throws InvalidKeyException 
 	 * @see arkeotek.io.IService#save(List)
 	 */
-	public void save(List<LinkableElement> list) throws SQLException
+	public void save(List<LinkableElement> list) throws SQLException, InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, IOException
 	{
-		System.out.println("premiere sauvegarde");
 		Transaction transaction = new Transaction(this, !Transaction.AUTOCOMMIT);
 		DTO dto = null;
-
+		
 			for (LinkableElement object : list)
 			{
+				System.out.println(object.getId());
 				dto = new DTO(transaction, object);
 				if (object instanceof Concept)
 				{
@@ -256,6 +275,7 @@ public class Service implements IService
 			
 			for (LinkableElement object : list)
 			{
+				System.out.println("Objet courant : " + object.getId());
 				// on crée une dto pour l'objet courant (transaction + objet)
 				dto = new DTO(transaction, object);
 				// links with ontology
@@ -265,6 +285,9 @@ public class Service implements IService
 			}
 			// on commite
 			transaction.commit();
+			
+			// passage de la variable enBase a true pour éviter les sauvegardes lourdes
+			this.owner.setEnBase(true);
 	}
 
 	/**

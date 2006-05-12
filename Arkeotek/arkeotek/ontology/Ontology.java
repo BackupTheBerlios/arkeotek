@@ -11,7 +11,10 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,7 +22,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.swing.JOptionPane;
 
 import ontologyEditor.Constants;
 import arkeotek.io.EncryptedProperties;
@@ -46,6 +52,8 @@ public class Ontology extends LinkableElement {
 	private IService dataAccessor;
 	
 	private URL path;
+	
+	private boolean enBase;
     
 	
 	static {
@@ -125,6 +133,16 @@ public class Ontology extends LinkableElement {
 		String value = properties.getProperty(EncryptedProperties.STORAGE_SERVICE);
 		this.dataAccessor = (IService) Class.forName(value).newInstance();
 		this.dataAccessor.setOwner(this);
+		
+		String seb = properties.getProperty(EncryptedProperties.STORAGE_ENBASE);
+		if (seb.equals("true"))
+		{
+			this.enBase = true;
+		}
+		else
+		{
+			this.enBase = false;
+		}
 	}
 
 	
@@ -615,6 +633,51 @@ public class Ontology extends LinkableElement {
 	 */
 	public void unlink(LinkableElement target) throws Exception {
 		this.unlink(NON_SENSE, target);
+	}
+
+	public boolean isEnBase()
+	{
+		return this.enBase;
+	}
+
+	public void setEnBase(boolean enBase) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, IOException, InvalidAlgorithmParameterException
+	{
+		this.enBase = enBase;
+		try
+		{
+				EncryptedProperties.setEnBase(this.name);
+		}
+		catch (InvalidKeyException e) {
+			e.printStackTrace();
+		}
+		catch (NoSuchAlgorithmException e)
+		{
+			e.printStackTrace();
+		}
+		catch (NoSuchPaddingException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IllegalBlockSizeException e)
+		{
+			e.printStackTrace();
+		}
+		catch (BadPaddingException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InvalidKeySpecException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InvalidAlgorithmParameterException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	

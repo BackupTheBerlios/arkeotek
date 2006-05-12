@@ -8,15 +8,18 @@ package arkeotek.io.db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import arkeotek.io.IService;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.Link;
 import arkeotek.ontology.LinkableElement;
+import arkeotek.ontology.Ontology;
 import arkeotek.ontology.Relation;
 
 /**
@@ -69,14 +72,16 @@ public class IOPerformer
 
 		try
 		{
-
+			
 			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
+			
 			ps.setString(1, ((LinkableElement) dto.getElement()).getName());
 			ps.setInt(2, ((LinkableElement) dto.getElement()).getState());
+			//System.out.println(ps);
 			ps.executeUpdate();
 			if (ps instanceof com.mysql.jdbc.PreparedStatement)
 				((LinkableElement) dto.getElement()).setId((int)((com.mysql.jdbc.PreparedStatement)ps).getLastInsertID());
-
+			
 		} catch (SQLException e)
 		{
 			throw e;
@@ -187,10 +192,10 @@ public class IOPerformer
 		try
 		{
 
-			ps = dto.getTransaction().getConnexion().prepareStatement(
-					req.toString());
+			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
 			ps.setString(1, ((LinkableElement) dto.getElement()).getName());
 			ps.setInt(2, ((LinkableElement) dto.getElement()).getState());
+			//System.out.println(ps);
 			ps.executeUpdate();
 			if (ps instanceof com.mysql.jdbc.PreparedStatement)
 				((LinkableElement) dto.getElement()).setId((int)((com.mysql.jdbc.PreparedStatement)ps).getLastInsertID());
@@ -304,76 +309,62 @@ public class IOPerformer
 	 * @param dto The <code>Concept</code> whose links are to be updated. 
 	 * @throws SQLException 
 	 */
-	public static void updateConceptLinks(DTO dto) throws SQLException
+	public static void updateConceptLinks(DTO dto,boolean enBase) throws SQLException
 	{
-		Set<Integer> keys = ((LinkableElement) dto.getElement()).getLinks().keySet();
+		Set<Integer> keys = ((LinkableElement) dto.getElement()).getLinks().keySet();		
 		for (Integer key : keys)
 		{
 			if (key.equals(Concept.KEY))
 			{
-/*				HashMap<Integer, ArrayList<Integer>> relTmp = new HashMap<Integer, ArrayList<Integer>>();
-				Set<Relation> relations = ((LinkableElement) dto.getElement()).getRelations(key).keySet();
-				for (Relation relation : relations)
+				if (!enBase)
 				{
-					ArrayList<LinkableElement> elements = ((LinkableElement) dto.getElement()).getLinkedElements(key, relation);
-					ArrayList<Integer> targets = new ArrayList<Integer>();
-					for (LinkableElement element : elements)
-						targets.add(element.getId());
-					relTmp.put(relation.getId(), targets);
-
+					// nouvelle ontologie, il n'y a rien en base
+					updateLinksFromSource(dto.getTransaction(),(LinkableElement) dto.getElement(),((LinkableElement) dto.getElement()).getLinks(key),"L_Concept2Concept");
 				}
-				
-*/				
-				updateLinksFromSource(
-						dto.getTransaction(), 
-						(LinkableElement) dto.getElement(), 
-						((LinkableElement) dto.getElement()).getLinks(key), 
-						new StringBuffer("select * from L_Concept2Concept where idSource = " + ((LinkableElement) dto.getElement()).getId()));
+				else
+				{
+					// la base est remplie
+					updateLinksFromSourceNext(
+							dto.getTransaction(), 
+							(LinkableElement) dto.getElement(), 
+							((LinkableElement) dto.getElement()).getLinks(key), 
+							new StringBuffer("select * from L_Concept2Concept where idSource = " + ((LinkableElement) dto.getElement()).getId()));
+				}
 			}
 			else if (key.equals(Lemma.KEY))
 			{
-/*				HashMap<Integer, ArrayList<Integer>> relTmp = new HashMap<Integer, ArrayList<Integer>>();
-				Set<Relation> relations = ((LinkableElement) dto.getElement()).getRelations(key).keySet();
-				for (Relation relation : relations)
+				if (!enBase)
 				{
-					ArrayList<LinkableElement> elements = ((LinkableElement) dto
-							.getElement()).getLinkedElements(key, relation);
-					ArrayList<Integer> sources = new ArrayList<Integer>();
-					for (LinkableElement element : elements)
-						sources.add(element.getId());
-					relTmp.put(relation.getId(), sources);
+					updateLinksFromTarget(dto.getTransaction(),(LinkableElement) dto.getElement(),((LinkableElement) dto.getElement()).getLinks(key),"L_Term2Concept");
 				}
-*/				updateLinksFromTarget(
-						dto.getTransaction(), 
-						(LinkableElement) dto.getElement(), 
-						((LinkableElement) dto.getElement()).getLinks(key), 
-						new StringBuffer("select * from L_Term2Concept where idTarget = " + ((LinkableElement) dto.getElement()).getId())
-					);
-
+				else
+				{
+					updateLinksFromTargetNext(
+					dto.getTransaction(), 
+					(LinkableElement) dto.getElement(), 
+					((LinkableElement) dto.getElement()).getLinks(key), 
+					new StringBuffer("select * from L_Term2Concept where idTarget = " + ((LinkableElement) dto.getElement()).getId()));
+				}
 			}
 			else if (key.equals(DocumentPart.KEY))
 			{
-/*				HashMap<Integer, ArrayList<Integer>> relTmp = new HashMap<Integer, ArrayList<Integer>>();
-				Set<Relation> relations = ((LinkableElement) dto.getElement()).getRelations(key).keySet();
-				for (Relation relation : relations)
-				{
-					ArrayList<LinkableElement> elements = ((LinkableElement) dto.getElement()).getLinkedElements(key, relation);
-					ArrayList<Integer> targets = new ArrayList<Integer>();
-					for (LinkableElement element : elements)
-						targets.add(element.getId());
-					relTmp.put(relation.getId(), targets);
+				if (!enBase){
+					
+					updateLinksFromSource(dto.getTransaction(),(LinkableElement) dto.getElement(),((LinkableElement) dto.getElement()).getLinks(key),"L_Concept2DocumentElement");
 				}
-*/				
-				updateLinksFromSource(
+				else
+				{
+				updateLinksFromSourceNext(
 						dto.getTransaction(),
 						(LinkableElement) dto.getElement(), 
 						((LinkableElement) dto.getElement()).getLinks(key), 
 						new StringBuffer("select * from L_Concept2DocumentElement where idSource = " + ((LinkableElement) dto.getElement()).getId()));
-
+				}
 			}
 		}
 	}
 
+	
 	/**
 	 * Retrieves all the concepts from base and stores them in a HashMap. 
 	 * @param transaction The database transaction to use for this update. 
@@ -452,16 +443,16 @@ public class IOPerformer
 		req.append("insert into T_DocumentElement (id, value, text, state) values (NULL, ?, ?, ?) ");
 		try
 		{
-
-			ps = dto.getTransaction().getConnexion().prepareStatement(
-					req.toString());
+			//System.out.println(((LinkableElement) dto.getElement()).getId());
+			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
 			ps.setString(1, ((DocumentPart) dto.getElement()).getName());
 			ps.setString(2, ((DocumentPart) dto.getElement()).getValue());
 			ps.setInt(3, ((LinkableElement) dto.getElement()).getState());
+			//System.out.println(ps);
 			ps.executeUpdate();
 			if (ps instanceof com.mysql.jdbc.PreparedStatement)
 				((LinkableElement) dto.getElement()).setId((int)((com.mysql.jdbc.PreparedStatement)ps).getLastInsertID());
-
+			System.out.println(((LinkableElement) dto.getElement()).getId());
 		} catch (SQLException e)
 		{
 			throw e;
@@ -572,7 +563,7 @@ public class IOPerformer
 	 * @param dto The <code>DocumentPart</code> whose links are to be updated. 
 	 * @throws SQLException 
 	 */
-	public static void updateDocElemLinks(DTO dto) throws SQLException
+	public static void updateDocElemLinks(DTO dto,boolean enBase) throws SQLException
 	{
 		Set<Integer> keys = ((LinkableElement) dto.getElement()).getLinks()
 				.keySet();
@@ -580,53 +571,52 @@ public class IOPerformer
 		{
 			if (key.equals(Concept.KEY))
 			{
-/*				HashMap<Integer, ArrayList<Integer>> relTmp = new HashMap<Integer, ArrayList<Integer>>();
-				Set<Relation> relations = ((LinkableElement) dto.getElement())
-						.getRelations(key).keySet();
-				for (Relation relation : relations)
+
+				
+				if(!enBase)
 				{
-					ArrayList<LinkableElement> elements = ((LinkableElement) dto.getElement()).getLinkedElements(key, relation);
-					ArrayList<Integer> sources = new ArrayList<Integer>();
-					for (LinkableElement element : elements)
-						sources.add(element.getId());
-					relTmp.put(relation.getId(), sources);
+					updateLinksFromTarget(dto.getTransaction(),(LinkableElement) dto.getElement(),((LinkableElement) dto.getElement()).getLinks(key),"L_Concept2DocumentElement");
 				}
-*/				
-				updateLinksFromTarget(
-						dto.getTransaction(),
-						((LinkableElement) dto.getElement()), 
-						((LinkableElement) dto.getElement()).getLinks(key),
-						new StringBuffer("select * from L_Concept2DocumentElement where idTarget = " + ((LinkableElement) dto.getElement()).getId()));
+				else
+				{
+					updateLinksFromTargetNext(
+							dto.getTransaction(),
+							((LinkableElement) dto.getElement()), 
+							((LinkableElement) dto.getElement()).getLinks(key),
+							new StringBuffer("select * from L_Concept2DocumentElement where idTarget = " + ((LinkableElement) dto.getElement()).getId()));
+				}
+			
+
 			}
 			else if (key.equals(Lemma.KEY))
 			{
-
-/*				HashMap<Integer, ArrayList<Integer>> relTmp = new HashMap<Integer, ArrayList<Integer>>();
-				Set<Relation> relations = ((LinkableElement) dto.getElement()).getRelations(key).keySet();
-				for (Relation relation : relations)
+				if(!enBase)
 				{
-					ArrayList<LinkableElement> elements = ((LinkableElement) dto.getElement()).getLinkedElements(key, relation);
-					ArrayList<Integer> sources = new ArrayList<Integer>();
-					for (LinkableElement element : elements)
-						sources.add(element.getId());
-					relTmp.put(relation.getId(), sources);
+					updateLinksFromTarget(dto.getTransaction(),(LinkableElement) dto.getElement(),((LinkableElement) dto.getElement()).getLinks(key),"L_Term2DocumentElement");
 				}
-*/				
-				updateLinksFromTarget(
-						dto.getTransaction(), 
-						((LinkableElement) dto.getElement()), 
-						((LinkableElement) dto.getElement()).getLinks(key), 
-						new StringBuffer("select * from L_Term2DocumentElement where idTarget = " + ((LinkableElement) dto.getElement()).getId()));
-
+				else
+				{
+					updateLinksFromTargetNext(
+							dto.getTransaction(), 
+							((LinkableElement) dto.getElement()), 
+							((LinkableElement) dto.getElement()).getLinks(key), 
+							new StringBuffer("select * from L_Term2DocumentElement where idTarget = " + ((LinkableElement) dto.getElement()).getId()));
+				}
 			}
 			else if (key.equals(DocumentPart.KEY))
 			{
-					updateLinksFromSource(
+				if(!enBase)
+				{
+					updateLinksFromSource(dto.getTransaction(),(LinkableElement) dto.getElement(),((LinkableElement) dto.getElement()).getLinks(key),"L_DocumentElement2DocumentElement");
+				}
+				else
+				{
+					updateLinksFromSourceNext(
 							dto.getTransaction(),
 							(LinkableElement) dto.getElement(), 
 							((LinkableElement) dto.getElement()).getLinks(key), 
 							new StringBuffer("select * from L_DocumentElement2DocumentElement where idSource = " + ((LinkableElement) dto.getElement()).getId()));
-
+				}
 			}
 		}
 	}
@@ -714,6 +704,7 @@ public class IOPerformer
 			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
 			ps.setString(1, ((LinkableElement) dto.getElement()).getName());
 			ps.setInt(2, ((LinkableElement) dto.getElement()).getState());
+			//System.out.println(ps);
 			ps.executeUpdate();
 			if (ps instanceof com.mysql.jdbc.PreparedStatement)
 				((LinkableElement) dto.getElement()).setId((int)((com.mysql.jdbc.PreparedStatement)ps).getLastInsertID());
@@ -830,71 +821,57 @@ public class IOPerformer
 	 * @param dto
 	 * @throws SQLException 
 	 */
-	public static void updateTermLinks(DTO dto) throws SQLException
+	public static void updateTermLinks(DTO dto,boolean enBase) throws SQLException
 	{
 		Set<Integer> keys = ((LinkableElement) dto.getElement()).getLinks().keySet();
 		for (Integer key : keys)
 		{
 			if (key.equals(Concept.KEY))
 			{
-/*				HashMap<Integer, ArrayList<Integer>> relTmp = new HashMap<Integer, ArrayList<Integer>>();
-				Set<Relation> relations = ((LinkableElement) dto.getElement()).getRelations(key).keySet();
-
-				for (Relation relation : relations)
+				if(!enBase)
 				{
-					ArrayList<LinkableElement> elements = ((LinkableElement) dto.getElement()).getLinkedElements(key, relation);
-					ArrayList<Integer> sources = new ArrayList<Integer>();
-					for (LinkableElement element : elements)
-						sources.add(element.getId());
-					relTmp.put(relation.getId(), sources);
+					updateLinksFromSource(dto.getTransaction(),(LinkableElement) dto.getElement(),((LinkableElement) dto.getElement()).getLinks(key),"L_Term2Concept");	
 				}
-*/				
-				updateLinksFromSource(
-						dto.getTransaction(), 
-						(LinkableElement) dto.getElement(), 
-						((LinkableElement) dto.getElement()).getLinks(key), 
-						new StringBuffer("select * from L_Term2Concept where idSource = " + ((LinkableElement) dto.getElement()).getId()));
+				else
+				{
+					updateLinksFromSourceNext(
+							dto.getTransaction(), 
+							(LinkableElement) dto.getElement(), 
+							((LinkableElement) dto.getElement()).getLinks(key), 
+							new StringBuffer("select * from L_Term2Concept where idSource = " + ((LinkableElement) dto.getElement()).getId()));
+				}
 			}
 			else if (key.equals(Lemma.KEY))
 			{
-/*
-				HashMap<Integer, ArrayList<Integer>> relTmp = new HashMap<Integer, ArrayList<Integer>>();
-				Set<Relation> relations = ((LinkableElement) dto.getElement()).getRelations(key).keySet();
-				for (Relation relation : relations)
+				if(!enBase)
 				{
-					ArrayList<LinkableElement> elements = ((LinkableElement) dto.getElement()).getLinkedElements(key, relation);
-					ArrayList<Integer> sources = new ArrayList<Integer>();
-					for (LinkableElement element : elements)
-						sources.add(element.getId());
-					relTmp.put(relation.getId(), sources);
+					updateLinksFromSource(dto.getTransaction(),(LinkableElement) dto.getElement(),((LinkableElement) dto.getElement()).getLinks(key),"L_Term2Term");
 				}
-*/				
-				updateLinksFromSource(
-						dto.getTransaction(), 
-						(LinkableElement) dto.getElement(), 
-						((LinkableElement) dto.getElement()).getLinks(key), 
-						new StringBuffer("select * from L_Term2Term where idSource = " + ((LinkableElement) dto.getElement()).getId()));
+				else
+				{
+					updateLinksFromSourceNext(
+							dto.getTransaction(), 
+							(LinkableElement) dto.getElement(), 
+							((LinkableElement) dto.getElement()).getLinks(key), 
+							new StringBuffer("select * from L_Term2Term where idSource = " + ((LinkableElement) dto.getElement()).getId()));
+				}
+				
 
 			}
 			else if (key.equals(DocumentPart.KEY))
 			{
-/*				HashMap<Integer, ArrayList<Integer>> relTmp = new HashMap<Integer, ArrayList<Integer>>();
-				Set<Relation> relations = ((LinkableElement) dto.getElement()).getRelations(key).keySet();
-				for (Relation relation : relations)
+				if(!enBase)
 				{
-					ArrayList<LinkableElement> elements = ((LinkableElement) dto.getElement()).getLinkedElements(key, relation);
-					ArrayList<Integer> targets = new ArrayList<Integer>();
-					for (LinkableElement element : elements)
-						targets.add(element.getId());
-					relTmp.put(relation.getId(), targets);
+					updateLinksFromSource(dto.getTransaction(),(LinkableElement) dto.getElement(),((LinkableElement) dto.getElement()).getLinks(key),"L_Term2DocumentElement");
 				}
-*/				
-				updateLinksFromSource(
+				else
+				{
+					updateLinksFromSourceNext(
 						dto.getTransaction(), 
 						(LinkableElement) dto.getElement(), 
 						((LinkableElement) dto.getElement()).getLinks(key), 
 						new StringBuffer("select * from L_Term2DocumentElement where idSource = " + ((LinkableElement) dto.getElement()).getId()));
-
+				}
 			}
 		}
 	}
@@ -983,43 +960,42 @@ public class IOPerformer
 	 * @param req The SQL request to execute. 
 	 * @throws SQLException 
 	 */
-	private static void updateLinksFromTarget(Transaction transaction,
-			LinkableElement target, HashMap<Relation, HashMap<LinkableElement, Link>> links,
-			StringBuffer req) throws SQLException
+	private static void updateLinksFromTarget(Transaction transaction,LinkableElement target, HashMap<Relation, HashMap<LinkableElement, Link>> links,String table) throws SQLException
 	{
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
+		Statement etatSimple = null;
 		try
 		{
-			ps = transaction.getConnexion().prepareStatement(req.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			rs = ps.executeQuery();
-			
-			while (rs.first())
-				rs.deleteRow();
-			
 			Set<Relation> relations = links.keySet();
 			for (Relation relation : relations)
 			{
 				Set<LinkableElement> sources = links.get(relation).keySet();
 				for (LinkableElement source : sources)
 				{
-					rs.moveToInsertRow();
-					rs.updateInt("idSource", source.getId());
-					rs.updateInt("idTarget", target.getId());
-					rs.updateInt("idRelation", relation.getId());
-					rs.updateInt("state", links.get(relation).get(source).getState());
-					rs.updateInt("weight", links.get(relation).get(source).getWeighting());
-					rs.insertRow();
+					String ordreSQL = "INSERT INTO " + table + " VALUES (" + source.getId() + "," + target.getId() + "," + relation.getId() + "," + links.get(relation).get(source).getState() + "," + links.get(relation).get(source).getWeighting() + ")";
+					System.out.println(ordreSQL);
+					etatSimple = transaction.getConnexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+					etatSimple.executeUpdate(ordreSQL);
 				}
 			}
-		} catch (SQLException e)
-		{
-			throw e;
-		} finally
-		{
-			transaction.clean(rs, ps);
 		}
+		catch (SQLException e)
+		{
+			System.out.println("huhu");
+			System.out.println(e.getErrorCode());
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace());
+			System.out.println(e.getSQLState());
+			System.out.println(e.getLocalizedMessage());
+			/*if(e.getErrorCode() == 1)
+			{
+					System.out.println("Bordel à cul !!!!!!");
+			}*/
+			//throw e;
+		}
+		//finally
+		//{
+			//transaction.clean(null, etatSimple);
+		//}
 	}
 
 	/**
@@ -1030,45 +1006,133 @@ public class IOPerformer
 	 * @param req The SQL request to execute. 
 	 * @throws SQLException 
 	 */
-	private static void updateLinksFromSource(Transaction transaction,
-			LinkableElement source, HashMap<Relation, HashMap<LinkableElement, Link>> links,
-			StringBuffer req) throws SQLException
+	private static void updateLinksFromSource(Transaction transaction,LinkableElement source, HashMap<Relation, HashMap<LinkableElement, Link>> links,String table) throws SQLException
 	{
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
+		Statement etatSimple = null;
 		try
 		{
-			ps = transaction.getConnexion().prepareStatement(req.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			rs = ps.executeQuery();
-			
-			while (rs.first())
-				rs.deleteRow();
-
 			Set<Relation> relations = links.keySet();
 			for (Relation relation : relations)
 			{
 				Set<LinkableElement> sources = links.get(relation).keySet();
 				for (LinkableElement target : sources)
 				{
-					rs.moveToInsertRow();
-					rs.updateInt("idSource", source.getId());
-					rs.updateInt("idTarget", target.getId());
-					rs.updateInt("idRelation", relation.getId());
-					rs.updateInt("state", links.get(relation).get(target).getState());
-					rs.updateInt("weight", links.get(relation).get(target).getWeighting());
-					rs.insertRow();
+					String ordreSQL = "INSERT INTO " + table + " VALUES (" + source.getId() + "," + target.getId() + "," + relation.getId() + "," + links.get(relation).get(target).getState() + "," + links.get(relation).get(target).getWeighting() + ")";
+					System.out.println(ordreSQL);
+					etatSimple = transaction.getConnexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+					etatSimple.executeUpdate(ordreSQL);
 				}
 			}
 		} catch (SQLException e)
 		{
-			throw e;
-		} finally
-		{
-			transaction.clean(rs, null);
+			System.out.println("huhu");
+			System.out.println(e.getErrorCode());
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace());
+			System.out.println(e.getSQLState());
+			System.out.println(e.getLocalizedMessage());
+			// throw e;
 		}
+		//finally
+		//{
+			//transaction.clean(null, etatSimple);
+		//}
 	}
-	
+	/**
+	  * Updates links targeting the element <code>idTarget</code> in the specified <code>relations</code>.  
+	  * @param transaction The database transaction to use. 
+	  * @param target The element targeted by the relations. 
+	  * @param links 
+	  * @param req The SQL request to execute. 
+	  * @throws SQLException 
+	  */
+	 private static void updateLinksFromTargetNext(Transaction transaction,
+	   LinkableElement target, HashMap<Relation, HashMap<LinkableElement, Link>> links,
+	   StringBuffer req) throws SQLException
+	 {
+	  PreparedStatement ps = null;
+	  ResultSet rs = null;
+	 
+	  try
+	  {
+	   ps = transaction.getConnexion().prepareStatement(req.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+	   rs = ps.executeQuery();
+	   
+	   while (rs.first())
+	    rs.deleteRow();
+	   
+	   Set<Relation> relations = links.keySet();
+	   for (Relation relation : relations)
+	   {
+	    Set<LinkableElement> sources = links.get(relation).keySet();
+	    for (LinkableElement source : sources)
+	    {
+	     rs.moveToInsertRow();
+	     System.out.println("source"+source.getId());
+	     System.out.println("target"+target.getId());
+	     rs.updateInt("idSource", source.getId());
+	     rs.updateInt("idTarget", target.getId());
+	     rs.updateInt("idRelation", relation.getId());
+	     rs.updateInt("state", links.get(relation).get(source).getState());
+	     rs.updateInt("weight", links.get(relation).get(source).getWeighting());
+	     rs.insertRow();
+	    }
+	   }
+	  } catch (SQLException e)
+	  {
+	   throw e;
+	  } finally
+	  {
+	   transaction.clean(rs, ps);
+	  }
+	 }
+	 
+	 /**
+	  * Updates links targeted by the element <code>idSource</code> in the specified <code>relations</code>.  
+	  * @param transaction The database transaction to use. 
+	  * @param source The source element of the relations. 
+	  * @param links The kind of relations concerned by this update.  
+	  * @param req The SQL request to execute. 
+	  * @throws SQLException 
+	  */
+	 private static void updateLinksFromSourceNext(Transaction transaction,
+	   LinkableElement source, HashMap<Relation, HashMap<LinkableElement, Link>> links,
+	   StringBuffer req) throws SQLException
+	 {
+	  PreparedStatement ps = null;
+	  ResultSet rs = null;
+	 
+	  try
+	  {
+	   ps = transaction.getConnexion().prepareStatement(req.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+	   rs = ps.executeQuery();
+	   
+	   while (rs.first())
+	    rs.deleteRow();
+	 
+	   Set<Relation> relations = links.keySet();
+	   for (Relation relation : relations)
+	   {
+	    Set<LinkableElement> sources = links.get(relation).keySet();
+	    for (LinkableElement target : sources)
+	    {
+	     rs.moveToInsertRow();
+	     rs.updateInt("idSource", source.getId());
+	     rs.updateInt("idTarget", target.getId());
+	     rs.updateInt("idRelation", relation.getId());
+	     rs.updateInt("state", links.get(relation).get(target).getState());
+	     rs.updateInt("weight", links.get(relation).get(target).getWeighting());
+	     rs.insertRow();
+	    }
+	   }
+	  } catch (SQLException e)
+	  {
+	   throw e;
+	  } finally
+	  {
+	   transaction.clean(rs, null);
+	  }
+	 }
 	/**
 	 * Retrieves all the relations between concepts from base and stores them in a HashMap. 
 	 * @param transaction The transaction to use for this retrieval. 

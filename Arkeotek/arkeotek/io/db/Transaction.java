@@ -88,7 +88,7 @@ public class Transaction
 			deconnexion();
 		}
 	}
-
+	
 	/**
 	 * Rolls back current transaction
 	 */

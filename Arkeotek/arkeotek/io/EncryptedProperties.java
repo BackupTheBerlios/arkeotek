@@ -6,8 +6,11 @@
 package arkeotek.io;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -54,6 +57,7 @@ public class EncryptedProperties extends Properties {
 	private static final String USER = "user";
 	private static final String LOGIN = "login";
 	private static final String PASSWORD = "password";
+	private static final String ENBASE = "enBase";
 	
 	/**
 	 * Key for the property specifying the kind of storage used for this ontology. 
@@ -71,7 +75,10 @@ public class EncryptedProperties extends Properties {
 	 * Key for the property specifying the user password used for this ontology. 
 	 */
 	public static final String STORAGE_USER_PASSWORD = STORAGE + "." + USER + "." + PASSWORD;
-
+	/**
+	 * Key for the property specifying the user password used for this ontology. 
+	 */
+	public static final String STORAGE_ENBASE = STORAGE + "." + ENBASE;
 	/**
 	 * Creates a new encrypted properties uninitialized. 
 	 * Note that as long as the setSecretKey(SecretKey key) have not been called, no encoding/decoding will be possible. 
@@ -211,8 +218,37 @@ public class EncryptedProperties extends Properties {
 		properties.setProperty(STORAGE_LOCATION, location);
 		properties.setProperty(STORAGE_USER_LOGIN, login);
 		properties.setProperty(STORAGE_USER_PASSWORD, properties.encrypt(password));
+		properties.setProperty(STORAGE_ENBASE,"false");
 		
 		properties.store(outStream, "");
+		return new_props;
+	}
+	
+	public static File setEnBase(String name) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, InvalidAlgorithmParameterException {
+		File new_props = new File(Constants.DEFAULT_ONTOLOGIES_PATH + name + ".properties");
+		//if (!new_props.createNewFile())
+			//throw new IOException("Error occured while trying to create file " + Constants.DEFAULT_ONTOLOGIES_PATH + name + ".properties");
+		
+		InputStream propertiesStream = new FileInputStream(new_props);
+		EncryptedProperties properties = new EncryptedProperties(name);
+		properties.load(propertiesStream);
+		
+		String service=properties.getProperty(EncryptedProperties.STORAGE_SERVICE);
+		String location=properties.getProperty(EncryptedProperties.STORAGE_LOCATION);
+		String login=properties.getProperty(EncryptedProperties.STORAGE_USER_LOGIN);
+		String password=properties.getEncryptedProperty(EncryptedProperties.STORAGE_USER_PASSWORD);
+			
+			
+		FileOutputStream outStream = new FileOutputStream(new_props);
+		EncryptedProperties properties2 = new EncryptedProperties(name);
+		
+		properties2.setProperty(STORAGE_SERVICE, service);
+		properties2.setProperty(STORAGE_LOCATION, location);
+		properties2.setProperty(STORAGE_USER_LOGIN, login);
+		properties2.setProperty(STORAGE_USER_PASSWORD, properties.encrypt(password));
+		properties2.setProperty(STORAGE_ENBASE,"true");
+		
+		properties2.store(outStream, "");
 		return new_props;
 	}
 }
