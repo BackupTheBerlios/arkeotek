@@ -52,7 +52,7 @@ public abstract class AbstractAction extends javax.swing.AbstractAction
 	/**
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
-	public void actionPerformed(ActionEvent e)
+	public void actionPerformed(ActionEvent e) 
 	{
 		if (this.isEnabled())
         {

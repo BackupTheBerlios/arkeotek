@@ -161,6 +161,7 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 		// IMPORTING TERMS
 		else if (i == this.parsers.indexOf(this.terms_parser))
 		{
+			//On verifie que le lemme existe bien
 			if (this.current_result[0] != null) {
 				int pos = Collections.binarySearch(this.owner.get(Lemma.KEY), new Lemma((String) this.current_result[1]));
 				LinkableElement temp_lemma;
@@ -204,13 +205,16 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 			if (this.current_result[0] != null && this.current_result[1] != null) {
 				DocumentPart temp_doc = (DocumentPart) this.results.get(this.parsers.indexOf(this.documents_parser)).get(this.current_result[0]);
 				Lemma temp_lemma = (Lemma) this.results.get(this.parsers.indexOf(this.terms_parser)).get(this.current_result[1]);
+				if (temp_lemma!=null)
+				{
+					System.out.println(temp_doc + " " + temp_lemma);
+					Relation temp_rel;
+					int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION));
+					temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
 	
-				Relation temp_rel;
-				int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION));
-				temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
-	
-				temp_lemma.link(temp_rel, temp_doc);
-				temp_doc.link(temp_rel, temp_lemma);
+					temp_lemma.link(temp_rel, temp_doc);
+					temp_doc.link(temp_rel, temp_lemma);
+				}
 			}
 		}
 

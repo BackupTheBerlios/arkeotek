@@ -90,18 +90,21 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 		} else if (i == this.parsers.indexOf(this.docs2lemmas_parser)) {
 			DocumentPart temp_doc = (DocumentPart) this.results.get(this.parsers.indexOf(this.documents_parser)).get(this.current_result[0]);
 			Lemma temp_lemma = (Lemma) this.results.get(this.parsers.indexOf(this.terms_parser)).get(this.current_result[1]);
+			//On verifie que le lemme existe bien
+			if (temp_lemma!=null)
+			{
+				Relation temp_rel;
+				int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION));
+				if (position < 0) {
+					temp_rel = new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION);
+					this.owner.link(temp_rel);
+				} else {
+					temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
+				}
 
-			Relation temp_rel;
-			int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION));
-			if (position < 0) {
-				temp_rel = new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION);
-				this.owner.link(temp_rel);
-			} else {
-				temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
+				temp_lemma.link(temp_rel, temp_doc);
+				temp_doc.link(temp_rel, temp_lemma);
 			}
-
-			temp_lemma.link(temp_rel, temp_doc);
-			temp_doc.link(temp_rel, temp_lemma);
 			
 		} else if (i == this.parsers.indexOf(this.terms2terms_parser)) {
 			// We check wether the read relation exists in the Ontology or not. 
@@ -136,7 +139,6 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 		HashMap<Object, Object> text = this.results.get(this.parsers.indexOf(this.documents_parser));
 		HashMap<String, LinkableElement> props = new HashMap<String, LinkableElement>();
 		HashMap<String, ArrayList<LinkableElement>> copy_props = new HashMap<String, ArrayList<LinkableElement>>();
-		
 		for (Object element : this.results.get(this.parsers.indexOf(this.documents_parser)).values()) {
 			String[] particles;
 			int position;
@@ -146,8 +148,7 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 			
 			particles = this.stripName(((DocumentPart) element).getName());
 			String parent_key = "";
-
-			for (int i = 0; i < particles.length - 2; i++)
+			for (int i=0; i < particles.length - 2; i++)
 				parent_key += particles[i] + "-";
 			if (particles.length >= 3)
 				parent_key = parent_key.substring(0, parent_key.length() - 1);

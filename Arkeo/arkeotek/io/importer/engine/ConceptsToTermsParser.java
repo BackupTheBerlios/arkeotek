@@ -27,7 +27,7 @@ public class ConceptsToTermsParser extends AbstractParser
 	/**
 	 * Lemmas indexes' colum name in file
 	 */
-	public static final String COL_NUM_TERM = "num terme";
+	public static final String COL_NUM_TERM = "num_terme";
 	
 	static{
 		retainedColumnHeaders = new ArrayList<String>(2);
