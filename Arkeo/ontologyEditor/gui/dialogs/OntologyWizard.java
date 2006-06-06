@@ -22,16 +22,19 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import arkeotek.io.EncryptedProperties;
@@ -91,55 +94,55 @@ public class OntologyWizard extends JDialog  implements ActionListener, Property
 		double lbl_width = 140;
 		double size[][] = { 
 				{ border, lbl_width, border, TableLayout.FILL, border }, // Columns
-				{ border, line, separator, line, border, line, separator, line, border, line, border, line, separator, line, border }  // Rows
+				{ border, line, border, separator, line, border, line, border, separator, line, border, line, border, line, border, separator, line, border }  // Rows
 			};
 		this.setLayout(new TableLayout(size));
-		this.setLocationRelativeTo(null);
+		//this.setLocationRelativeTo(null);
 		
         // Create the components. 
-		this.lbl_ontology_name = new JLabel("Nom de l'ontologie : ");
+		this.lbl_ontology_name = new JLabel("Nom de l'ontologie : "); 
         this.add(this.lbl_ontology_name, "1, 1, 1, 1");
 		
 		this.txt_ontology_name = new JTextField("");
-		this.add(this.txt_ontology_name, "3, 1, 3, 1");
+		this.add(this.txt_ontology_name, "3, 1 ,3 , 1");
 		
-		this.add(new JSeparator(), "1, 2, 3, 2");
+		this.add(new JSeparator(), "1, 3, 3, 2");
 		
 		this.lbl_storage_type = new JLabel("Type de stockage : ");
-		this.add(this.lbl_storage_type, "1, 3, 1, 3");
+		this.add(this.lbl_storage_type, "1, 4, 1, 3");
 
 		this.cmb_storage_type = new JComboBox();
 		this.cmb_storage_type.addItem(new StorageCell("(Choisissez un type de stockage pour vos donn\u00e9es)", ""));
 		this.cmb_storage_type.addItem(new StorageCell("Base de donn\u00e9es MySQL", Service.class.getCanonicalName()));
-		this.add(this.cmb_storage_type, "3, 3, 3, 3");
+		this.add(this.cmb_storage_type, "3, 4, 3, 3");
 		
 		this.lbl_storage_repository = new JLabel("Emplacement : ");
-		this.add(this.lbl_storage_repository, "1, 5, 1, 5");
+		this.add(this.lbl_storage_repository, "1, 6, 1, 5");
 		
 		this.txt_storage_repository = new JTextField("");
-		this.add(this.txt_storage_repository, "3, 5, 3, 5");
+		this.add(this.txt_storage_repository, "3, 6, 3, 5");
 		
-		this.add(new JSeparator(), "1, 6, 3, 6");
+		this.add(new JSeparator(), "1, 8, 3, 6");
 		
 		this.lbl_user_login = new JLabel("Nom d'utilisateur : ");
-		this.add(this.lbl_user_login, "1, 7, 1, 7");
+		this.add(this.lbl_user_login, "1, 9, 1, 7");
 
 		this.txt_user_login = new JTextField("");
-		this.add(this.txt_user_login, "3, 7, 3, 7");
+		this.add(this.txt_user_login, "3, 9, 3, 7");
 		
 		this.lbl_user_password = new JLabel("Mot de passe : ");
-		this.add(this.lbl_user_password, "1, 9, 1, 9");
+		this.add(this.lbl_user_password, "1, 11, 1, 9");
 
 		this.txt_user_password = new JPasswordField("");
-		this.add(this.txt_user_password, "3, 9, 3, 9");
+		this.add(this.txt_user_password, "3, 11, 3, 9");
 		
 		this.lbl_user_confirm = new JLabel("Confirmez : ");
-		this.add(this.lbl_user_confirm, "1, 11, 1, 11");
+		this.add(this.lbl_user_confirm, "1, 13, 1, 11");
 
 		this.txt_user_confirm = new JPasswordField("");
-		this.add(this.txt_user_confirm, "3, 11, 3, 11");
+		this.add(this.txt_user_confirm, "3, 13, 3, 11");
 		
-		this.add(new JSeparator(), "1, 12, 3, 12");
+		this.add(new JSeparator(), "1, 15, 3, 12");
 		
 		this.validate_button.addMouseListener(new MouseAdapter()
 		{
@@ -152,7 +155,7 @@ public class OntologyWizard extends JDialog  implements ActionListener, Property
 				OntologyWizard.this.validateInput();
 			}
 		});
-		this.add(this.validate_button, "1, 13, 1, 13");
+		this.add(this.validate_button, "3, 16, 3, 13");
 		this.cancel_button.addMouseListener(new MouseAdapter()
 				{
 					/**
@@ -164,11 +167,20 @@ public class OntologyWizard extends JDialog  implements ActionListener, Property
 						OntologyWizard.this.cancelInput();
 					}
 				});
-		this.add(this.cancel_button, "3, 13, 3, 13");
+		this.add(this.cancel_button, "1, 16, 1, 13");
 		
+		/*
+		JPanel panel = new JPanel();
+		panel.setBorder(BorderFactory.createTitledBorder("Panneau de navigation:"));
+		this.add(panel);
+		panel.add(lbl_ontology_name);
+		panel.add(txt_ontology_name);
+		*/
+		
+		// Disposition de la fenetre
 		this.setResizable(false);
-//		this.setSize(450, 220);
 		this.pack();
+		this.setLocation((frame.getLocation().x) + (frame.getSize().width/2) - (this.getSize().width/2),(frame.getLocation().y) + (frame.getSize().height/2) - (this.getSize().height/2));
 	}
 
 /**

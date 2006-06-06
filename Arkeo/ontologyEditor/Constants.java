@@ -87,11 +87,6 @@ public interface Constants
 	 * Flag used in the actions map of <code>ActionManager</code> for the <code>BreedAction</code> action. 
 	 */
 	public static final String ACTION_BREED = "breed";
-
-	/**
-	 * Flag used in the actions map of <code>ActionManager</code> for the <code>AboutAction</code> action. 
-	 */
-	public static final String ACTION_ABOUT = "about";
 	
 	/**
 	 * Flag used in the actions map of <code>ActionManager</code> for the <code>LemmasFusionAction</code> action. 
@@ -107,6 +102,16 @@ public interface Constants
 	 * Flag used in the actions map of <code>ActionManager</code> for the <code>SCDIndexationAction</code> action. 
 	 */
 	public static final String ACTION_SCD_INDEXATION = "Indexer le document (SCD)";
+	
+	/**
+	 * Flag used in the actions map of <code>ActionManager</code> for the <code>LemmaSearchAction</code> action. 
+	 */
+	public static final String ACTION_SEARCH_LEMMA = "Rechercher un lemme";
+	
+	/**
+	 * Flag used in the actions map of <code>ActionManager</code> for the <code>AProposAction</code> action. 
+	 */
+	public static final String ACTION_APROPOS = "A propos";
 
 	/**
 	 * Default path where resources are located. 

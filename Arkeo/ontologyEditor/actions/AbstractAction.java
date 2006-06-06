@@ -43,6 +43,7 @@ public abstract class AbstractAction extends javax.swing.AbstractAction
 	 * @param keystroke The keystroke invoking this action. 
 	 * @throws Exception
 	 */
+	
 	public AbstractAction(String label, String icon, ApplicationManager.Request request, KeyStroke keystroke) throws Exception
 	{
 		this(label, icon, request);

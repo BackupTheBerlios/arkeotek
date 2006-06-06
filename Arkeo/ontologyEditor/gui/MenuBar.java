@@ -138,16 +138,25 @@ public class MenuBar extends JMenuBar
 		mView.add(miBottomPannel);
 		
 		this.add(mView);
+		
+		// "Search" menu pour la recherche. 
+		JMenu mSearch = new JMenu("Recherche");
+
+		JMenuItem miSearchLemma = new JMenuItem(ActionManager.getActionManager().getAction(
+                Constants.ACTION_SEARCH_LEMMA));
+		miSearchLemma.setText("Recherche de lemme");
+        mSearch.add(miSearchLemma);
+
+        this.add(mSearch);
 
 		// "Help" menu creation. 
         JMenu mHelp = new JMenu("?");
 
-        JMenuItem miAbout = new JMenuItem(ActionManager.getActionManager()
-                .getAction(Constants.ACTION_ABOUT));
-		miAbout.setText("A propos... ");
-
-        mHelp.add(miAbout);
-
+        JMenuItem miAPropos = new JMenuItem(ActionManager.getActionManager().getAction(
+                Constants.ACTION_APROPOS));
+		miAPropos.setText("A propos");
+        mHelp.add(miAPropos);
+        
         this.add(mHelp);
     }
 

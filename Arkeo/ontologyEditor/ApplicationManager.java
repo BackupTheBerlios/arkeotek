@@ -16,11 +16,12 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
-import ontologyEditor.actions.AboutAction;
+import ontologyEditor.actions.AProposAction;
 import ontologyEditor.actions.BottomPanelChangeAction;
 import ontologyEditor.actions.BreedAction;
 import ontologyEditor.actions.GenericIndexationAction;
 import ontologyEditor.actions.ImportTermontoAction;
+import ontologyEditor.actions.LemmaSearchAction;
 import ontologyEditor.actions.LemmasFusionAction;
 import ontologyEditor.actions.NewConceptAction;
 import ontologyEditor.actions.NewLemmaAction;
@@ -32,6 +33,8 @@ import ontologyEditor.actions.SCDIndexationAction;
 import ontologyEditor.actions.SaveAction;
 import ontologyEditor.actions.TopPanelChangeAction;
 import ontologyEditor.gui.MainFrame;
+import ontologyEditor.gui.dialogs.AboutDialog;
+import ontologyEditor.gui.dialogs.FindLemmaDialog;
 import ontologyEditor.gui.dialogs.OntologyWizard;
 import ontologyEditor.gui.dialogs.ProgressBarDialog;
 import ontologyEditor.gui.filechoosers.OntologyFileChooser;
@@ -149,7 +152,15 @@ public class ApplicationManager
         /**
          * Performs the generic indexing action
          */
-        GENERIC_INDEXATION
+        GENERIC_INDEXATION,
+        /**
+         * Performs Lemma Search
+         */
+        LEMMA_SEARCH,
+        /**
+         * Performs Showing About Dialog
+         */
+        SHOW_APROPOS
     }
 
 	 /**
@@ -182,11 +193,13 @@ public class ApplicationManager
             am.registerAction(Constants.ACTION_CHANGE_TOP_PANNEL_CONCEPTS, new TopPanelChangeAction(Concept.KEY));
             am.registerAction(Constants.ACTION_CHANGE_TOP_PANNEL_LEMMAS, new TopPanelChangeAction(Lemma.KEY));
             am.registerAction(Constants.ACTION_CHANGE_TOP_PANNEL_DOCUMENTS, new TopPanelChangeAction(DocumentPart.KEY));
+            
+            am.registerAction(Constants.ACTION_SEARCH_LEMMA, new LemmaSearchAction());
 
-			am.registerAction(Constants.ACTION_ABOUT, new AboutAction());
+			am.registerAction(Constants.ACTION_APROPOS, new AProposAction());
 
 			// Retrieview of ontology (we must create the ontology before the mainframe)
-//			ApplicationManager.ontology = new Ontology("Pipontologie");
+			// ApplicationManager.ontology = new Ontology("Pipontologie");
 			
 			// Creation of main frame
             DisplayManager.mainFrame = new MainFrame();
@@ -530,7 +543,33 @@ public class ApplicationManager
 			case GENERIC_INDEXATION :
 				new GenericIndexer(ontology, DisplayManager.getInstance().getSelectedElements(DocumentPart.KEY).get(0)).index();
 				break;
-			case SHOW_ABOUT : 
+				
+			case LEMMA_SEARCH :
+				// TODO tester si le panneau des lemmes est actif
+				if (ontology != null)
+				{
+					FindLemmaDialog lemmaSearchDialog = new FindLemmaDialog();
+					lemmaSearchDialog.setVisible(true);
+					String lcn = lemmaSearchDialog.getContainName();
+					if ( lcn != null)
+					{
+						// TODO appeler la fonction de recherche qui doit se situer
+						// dans le SearchAction  ...
+						System.out.println("huhu : " + lcn);
+						//DisplayManager.getInstance().resetDisplay();
+					}
+				}
+				break;
+			
+			case SHOW_APROPOS : 
+					
+					// Instanciation de la boite de dialog "a propos" de l'application
+					AboutDialog aboutDialog = new AboutDialog();
+				
+				break;
+				
+			//System.out.println("1"); break;
+			case SHOW_ABOUT : System.out.println("2"); break;
 			case QUIT_APPLICATION : System.exit(0);
 			case RUN_APPLICATION : 
 				// No special action is to be done during launching. 
