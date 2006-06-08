@@ -112,6 +112,11 @@ public interface Constants
 	 * Flag used in the actions map of <code>ActionManager</code> for the <code>AProposAction</code> action. 
 	 */
 	public static final String ACTION_APROPOS = "A propos";
+	
+	/**
+	 * Changement de la langue de l'application
+	 */
+	public static final String ACTION_CHANGE_LANGUAGE = "Changer la langue de l'application";
 
 	/**
 	 * Default path where resources are located. 

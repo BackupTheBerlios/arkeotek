@@ -5,11 +5,14 @@
  */
 package ontologyEditor.gui;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
 import ontologyEditor.ActionManager;
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 
 /**
@@ -19,132 +22,156 @@ import ontologyEditor.Constants;
  */
 public class MenuBar extends JMenuBar
 {
+	public static ButtonGroup GROUPLANG = null;
     /**
      * Creates and initializes a <code>MenuBar</code> customized for the ontologyEditor. 
+     * @throws InterruptedException 
      */
     public MenuBar()
     {
         super();
-		// "File" menu creation. 
-		JMenu mFile = new JMenu("Fichier");
+        
+        // "File" menu creation. 
+		JMenu mFile = new JMenu(ApplicationManager.getApplicationManager().getTraduction("file"));
 
 		JMenuItem miNew = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_NEW_ONTOLOGY));
-		miNew.setText("Nouvelle ontologie... ");
+		miNew.setText(ApplicationManager.getApplicationManager().getTraduction("newontology"));
         mFile.add(miNew);
 
 		mFile.addSeparator();
 
 		JMenuItem miOpen = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_OPEN));
-		miOpen.setText("Ouvrir");
+		miOpen.setText(ApplicationManager.getApplicationManager().getTraduction("openontology"));
         mFile.add(miOpen);
 		
 		JMenuItem miTermontoOpen = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_OPEN_FROM_TERMONTO));
-		miTermontoOpen.setText("Importer une ontologie Termonto");
+		miTermontoOpen.setText(ApplicationManager.getApplicationManager().getTraduction("importtermontoontology"));
         mFile.add(miTermontoOpen);
 
         JMenuItem miSave = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_SAVE));
-		miSave.setText("Enregistrer");
+		miSave.setText(ApplicationManager.getApplicationManager().getTraduction("saveontology"));
         mFile.add(miSave);
 
 		mFile.addSeparator();
 		
         JMenuItem miQuit = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_QUIT));
-		miQuit.setText("Quitter");
+		miQuit.setText(ApplicationManager.getApplicationManager().getTraduction("quit"));
         mFile.add(miQuit);
 
         this.add(mFile);
 
 		// "Edit" menu creation. 
-		JMenu mEdit = new JMenu("Edition");
+		JMenu mEdit = new JMenu(ApplicationManager.getApplicationManager().getTraduction("edition"));
 
         JMenuItem miNewConcept = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_NEW_CONCEPT));
-		miNewConcept.setText("Nouveau concept... ");
+		miNewConcept.setText(ApplicationManager.getApplicationManager().getTraduction("newconcept"));
         mEdit.add(miNewConcept);
 
         JMenuItem miNewLemma = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_NEW_LEMMA));
-		miNewLemma.setText("Nouveau lemme... ");
+		miNewLemma.setText(ApplicationManager.getApplicationManager().getTraduction("newterm"));
         mEdit.add(miNewLemma);
 		
 		JMenuItem miNewRelation = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_NEW_RELATION));
-		miNewRelation.setText("Nouvelle relation... ");
+		miNewRelation.setText(ApplicationManager.getApplicationManager().getTraduction("newrelation"));
         mEdit.add(miNewRelation);
 
 		mEdit.addSeparator();
 		
         JMenuItem miBreed = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_BREED));
-		miBreed.setText("Enrichir... ");
+		miBreed.setText(ApplicationManager.getApplicationManager().getTraduction("breed"));
         mEdit.add(miBreed);
 		
 		mEdit.addSeparator();
 		
 		JMenuItem miFusion = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_LEMMAS_FUSION));
-		miFusion.setText("Fusionner les lemmes");
+		miFusion.setText(ApplicationManager.getApplicationManager().getTraduction("mergeterms"));
         mEdit.add(miFusion);
 		
 		JMenuItem miIndexation = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_GENERIC_INDEXATION));
-		miIndexation.setText("Indexer le document (g\u00e9n\u00e9rique)");
+		miIndexation.setText(ApplicationManager.getApplicationManager().getTraduction("indexdocumentgeneric"));
         mEdit.add(miIndexation);
 
         this.add(mEdit);
 
 		// "View" menu creation
-		JMenu mView = new JMenu("Affichage");
+		JMenu mView = new JMenu(ApplicationManager.getApplicationManager().getTraduction("display"));
 		
 		// "Top pannel" sub menu
 		JMenu miTopPannel = new JMenu();
-		miTopPannel.setText("Panneau sup\u00e9rieur");
+		miTopPannel.setText(ApplicationManager.getApplicationManager().getTraduction("toppanel"));
 		
 		JMenuItem miTopChangeToConcepts = new JMenuItem(ActionManager.getActionManager().getAction(Constants.ACTION_CHANGE_TOP_PANNEL_CONCEPTS));
-		miTopChangeToConcepts.setText("Vue par concepts");
+		miTopChangeToConcepts.setText(ApplicationManager.getApplicationManager().getTraduction("conceptview"));
 		miTopPannel.add(miTopChangeToConcepts);
 
 		JMenuItem miTopChangeToLemmas = new JMenuItem(ActionManager.getActionManager().getAction(Constants.ACTION_CHANGE_TOP_PANNEL_LEMMAS));
-		miTopChangeToLemmas.setText("Vue par termes");
+		miTopChangeToLemmas.setText(ApplicationManager.getApplicationManager().getTraduction("termview"));
 		miTopPannel.add(miTopChangeToLemmas);
 
 		JMenuItem miTopChangeToDocuments = new JMenuItem(ActionManager.getActionManager().getAction(Constants.ACTION_CHANGE_TOP_PANNEL_DOCUMENTS));
-		miTopChangeToDocuments.setText("Vue par documents");
+		miTopChangeToDocuments.setText(ApplicationManager.getApplicationManager().getTraduction("documentview"));
 		miTopPannel.add(miTopChangeToDocuments);
 		
 		mView.add(miTopPannel);
 
 		// "Bottom pannel" sub menu
 		JMenu miBottomPannel = new JMenu();
-		miBottomPannel.setText("Panneau inf\u00e9rieur");
+		miBottomPannel.setText(ApplicationManager.getApplicationManager().getTraduction("bottompanel"));
 		
 		JMenuItem miBottomChangeToConcepts = new JMenuItem(ActionManager.getActionManager().getAction(Constants.ACTION_CHANGE_BOTTOM_PANNEL_CONCEPTS));
-		miBottomChangeToConcepts.setText("Vue par concepts");
+		miBottomChangeToConcepts.setText(ApplicationManager.getApplicationManager().getTraduction("conceptview"));
 		miBottomPannel.add(miBottomChangeToConcepts);
 
 		JMenuItem miBottomChangeToLemmas = new JMenuItem(ActionManager.getActionManager().getAction(Constants.ACTION_CHANGE_BOTTOM_PANNEL_LEMMAS));
-		miBottomChangeToLemmas.setText("Vue par termes");
+		miBottomChangeToLemmas.setText(ApplicationManager.getApplicationManager().getTraduction("termview"));
 		miBottomPannel.add(miBottomChangeToLemmas);
 
 		JMenuItem miBottomChangeToDocuments = new JMenuItem(ActionManager.getActionManager().getAction(Constants.ACTION_CHANGE_BOTTOM_PANNEL_DOCUMENTS));
-		miBottomChangeToDocuments.setText("Vue par documents");
+		miBottomChangeToDocuments.setText(ApplicationManager.getApplicationManager().getTraduction("documentview"));
 		miBottomPannel.add(miBottomChangeToDocuments);
 		
 		mView.add(miBottomPannel);
 		
+		// "Language" sub menu
+		JMenu miLanguage = new JMenu();
+		miLanguage.setText(ApplicationManager.getApplicationManager().getTraduction("language"));
+		
+		GROUPLANG = new ButtonGroup();
+		
+		ApplicationManager app = ApplicationManager.getApplicationManager();
+	
+		for(int i=0;i<app.getAvailableLanguages().size();i++)
+		{
+			JRadioButtonMenuItem rbMenuItem = new JRadioButtonMenuItem(ActionManager.getActionManager().getAction(Constants.ACTION_CHANGE_LANGUAGE));
+			String lang = (String) app.getAvailableLanguages().get(i);
+			rbMenuItem.setText(app.getTraduction(lang)); rbMenuItem.setName(lang);
+			rbMenuItem.setSelected(ApplicationManager.getCurrentLang().equals(lang));
+			GROUPLANG.add(rbMenuItem);
+			miLanguage.add(rbMenuItem);
+		}
+		
+		mView.add(miLanguage);
+		
+		
 		this.add(mView);
 		
 		// "Search" menu pour la recherche. 
-		JMenu mSearch = new JMenu("Recherche");
+		JMenu mSearch = new JMenu(ApplicationManager.getApplicationManager().getTraduction("search"));
 
 		JMenuItem miSearchLemma = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_SEARCH_LEMMA));
-		miSearchLemma.setText("Recherche de lemme");
+		miSearchLemma.setText(ApplicationManager.getApplicationManager().getTraduction("findterm"));
         mSearch.add(miSearchLemma);
 
         this.add(mSearch);
@@ -154,7 +181,7 @@ public class MenuBar extends JMenuBar
 
         JMenuItem miAPropos = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_APROPOS));
-		miAPropos.setText("A propos");
+		miAPropos.setText(ApplicationManager.getApplicationManager().getTraduction("aboutarkeotek"));
         mHelp.add(miAPropos);
         
         this.add(mHelp);

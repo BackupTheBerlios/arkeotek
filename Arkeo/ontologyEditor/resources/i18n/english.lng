@@ -1,0 +1,39 @@
+#
+# Barre de Menu Principale de l'Application Arkeotek
+#
+
+# File Menu
+file=File
+newontology=New ontology
+openontology=Open
+importtermontoontology=Import a Termonto ontology
+saveontology=Save
+quit=Quit
+
+# Edition Menu
+edition=Edition
+newconcept=New concept
+newterm=New term
+newrelation=New relation
+breed=Breed...
+mergeterms=Merge terms
+indexdocumentgeneric=Index the document (generic)
+
+# Display Menu
+display=Display
+toppanel=Top panel
+bottompanel=Bottom Panel
+conceptview=Concept view
+termview=Term view
+documentview=Document view
+language=Language
+french=French
+english=English
+spanish=Spanish
+
+# Search Menu
+search=Search
+findterm=Find a term...
+
+# Help Menu
+aboutarkeotek=About Ark\u00e9otek

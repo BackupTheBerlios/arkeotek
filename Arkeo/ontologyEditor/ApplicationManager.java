@@ -5,20 +5,27 @@
  */
 package ontologyEditor;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Vector;
 
+import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButtonMenuItem;
 
 import ontologyEditor.actions.AProposAction;
 import ontologyEditor.actions.BottomPanelChangeAction;
 import ontologyEditor.actions.BreedAction;
+import ontologyEditor.actions.ChangeLanguageAction;
 import ontologyEditor.actions.GenericIndexationAction;
 import ontologyEditor.actions.ImportTermontoAction;
 import ontologyEditor.actions.LemmaSearchAction;
@@ -33,6 +40,7 @@ import ontologyEditor.actions.SCDIndexationAction;
 import ontologyEditor.actions.SaveAction;
 import ontologyEditor.actions.TopPanelChangeAction;
 import ontologyEditor.gui.MainFrame;
+import ontologyEditor.gui.MenuBar;
 import ontologyEditor.gui.dialogs.AboutDialog;
 import ontologyEditor.gui.dialogs.FindLemmaDialog;
 import ontologyEditor.gui.dialogs.OntologyWizard;
@@ -160,15 +168,28 @@ public class ApplicationManager
         /**
          * Performs Showing About Dialog
          */
-        SHOW_APROPOS
+        SHOW_APROPOS,
+        /**
+         * Performs Changing Language of the application
+         */
+        CHANGE_LANGUAGE
     }
+    
+    // Language
+    private static Vector availableLanguages = null ;
+	private static Properties config = null ;
+	private static Properties currentLanguage = null;
+	private static String currentLang = null;
+	public static final String CHEMIN = "./ontologyEditor/resources/i18n/";
+	public static final String ERRORSTRING = "#ERROR";
+	public static final String EXTENSION = "lng";
+	public static final String LANGFILE = "lang.cfg";
+	
 
-	 /**
-     * Constructor of ApplicationManager. It is private to allow the implementation of the 
-     * singleton pattern
-     */
-    private ApplicationManager()
+	
+	private ApplicationManager()
     {
+		applicationManager=this;
         try
         {
             // Initialisation of actions
@@ -195,9 +216,10 @@ public class ApplicationManager
             am.registerAction(Constants.ACTION_CHANGE_TOP_PANNEL_DOCUMENTS, new TopPanelChangeAction(DocumentPart.KEY));
             
             am.registerAction(Constants.ACTION_SEARCH_LEMMA, new LemmaSearchAction());
-
 			am.registerAction(Constants.ACTION_APROPOS, new AProposAction());
+			am.registerAction(Constants.ACTION_CHANGE_LANGUAGE, new ChangeLanguageAction());
 
+			
 			// Retrieview of ontology (we must create the ontology before the mainframe)
 			// ApplicationManager.ontology = new Ontology("Pipontologie");
 			
@@ -561,15 +583,21 @@ public class ApplicationManager
 				}
 				break;
 			
-			case SHOW_APROPOS : 
-					
-					// Instanciation de la boite de dialog "a propos" de l'application
-					AboutDialog aboutDialog = new AboutDialog();
+			case SHOW_APROPOS : // Instanciation de la boite de dialog "a propos" de l'application
+					AboutDialog aboutDialog = new AboutDialog();break;
 				
+			case CHANGE_LANGUAGE : 
+				JRadioButtonMenuItem elem = null;
+				Enumeration<AbstractButton> enumer = MenuBar.GROUPLANG.getElements();
+				
+				
+				while(enumer.hasMoreElements())
+				{
+					JRadioButtonMenuItem jrbmi = (JRadioButtonMenuItem)enumer.nextElement();
+					if(jrbmi.isSelected()) setCurrentLang(jrbmi.getName());
+				}
+				JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Veuillez redémarrer l'application afin que les nouveaux paramètres soient pris en compte.");
 				break;
-				
-			//System.out.println("1"); break;
-			case SHOW_ABOUT : System.out.println("2"); break;
 			case QUIT_APPLICATION : System.exit(0);
 			case RUN_APPLICATION : 
 				// No special action is to be done during launching. 
@@ -584,43 +612,251 @@ public class ApplicationManager
             e.printStackTrace();
         }
     }
+        
+    /*********************************************************************************************************************************
+     *  PARTIE MULTILANGUE
+     *  
+     * 	Julien Sanmartin
+     * 
+     * 	Hubert Nouhen
+     * 
+     * 	Le 6/06/2006
+     * 
+     */
 	
-private class GenericRunnable extends Thread
-{
-	private Object argument;
 	
-	/**
-	 * @param argument
-	 */
-	public GenericRunnable(Object argument)
+	public static void loadConfig()
 	{
-		this.argument = argument;
+		config = new Properties();
+		try
+		{
+			// Reading File "lang.cfg"
+			config.load(new FileInputStream ("./ontologyEditor/resources/i18n/" + LANGFILE));
+		}
+		catch (FileNotFoundException e)
+		{			
+			createLanguageFile("french");
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public static void createLanguageFile(String s)
+	{
+		// Creation of the "lang.cfg" config file with the curent language
+		config.clear();
+		config.put("currentLanguage", s);
+		sauvegarderConfig();
+	}
+	
+	public static void sauvegarderConfig()
+	{
+		try
+		{
+			config.save(new FileOutputStream((CHEMIN + LANGFILE)), "Arkeotek Language Configuration");
+		}
+		catch (FileNotFoundException e)
+		{
+			// file writing matter
+			e.printStackTrace();
+		}
+	}
+    
+    /**
+     * Chargement de la langue courante sauvegardée
+     * dans un fichier de propriété de l'application
+     */
+    public static void loadCurrentLanguage()
+	{
+    	currentLanguage = new Properties() ;
+		try
+		{
+    		currentLanguage.load(new FileInputStream (CHEMIN + config.getProperty("currentLanguage") + "." + EXTENSION));
+   		 	currentLang = config.getProperty("currentLanguage");
+		}
+    	catch (FileNotFoundException e)
+		{
+    		// file does not exist, we load first lang file 
+			// change la langue et appelle directement charger
+			if (availableLanguages.size() != 0)
+			{
+				ApplicationManager.getApplicationManager().setCurrentLanguage(CHEMIN + availableLanguages.elementAt(0));
+			}
+			else
+			{
+				// aucune langue disponible
+				e.printStackTrace();
+			}
+		 }
+		 catch (IOException e)
+		 {
+			 // problème de lecture du fichier
+			 e.printStackTrace();
+		 }
+	}
+    
+    /**
+	 * Retrieve all languages of the application
+	 * There is 1 property file by language
+	 * in the language directory
+	 */
+	public static void retrieveAvailableLanguages()
+	{
+		availableLanguages = new Vector(); // vector initialisation
+		File file = new File(CHEMIN);			// file language directory
+		File[] fliste = file.listFiles();		// listing of all files in the directory
+		for (int i = 0 ; i < fliste.length ; i++ )
+		{
+			if (fliste[i].isFile())
+			{
+				// si le fichier courant correspond bien un fichier.lng, c'est un fichier de langue
+			 	 if ( fliste[i].getName().substring(fliste[i].getName().length() - 1 - EXTENSION.length()).equals(".".concat(EXTENSION)))
+			  	 {
+			  		// on remplit notre liste de fichiers de langue
+					availableLanguages.addElement(fliste[i].getName().substring( 0 , fliste[i].getName().length()-1- EXTENSION.length()));
+			  	 }
+			 }
+		}
 	}
 	
 	/**
-	 * @see java.lang.Thread#run()
+	 * Renvoie la chaine de caractère associée à la clé s dans le fichier de configuration
+	 * @param s clé dont on veut récupérer la valeur
+	 * @return valeur associée à la clé dans le fichier de configuration
 	 */
-	public void run()
+	public String getConfigProperty(String s)
 	{
-		//this method has to be implemented during the creation of the class
+		if ( config == null )
+		{
+			return "" ;
+		}
+		String retour = config.getProperty(s);
+		// si la clé n'existe pas on renvoie une chaine nulle
+		if ( retour == null )
+		{
+			return "";
+		}
+		// renvoie la valeur récupérée
+		return retour;
 	}
 	
 	/**
-	 * @return the argument
+	 * Renvoie la chaine de caractère associée à la clé s dans le fichier de langue
+	 * @param s clé dont on veut récupérer la traduction
+	 * @return valeur associée à la clé dans le fichier de langue
 	 */
-	public Object getArgument()
+	public String getTraduction(String s)
 	{
-		return this.argument;
+		if ( currentLanguage == null )
+		{
+			return ApplicationManager.ERRORSTRING;
+		}
+		String retour = currentLanguage.getProperty(s);
+		// si la clé n'existe pas on renvoie une chaine nulle
+		if ( retour == null )
+		{
+			return ApplicationManager.ERRORSTRING;
+		}
+		// renvoie la valeur récupérée
+		return retour;
 	}
-}
+	
+	/**
+	 * Renvoie la liste des langues disponibles récupérée
+	 */
+	public Vector getLangues()
+	{
+		return availableLanguages;
+	}
+	
+	/**
+	 * update current language used in the application
+	 * write a new "lang.cfg" in the language directory
+	 * charge le fichier de langues
+	 * @param s
+	 */
+	public void setCurrentLanguage(String s)
+	{
+		// check existence of s
+		if(availableLanguages.contains((Object) s))
+		{
+			createLanguageFile(s);
+			loadCurrentLanguage();
+		}
+	}
+	
+	public Vector getAvailableLanguages() {
+		return availableLanguages;
+	}
+
+	public Properties getCurrentLanguage() {
+		return currentLanguage;
+	}
+
+	public static String getCurrentLang() {
+		return currentLang;
+	}
+
+	public static void setCurrentLang(String currentLang) {
+		ApplicationManager.currentLang = currentLang;
+		createLanguageFile(getCurrentLang());
+		loadConfig();
+		loadCurrentLanguage();
+	}
+	
+	/**
+	 * 
+	 * Fin Partie Multilanguage
+	 * 
+	 * @author nouhen
+	 ****************************************************************************************************************************************
+	 */
+
+	
+	private class GenericRunnable extends Thread
+	{
+		private Object argument;
+		
+		/**
+		 * @param argument
+		 */
+		public GenericRunnable(Object argument)
+		{
+			this.argument = argument;
+		}
+		
+		/**
+		 * @see java.lang.Thread#run()
+		 */
+		public void run()
+		{
+			//this method has to be implemented during the creation of the class
+		}
+		
+		/**
+		 * @return the argument
+		 */
+		public Object getArgument()
+		{
+			return this.argument;
+		}
+	}
+	
+	
 	/**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                ApplicationManager.retrieveAvailableLanguages();
+                ApplicationManager.loadConfig();
+                ApplicationManager.loadCurrentLanguage();
                 ApplicationManager.getApplicationManager();
-            }
+           }
         });
     }
 }
