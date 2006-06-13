@@ -101,6 +101,11 @@ public class MenuBar extends JMenuBar
                 Constants.ACTION_GENERIC_INDEXATION));
 		miIndexation.setText(ApplicationManager.getApplicationManager().getTraduction("indexdocumentgeneric"));
         mEdit.add(miIndexation);
+        
+		JMenuItem miEditionRelations = new JMenuItem(ActionManager.getActionManager().getAction(
+                Constants.ACTION_EDITION_RELATIONS));
+		miEditionRelations.setText(ApplicationManager.getApplicationManager().getTraduction("editionrelations"));
+        mEdit.add(miEditionRelations);
 
         this.add(mEdit);
 

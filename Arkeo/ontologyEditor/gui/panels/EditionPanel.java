@@ -238,8 +238,14 @@ public class EditionPanel extends JPanel
             switch(evt.getKeyCode()){
                 case KeyEvent.VK_DELETE:
 					if(((JTable)evt.getSource()).getRowCount() > 0)
-						((EditorTableModel) ((JTable)evt.getSource()).getModel()).removeRelation(((JTable)evt.getSource()).getSelectedRow());
-                    evt.consume();
+					{
+						int confirmation = JOptionPane.showConfirmDialog(DisplayManager.mainFrame,"Etes vous sûr de vouloir supprimer cette relation ?","Confirmation de suppression",JOptionPane.YES_NO_OPTION);
+						if(confirmation==0)
+						{
+							((EditorTableModel) ((JTable)evt.getSource()).getModel()).removeRelation(((JTable)evt.getSource()).getSelectedRow());
+						}
+					}
+					evt.consume();
                     break;
                 default:
                     break;

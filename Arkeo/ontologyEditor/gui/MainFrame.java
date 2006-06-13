@@ -186,6 +186,68 @@ public class MainFrame extends JFrame
 	}
 	
 	/**
+	 * isAtBottomPanel(Concept.KEY ou Lemma.KEY ou DocumentPart.KEY)
+	 * @ Hubert Nouhen
+	 */
+	
+	public boolean isAtBottomPanel(int key)
+	{
+		boolean res=false;
+				
+		if(key == Lemma.KEY)
+		{
+			if (this.bottomPanel instanceof LinguisticPanel) res=true;
+		}
+		
+		if(key == Concept.KEY)
+		{
+			if (this.bottomPanel instanceof OntologyPanel) res=true;
+		}
+		
+		if(key == DocumentPart.KEY)
+		{
+			if (this.bottomPanel instanceof CorpusPanel) res=true;
+		}
+		
+		return res;
+	}
+
+	/**
+	 * isAtTopPanel(Concept.KEY ou Lemma.KEY ou DocumentPart.KEY)
+	 * @ Hubert Nouhen
+	 */
+	public boolean isAtTopPanel(int key)
+	{
+		boolean res=false;
+				
+		if(key == Lemma.KEY)
+		{
+			if (this.topPanel instanceof LinguisticPanel) res=true;
+		}
+		
+		if(key == Concept.KEY)
+		{
+			if (this.topPanel instanceof OntologyPanel) res=true;
+		}
+		
+		if(key == DocumentPart.KEY)
+		{
+			if (this.topPanel instanceof CorpusPanel) res=true;
+		}
+		
+		return res;
+	}
+	
+	/**
+	 * isActive(Concept.KEY ou Lemma.KEY ou DocumentPart.KEY)
+	 * @ Hubert Nouhen
+	 */
+	public boolean isActive(int key)
+	{
+		return(isAtBottomPanel(key)||isAtTopPanel(key));
+	}
+	
+	/**
 	 * Return indexes of <code>element</code> in trees
 	 * @param element
 	 * @return indexes of element

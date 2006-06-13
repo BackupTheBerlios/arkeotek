@@ -36,6 +36,7 @@ import ontologyEditor.actions.NewOntologyAction;
 import ontologyEditor.actions.NewRelationAction;
 import ontologyEditor.actions.OpenAction;
 import ontologyEditor.actions.QuitAction;
+import ontologyEditor.actions.RelationsEditionAction;
 import ontologyEditor.actions.SCDIndexationAction;
 import ontologyEditor.actions.SaveAction;
 import ontologyEditor.actions.TopPanelChangeAction;
@@ -45,9 +46,13 @@ import ontologyEditor.gui.dialogs.AboutDialog;
 import ontologyEditor.gui.dialogs.FindLemmaDialog;
 import ontologyEditor.gui.dialogs.OntologyWizard;
 import ontologyEditor.gui.dialogs.ProgressBarDialog;
+import ontologyEditor.gui.dialogs.RelationsEditorDialog;
 import ontologyEditor.gui.filechoosers.OntologyFileChooser;
 import ontologyEditor.gui.filechoosers.SyntexFileChooser;
 import ontologyEditor.gui.filechoosers.TermontoFileChooser;
+import ontologyEditor.gui.panels.LinguisticNavigationPanel;
+import ontologyEditor.gui.panels.LinguisticPanel;
+import sun.security.jca.GetInstance;
 import arkeotek.indexing.generic.GenericIndexer;
 import arkeotek.indexing.scd.SCDIndexer;
 import arkeotek.io.importer.AbstractParser;
@@ -55,6 +60,7 @@ import arkeotek.io.importer.termonto.Importer;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.DuplicateElementException;
+import arkeotek.ontology.IIndexable;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.Link;
 import arkeotek.ontology.LinkableElement;
@@ -172,7 +178,11 @@ public class ApplicationManager
         /**
          * Performs Changing Language of the application
          */
-        CHANGE_LANGUAGE
+        CHANGE_LANGUAGE,
+        /**
+         * Performs Edition Relations
+         */
+        EDITION_RELATIONS
     }
     
     // Language
@@ -207,6 +217,7 @@ public class ApplicationManager
 			am.registerAction(Constants.ACTION_LEMMAS_FUSION, new LemmasFusionAction());
 			am.registerAction(Constants.ACTION_SCD_INDEXATION, new SCDIndexationAction());
 			am.registerAction(Constants.ACTION_GENERIC_INDEXATION, new GenericIndexationAction());
+			am.registerAction(Constants.ACTION_EDITION_RELATIONS, new RelationsEditionAction());
 
 			am.registerAction(Constants.ACTION_CHANGE_BOTTOM_PANNEL_CONCEPTS, new BottomPanelChangeAction(Concept.KEY));
             am.registerAction(Constants.ACTION_CHANGE_BOTTOM_PANNEL_LEMMAS, new BottomPanelChangeAction(Lemma.KEY));
@@ -567,36 +578,65 @@ public class ApplicationManager
 				break;
 				
 			case LEMMA_SEARCH :
-				// TODO tester si le panneau des lemmes est actif
 				if (ontology != null)
 				{
-					FindLemmaDialog lemmaSearchDialog = new FindLemmaDialog();
-					lemmaSearchDialog.setVisible(true);
-					String lcn = lemmaSearchDialog.getContainName();
-					if ( lcn != null)
+					// We check if the LinguisticPanel is Active
+					if(DisplayManager.mainFrame.isActive(Lemma.KEY))
 					{
-						// TODO appeler la fonction de recherche qui doit se situer
-						// dans le SearchAction  ...
-						System.out.println("huhu : " + lcn);
-						//DisplayManager.getInstance().resetDisplay();
+						FindLemmaDialog lemmaSearchDialog = new FindLemmaDialog();
+						lemmaSearchDialog.setVisible(true);
+						String lcn = lemmaSearchDialog.getContainName();
+						if ( lcn != null)
+						{
+							// TODO appeler la fonction de recherche qui doit se situer
+							// dans le SearchAction  ...
+							System.out.println("huhu : " + lcn);
+							ArrayList<LinkableElement> all_lemmas = ApplicationManager.ontology.get(Lemma.KEY);
+							ArrayList<LinkableElement> matching_lemmas = new ArrayList<LinkableElement>();
+							for(int i=0;i<all_lemmas.size();i++)
+							{
+								if(((Lemma) all_lemmas.get(i)).getName().contains(lcn))
+								{
+									matching_lemmas.add(all_lemmas.get(i));
+								}
+							}
+							
+							// affichage pour verif
+							for(int i=0;i<matching_lemmas.size();i++)
+							{
+								System.out.println(matching_lemmas.get(i));
+							}
+						}
 					}
+					else
+					{
+						//if not active we display a message...
+						JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Veuillez afficher le panneau des termes.");
+					}
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Veuillez charger une ontologie, avant d'effectuer une recherche.");
 				}
 				break;
 			
 			case SHOW_APROPOS : // Instanciation de la boite de dialog "a propos" de l'application
-					AboutDialog aboutDialog = new AboutDialog();break;
+					/*AboutDialog aboutDialog = */new AboutDialog();break;
 				
 			case CHANGE_LANGUAGE : 
-				JRadioButtonMenuItem elem = null;
 				Enumeration<AbstractButton> enumer = MenuBar.GROUPLANG.getElements();
-				
-				
 				while(enumer.hasMoreElements())
 				{
 					JRadioButtonMenuItem jrbmi = (JRadioButtonMenuItem)enumer.nextElement();
 					if(jrbmi.isSelected()) setCurrentLang(jrbmi.getName());
 				}
 				JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Veuillez redémarrer l'application afin que les nouveaux paramètres soient pris en compte.");
+				break;
+			case EDITION_RELATIONS :
+				if(ApplicationManager.ontology!=null)
+				{
+					new RelationsEditorDialog();
+				}
 				break;
 			case QUIT_APPLICATION : System.exit(0);
 			case RUN_APPLICATION : 

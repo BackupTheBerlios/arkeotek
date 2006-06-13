@@ -18,6 +18,7 @@ newrelation=Nouvelle relation
 breed=Enrichir...
 mergeterms=Fusionner les termes
 indexdocumentgeneric=Indexer le document (g\u00e9n\u00e9rique)
+editionrelations=Edition des relations
 
 # Display Menu
 display=Affichage
@@ -38,3 +39,6 @@ findterm=Rechercher des termes
 # Help Menu
 aboutarkeotek=A propos d\u0027Arkeotek
 
+###########################################
+
+# Relations Editor Dialog

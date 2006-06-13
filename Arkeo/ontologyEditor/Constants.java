@@ -117,6 +117,11 @@ public interface Constants
 	 * Changement de la langue de l'application
 	 */
 	public static final String ACTION_CHANGE_LANGUAGE = "Changer la langue de l'application";
+	
+	/**
+	 * Edition of the relations
+	 */
+	public static final String ACTION_EDITION_RELATIONS = "Changer la langue de l'application";
 
 	/**
 	 * Default path where resources are located. 

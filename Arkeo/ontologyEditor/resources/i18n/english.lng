@@ -18,6 +18,7 @@ newrelation=New relation
 breed=Breed...
 mergeterms=Merge terms
 indexdocumentgeneric=Index the document (generic)
+editionrelations=Relations edition
 
 # Display Menu
 display=Display
@@ -37,3 +38,8 @@ findterm=Find a term...
 
 # Help Menu
 aboutarkeotek=About Ark\u00e9otek
+
+###########################################
+
+# Relations Editor Dialog
+relationseditor=Relations editor
