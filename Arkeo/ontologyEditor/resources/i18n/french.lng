@@ -42,3 +42,8 @@ aboutarkeotek=A propos d\u0027Arkeotek
 ###########################################
 
 # Relations Editor Dialog
+relationseditor=Editeur de relations
+cancelbutton=Annuler
+okbutton=Ok
+addbutton=Ajouter
+delbutton=Supprimer
