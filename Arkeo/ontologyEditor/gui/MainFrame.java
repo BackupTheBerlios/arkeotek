@@ -14,11 +14,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.gui.panels.AbstractPanel;
+import ontologyEditor.gui.panels.CorpusNavigationPanel;
 import ontologyEditor.gui.panels.CorpusPanel;
 import ontologyEditor.gui.panels.EditionPanel;
+import ontologyEditor.gui.panels.LinguisticNavigationPanel;
 import ontologyEditor.gui.panels.LinguisticPanel;
+import ontologyEditor.gui.panels.OntologyNavigationPanel;
 import ontologyEditor.gui.panels.OntologyPanel;
+import ontologyEditor.gui.tables.LemmaTableModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -54,6 +59,7 @@ public class MainFrame extends JFrame
 	 * Creates new form MainFrame 
 	 */
     public MainFrame() {
+    	this.setTitle("Arkeotek");
 		Rectangle screenSize = GraphicsEnvironment
         .getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		this.setSize(screenSize.width , screenSize.height);
@@ -62,6 +68,7 @@ public class MainFrame extends JFrame
 		initComponents();
 		this.editionPanel.setMinimumSize(new Dimension(screenSize.width /6, screenSize.height));
 		this.setVisible(true);
+		this.repaint();
     }
     
     /** 
@@ -70,7 +77,7 @@ public class MainFrame extends JFrame
      */
     private void initComponents() {
 		this.loadingPanel = new JPanel();
-		this.loadingPanel.add(new JLabel("chargement..."));
+		this.loadingPanel.add(new JLabel("Chargement en cours"));
 		
 		this.menuBar = new MenuBar();
 		this.jSplitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -97,6 +104,7 @@ public class MainFrame extends JFrame
 	 * Refreshes the display of the <code>MainFrame</code> and its <code>Components</code>. 
 	 */
 	public void refresh() {
+		System.out.println("huhu refresh 1");
 		this.jSplitPane1.setLeftComponent(this.loadingPanel);
 		this.topPanel.refresh();
 		this.bottomPanel.refresh();
@@ -162,7 +170,13 @@ public class MainFrame extends JFrame
 					 this.topPanel = new OntologyPanel();
 			 } else if (category_key == Lemma.KEY) {
 				 if (!(this.topPanel instanceof LinguisticPanel))
+				 {
 					 this.topPanel = new LinguisticPanel();
+					 if (ApplicationManager.ontology!=null)
+						{
+							((LemmaTableModel)topPanel.getTable().getModel()).remplirTableLemme();
+						}
+				 }
 			 } else if (category_key == DocumentPart.KEY) {
 				 if (!(this.topPanel instanceof CorpusPanel))
 					 this.topPanel = new CorpusPanel();
@@ -175,7 +189,13 @@ public class MainFrame extends JFrame
 					 this.bottomPanel = new OntologyPanel();
 			 } else if (category_key == Lemma.KEY) {
 				 if (!(this.bottomPanel instanceof LinguisticPanel))
+				 {
 					 this.bottomPanel = new LinguisticPanel();
+					 if (ApplicationManager.ontology!=null)
+						{
+							((LemmaTableModel)bottomPanel.getTable().getModel()).remplirTableLemme();
+						}
+				 }
 			 } else if (category_key == DocumentPart.KEY) {
 				 if (!(this.bottomPanel instanceof CorpusPanel))
 					 this.bottomPanel = new CorpusPanel();
@@ -259,7 +279,7 @@ public class MainFrame extends JFrame
 		indices[1] = this.bottomPanel.getChildIndexInTree(element);
 		return indices;
 	}
-
+	
 	/**
 	 * @param i index of panel<br>value can be topPanel or bottomPanel
 	 * @return Returns the panel.
@@ -270,6 +290,7 @@ public class MainFrame extends JFrame
 			return this.topPanel;
 		return this.bottomPanel;
 	}
+	
 
 	/**
 	 * @return Returns the editionPanel.
@@ -278,6 +299,61 @@ public class MainFrame extends JFrame
 	{
 		return this.editionPanel;
 	}
-	
+
+	public void mAJ(LinkableElement courant) {
+		// TODO Auto-generated method stub
+		JPanel haut=this.getPanel(TOP_PANEL);
+		JPanel bas=this.getPanel(BOTTOM_PANEL);
+		if (courant instanceof Concept)
+		{
+			if (bas instanceof OntologyPanel)
+			{
+				((OntologyNavigationPanel)((OntologyPanel) bas).getNavigationPanel()).remplirLabelPere(courant);
+				((OntologyNavigationPanel)((OntologyPanel) bas).getNavigationPanel()).remplirTableDefini(courant);
+				((OntologyNavigationPanel)((OntologyPanel) bas).getNavigationPanel()).remplirTableFils(courant);
+				((OntologyNavigationPanel)((OntologyPanel) bas).getNavigationPanel()).remplirTableLemme(courant);
+			}
+			else if (haut instanceof OntologyPanel)
+			{
+				((OntologyNavigationPanel)((OntologyPanel) haut).getNavigationPanel()).remplirLabelPere(courant);
+				((OntologyNavigationPanel)((OntologyPanel) haut).getNavigationPanel()).remplirTableDefini(courant);
+				((OntologyNavigationPanel)((OntologyPanel) haut).getNavigationPanel()).remplirTableFils(courant);
+				((OntologyNavigationPanel)((OntologyPanel) haut).getNavigationPanel()).remplirTableLemme(courant);
+			}
+		}
+		else if (courant instanceof Lemma)
+		{
+			if (bas instanceof LinguisticPanel)
+			{
+				((LinguisticNavigationPanel)((LinguisticPanel) bas).getNavigationPanel()).remplirTableConcept(courant);
+				((LinguisticNavigationPanel)((LinguisticPanel) bas).getNavigationPanel()).remplirTableDocumentParent(courant);
+				((LinguisticNavigationPanel)((LinguisticPanel) bas).getNavigationPanel()).remplirTableLemmeLier(courant);
+				((LinguisticNavigationPanel)((LinguisticPanel) bas).getNavigationPanel()).remplirTableLemmeParent(courant);
+			}
+			else if (haut instanceof LinguisticPanel)
+			{
+				((LinguisticNavigationPanel)((LinguisticPanel) haut).getNavigationPanel()).remplirTableConcept(courant);
+				((LinguisticNavigationPanel)((LinguisticPanel) haut).getNavigationPanel()).remplirTableDocumentParent(courant);
+				((LinguisticNavigationPanel)((LinguisticPanel) haut).getNavigationPanel()).remplirTableLemmeLier(courant);
+				((LinguisticNavigationPanel)((LinguisticPanel) haut).getNavigationPanel()).remplirTableLemmeParent(courant);
+			}
+		}
+		else if (courant instanceof DocumentPart)
+		{
+			if (bas instanceof OntologyPanel)
+			{
+				((CorpusNavigationPanel)((CorpusPanel) bas).getNavigationPanel()).remplirTableConceptIndexant(courant);
+				((CorpusNavigationPanel)((CorpusPanel) bas).getNavigationPanel()).remplirTableConceptPotentiel(courant);
+				((CorpusNavigationPanel)((CorpusPanel) bas).getNavigationPanel()).remplirTableLemmeLier(courant);
+			}
+			else if (haut instanceof OntologyPanel)
+			{
+				((CorpusNavigationPanel)((CorpusPanel) haut).getNavigationPanel()).remplirTableConceptIndexant(courant);
+				((CorpusNavigationPanel)((CorpusPanel) haut).getNavigationPanel()).remplirTableConceptPotentiel(courant);
+				((CorpusNavigationPanel)((CorpusPanel) haut).getNavigationPanel()).remplirTableLemmeLier(courant);
+			
+			}
+		}
+	}
 	
 }

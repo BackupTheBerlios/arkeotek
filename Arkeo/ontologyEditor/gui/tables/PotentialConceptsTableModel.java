@@ -63,6 +63,7 @@ public class PotentialConceptsTableModel extends EditorTableModel
 	 */
 	private ArrayList<Object[]> getElementsFromLinkableElement(LinkableElement parent)
 	{
+		System.out.println("getElementsFromLinkableElement");
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		if (parent != null)
 		{

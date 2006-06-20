@@ -50,6 +50,9 @@ import ontologyEditor.gui.dialogs.RelationsEditorDialog;
 import ontologyEditor.gui.filechoosers.OntologyFileChooser;
 import ontologyEditor.gui.filechoosers.SyntexFileChooser;
 import ontologyEditor.gui.filechoosers.TermontoFileChooser;
+import ontologyEditor.gui.panels.AbstractPanel;
+import ontologyEditor.gui.tables.LemmaTableModel;
+import ontologyEditor.gui.treeviews.ConceptualTreeModel;
 import ontologyEditor.gui.panels.LinguisticNavigationPanel;
 import ontologyEditor.gui.panels.LinguisticPanel;
 import sun.security.jca.GetInstance;
@@ -384,7 +387,7 @@ public class ApplicationManager
 				if (ontology != null) {
 					if (ontology.isDirty() != null) {
 						Object[] options = {"Oui", "Non", "Annuler"};
-						choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, "L'ontologie courante n'a pas \u00e9t\u00e9 enregistr\u00e9e, voulez-vous le faire maintenant ?", "Modifications non enregistr\u00e9es", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+						choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, "L'ontologie courante n'a pas été enregistrée, voulez-vous le faire maintenant ?", "Modifications non enregistr\u00e9es", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 						if (choice == JOptionPane.OK_OPTION)
 							ontology.save();
 					}
@@ -397,7 +400,7 @@ public class ApplicationManager
 					if (ontologyFileChooser.getSelectedFile() != null) {
 					
 						ProgressBarDialog progressBarDialog = new ProgressBarDialog(DisplayManager.mainFrame, "Chargement", true);
-					
+						
 						
 						ontology = null;
 						Object[] parameters = {ontologyFileChooser.extractOntologyName(), progressBarDialog};
@@ -407,6 +410,9 @@ public class ApplicationManager
 							{
 								try {
 									ApplicationManager.ontology = new Ontology((String)((Object[]) this.getArgument())[0]);
+									//DisplayManager.mainFrame.remplirTableLemme();
+									//DisplayManager.getInstance().remplirArbreDocument();
+									//DisplayManager.getInstance().remplirArbreConcept();
 									ApplicationManager.ontology.setSaved();
 									((ProgressBarDialog)((Object[])this.getArgument())[1]).dispose();
 								} catch (DuplicateElementException e) {
@@ -503,11 +509,12 @@ public class ApplicationManager
 				DisplayManager.mainFrame.changeView(MainFrame.BOTTOM_PANEL, DocumentPart.KEY);
 				break;
 			case LEMMAS_FUSION :
-				ArrayList<LinkableElement> lemmas = DisplayManager.getInstance().getSelectedElements(Lemma.KEY);
+				
+				ArrayList<LinkableElement> lemmas = DisplayManager.getInstance().getSelectedElementsTable(Lemma.KEY);;
 				Object[] possibilities = lemmas.toArray();
 				Lemma mainLemma = (Lemma)JOptionPane.showInputDialog(
 				                    DisplayManager.mainFrame,
-				                    "Choisissez le lemme \u00e0 conserver",
+				                    "Choisissez le lemme à conserver",
 				                    "Fusion de lemmes",
 				                    JOptionPane.PLAIN_MESSAGE,
 				                    null,
@@ -562,12 +569,13 @@ public class ApplicationManager
 								((LinkableElement)reference[0]).unlink(((Relation)reference[1]), lemma);
 								((LinkableElement)reference[0]).link(((Relation)reference[1]), mainLemma);
 							}
-							int[] indexes = DisplayManager.mainFrame.getChildIndexesInTrees(lemma);
+							//int[] indexes = DisplayManager.mainFrame.getChildIndexesInTrees(lemma);
 							ApplicationManager.ontology.unlink(lemma);
-							DisplayManager.getInstance().removeElement(lemma, indexes);
+							DisplayManager.getInstance().mainFrame.refresh();
+							//DisplayManager.getInstance().removeElement(lemma, indexes);
 						}
 					}
-					DisplayManager.getInstance().reloadGUI();
+					//DisplayManager.getInstance().reloadGUI();
 				}
 				break;
 			case SCD_INDEXATION :

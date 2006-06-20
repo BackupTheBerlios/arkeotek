@@ -7,16 +7,22 @@ package ontologyEditor.gui.transfers;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.util.ArrayList;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
+import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.panels.CorpusNavigationPanel;
+import ontologyEditor.gui.tables.ConceptIndexantTM;
+import ontologyEditor.gui.tables.ConceptPotentielTM;
 import ontologyEditor.gui.tables.EditorTableModel;
+import ontologyEditor.gui.tables.HighEditorPaneTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
@@ -65,26 +71,46 @@ public class ConceptDropTransferHandler extends TransferHandler
 			JTable target = (JTable) c;
             if (t != null)
 			{
-				LinkableElement element = (LinkableElement) t.getTransferData(this.exportedLinkableElement);
+            	LinkableElement element = (LinkableElement) t.getTransferData(this.exportedLinkableElement);
 				Object[] relations = ApplicationManager.ontology.get(Relation.KEY).toArray();
 				if (relations.length != 0)
 				{
 					Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
-							"Veuillez entrer le nom de la relation:", "Cr\u00e9ation d'un lien", JOptionPane.INFORMATION_MESSAGE, null,
+							"Veuillez entrer le nom de la relation:", "Création d'un lien", JOptionPane.INFORMATION_MESSAGE, null,
 							relations, relations[0]);
 					if (relation != null)
 					{
-						if (((EditorTableModel) target.getModel()).getElement() instanceof Concept)
+						// si la cible c'est les conceptIndexant 
+						if (target.getModel() instanceof ConceptIndexantTM)
 						{
-							Object[] possibleValues = {"de l'\u00e9l\u00e9ment \u00e9dit\u00e9", "vers l'\u00e9l\u00e9ment \u00e9dit\u00e9" };
-							Object selectedValue = JOptionPane.showInputDialog(null, 
-							"Selectionnez le sens de la relation", "Input",
-							JOptionPane.INFORMATION_MESSAGE, null,
-							possibleValues, possibleValues[0]);
-							((EditorTableModel) target.getModel()).addRelation(element, relation, (((String)selectedValue).equals("vers l'\u00e9l\u00e9ment \u00e9dit\u00e9")?1:0));
+							//on regarde dans quel panel s'est fait le drag and drop
+							int panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+							if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getY()==target.getParent().getParent().getParent().getParent().getParent().getY())
+							{
+								panel=DisplayManager.mainFrame.TOP_PANEL;
+							}
+							// on recupere le document source
+							LinkableElement doc=((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getDoc();
+							// on créer une nouvelle relation
+							ApplicationManager.ontology.addRelation(doc,element,relation);
+							// on met a jour les tables correspondantes
+							((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptIndexant(doc);
+							((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptPotentiel(doc);
 						}
-						else
-							((EditorTableModel) target.getModel()).addRelation(element, relation, 2);
+						// si on glisse un concept dans le panneau haut d'edition
+						else if (target.getModel() instanceof HighEditorPaneTM)
+						{
+							// on recupere le concept source
+							LinkableElement concept=DisplayManager.mainFrame.getEditionPanel().getCourant();
+							//if (concept instanceof Concept)
+							//{
+								// on créer une nouvelle relation
+								ApplicationManager.ontology.addRelation(concept,element,relation);
+								// on met a jour l'interface
+								DisplayManager.mainFrame.refresh();
+							//}
+						}
+						
 					}
 				}
 				else

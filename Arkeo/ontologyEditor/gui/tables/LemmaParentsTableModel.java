@@ -46,6 +46,7 @@ public class LemmaParentsTableModel extends EditorTableModel
 	 */
 	private ArrayList<Object[]> getElementsFromLinkableElement(LinkableElement element)
 	{
+		System.out.println("getElementsFromLinkableElement LemmaParentsTableModel");
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		if (element != null)
 		{	

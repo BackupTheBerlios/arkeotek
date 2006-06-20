@@ -1,37 +1,19 @@
-/**
- * Created on 31 mai 2005
- * 
- * Arkeotek Project
- */
 package ontologyEditor.gui.tables;
-
-import java.util.ArrayList;
-import java.util.Set;
 
 import javax.swing.table.AbstractTableModel;
 
-import ontologyEditor.ApplicationManager;
-import arkeotek.ontology.DocumentPart;
-import arkeotek.ontology.LinkableElement;
-import arkeotek.ontology.Relation;
+public class SecondEditorPaneTM extends AbstractTableModel {
 
-/**
- * @author Bernadou Pierre 
- * @author Czerny Jean
- *
- */
-public class LinesTableModel extends AbstractTableModel
-{
 	private String[] columnNames;
 	private Object[][] donnees;
 	
-	public LinesTableModel() {
+	public SecondEditorPaneTM() {
 		super();
 		//super(element);
 		// TODO Auto-generated constructor stub
 	}
 	
-	public LinesTableModel(Object [][] donnees,String[] columnNames) {
+	public SecondEditorPaneTM(Object [][] donnees,String[] columnNames) {
 		super();
 		this.columnNames=columnNames;
 		this.donnees=donnees;
@@ -82,6 +64,5 @@ public class LinesTableModel extends AbstractTableModel
 	public void setDonnees(Object[][] donnees) {
 		this.donnees = donnees;
 	}
-	
-	
+
 }

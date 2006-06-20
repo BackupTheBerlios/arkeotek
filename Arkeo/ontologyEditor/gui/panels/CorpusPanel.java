@@ -9,9 +9,14 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTree;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.tables.LinkableElementTable;
+import ontologyEditor.gui.treeviews.CorpusTM;
 import ontologyEditor.gui.treeviews.CorpusTreeModel;
+import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
+import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 
 /**
@@ -22,14 +27,30 @@ import arkeotek.ontology.LinkableElement;
 public class CorpusPanel extends AbstractPanel {
     /** Creates new form MainFrame */
     public CorpusPanel() {
-		super(new CorpusTreeModel(), new CorpusNavigationPanel());
+		super(new CorpusTM(),new CorpusNavigationPanel());
     }
     
 	protected void performMouseClicked(MouseEvent e) {
-		if (((JTree)e.getSource()).getSelectionPath().getLastPathComponent() instanceof DocumentPart)
+		if (ApplicationManager.ontology!=null)
 		{
-			((CorpusNavigationPanel) this.navigationPanel).fillTable(((DocumentPart)((JTree)e.getSource()).getSelectionPath().getLastPathComponent()));
-			DisplayManager.getInstance().reflectNavigation((DocumentPart)((JTree)e.getSource()).getSelectionPath().getLastPathComponent());
+			if (((JTree)e.getSource()).getLastSelectedPathComponent()!=null)
+			{
+				String nomDoc=((JTree)e.getSource()).getLastSelectedPathComponent().toString();
+				DocumentPart document;
+				for (int i=0;i<ApplicationManager.ontology.get(DocumentPart.KEY).size();i++)
+				{
+					if (ApplicationManager.ontology.get(DocumentPart.KEY).get(i).toString().equals(nomDoc))
+					{
+						document=(DocumentPart)ApplicationManager.ontology.get(DocumentPart.KEY).get(i);
+						((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptIndexant(document);
+						((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptPotentiel(document);
+						((CorpusNavigationPanel) this.navigationPanel).remplirTableLemmeLier(document);
+						//((OntologyNavigationPanel) this.navigationPanel).rollFirstPanel((LinkableElement)((JTree)e.getSource()).getSelectionPath().getLastPathComponent());
+						DisplayManager.getInstance().reflectNavigation(document);
+						return;
+					}
+				}
+			}
 		}
 	}
 
@@ -44,6 +65,12 @@ public class CorpusPanel extends AbstractPanel {
 	{
 		//empty corpse
 		
+	}
+	
+	public void refresh() {
+		((CorpusTM)this.getTree().getModel()).remplirArbreDocument();
+		if (ApplicationManager.ontology!=null)
+			((CorpusNavigationPanel)this.getNavigationPanel()).refresh();
 	}
 	
 }

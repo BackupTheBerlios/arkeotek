@@ -23,6 +23,8 @@ import arkeotek.ontology.Relation;
 public class ConceptualTreeModel extends AbstractTreeModel
 {
 	private LinkableElement lastElement;
+	
+	private Integer treeSize;
 
 	/**
 	 * 
@@ -30,9 +32,10 @@ public class ConceptualTreeModel extends AbstractTreeModel
 	public ConceptualTreeModel()
 	{
 		super(Concept.KEY);
+		this.treeSize=0;
 	}
 
-	protected ArrayList<LinkableElement> getElementsFromIndexable(LinkableElement parent)
+	public ArrayList<LinkableElement> getElementsFromIndexable(LinkableElement parent)
 	{
 		ArrayList<LinkableElement> elems = new ArrayList<LinkableElement>();
 		Set<Relation> keys = null;
@@ -54,8 +57,8 @@ public class ConceptualTreeModel extends AbstractTreeModel
 			if (((Concept) parent).getLinks(Lemma.KEY) != null)
 			{
 				keys = ((Concept) parent).getLinks(Lemma.KEY).keySet();
-				for (Relation key : keys)
-					elems.addAll(((Concept) parent).getLinks(Lemma.KEY, key));
+				/*for (Relation key : keys)
+					elems.addAll(((Concept) parent).getLinks(Lemma.KEY, key));*/
 			}
 		}
 		else if (parent instanceof Ontology)
@@ -66,6 +69,7 @@ public class ConceptualTreeModel extends AbstractTreeModel
 					elems.add(concept);
 			}
 		}
+		treeSize=elems.size();
 		return elems;		
 	}
 
@@ -105,7 +109,9 @@ public class ConceptualTreeModel extends AbstractTreeModel
 	@Override
 	public int getChildCount(Object parent)
 	{
+		System.out.println("****************************************** "+treeSize);
 		if (((LinkableElement) parent).getCategoryKey() == this.getModelCategory() || parent instanceof Ontology)
+			//return treeSize;
 			return getElementsFromIndexable((LinkableElement) parent).size();
        return 0;
 	}
@@ -120,14 +126,22 @@ public class ConceptualTreeModel extends AbstractTreeModel
 			elems = getElementsFromIndexable((LinkableElement) parent);
 		return elems.indexOf(child);
 	}
+
+	public Integer getTreeSize() {
+		return treeSize;
+	}
+
+	public void setTreeSize(Integer treeSize) {
+		this.treeSize = treeSize;
+	}
 	
 	/**
 	 * @see ontologyEditor.gui.treeviews.AbstractTreeModel#reloadTree()
 	 */
-	public void reloadTree()
+	/*public void reloadTree()
 	{
 		this.fireTreeStructureChanged();
-	}
+	}*/
 	
 	
 }

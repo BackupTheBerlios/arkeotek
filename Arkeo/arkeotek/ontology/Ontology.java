@@ -27,7 +27,10 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.JOptionPane;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
+import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.tables.LemmaTableModel;
 import arkeotek.io.EncryptedProperties;
 import arkeotek.io.IService;
 import arkeotek.io.importer.syntex.Importer;
@@ -67,7 +70,6 @@ public class Ontology extends LinkableElement {
 	 */
     public Ontology(String name, URL url) {
 		super(0, name, LinkableElement.DEFAULT);
-		
 		try {
 			if (url == null)
 			{
@@ -84,7 +86,7 @@ public class Ontology extends LinkableElement {
 				Collections.sort(this.elements.get(ctg));
 			
 		} catch (NullPointerException e) {
-			// We simply ignore errors occuring while retrieving storage properties. 
+			// We simply ignore errors   while retrieving storage properties. 
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {
@@ -117,7 +119,7 @@ public class Ontology extends LinkableElement {
      */
 	public Ontology(String name) throws Exception
 	{
-		this(name, null);		
+		this(name, null);
 	}
     
     private void importProperties() throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException, NoSuchAlgorithmException, NoSuchPaddingException
@@ -227,8 +229,8 @@ public class Ontology extends LinkableElement {
 	public ResultSet lookup(LinkableElement target)
 	{
 		ArrayList<LinkableElement> list = this.elements.get(target.getCategoryKey());
-		ResultSet matching_lemmas = new ResultSet();
 		
+		ResultSet matching_lemmas = new ResultSet();
 		for (LinkableElement elem : list) {
 			int relevance = elem.evaluate(target);
 			if (relevance > LinkableElement.DISTINCT)
@@ -328,6 +330,7 @@ public class Ontology extends LinkableElement {
 	 */
 	public ArrayList<Object[]> getLemmasParents(LinkableElement element)
 	{
+		System.out.println("getLemmaParents");
 		ArrayList<LinkableElement> lemmasToCheck = (ArrayList<LinkableElement>) this.elements.get(Lemma.KEY).clone();
 		HashMap<LinkableElement, ArrayList<Relation>> parents = new HashMap<LinkableElement, ArrayList<Relation>>();
 		ArrayList<Object[]> parentsToArray = new ArrayList<Object[]>();
@@ -381,6 +384,7 @@ public class Ontology extends LinkableElement {
 	 */
 	public ArrayList<Object[]> getElementsThatReference(LinkableElement element)
 	{
+		System.out.println("getElmentThatReference");
 		HashMap<LinkableElement, ArrayList<Relation>> parents = new HashMap<LinkableElement, ArrayList<Relation>>();
 		ArrayList<Object[]> parentsToArray = new ArrayList<Object[]>();
 		
@@ -677,8 +681,5 @@ public class Ontology extends LinkableElement {
 		{
 			e.printStackTrace();
 		}
-	}
-
-	
-	
+	}	
 }

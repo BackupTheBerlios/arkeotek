@@ -166,7 +166,7 @@ public class LinguisticTreeModel extends AbstractTreeModel
 				if (end_range < 0) end_range = -end_range - 1;
 			} else {
 				begin_range = 0;
-				end_range = Collections.binarySearch(temp_elems, new Lemma("A"));
+				end_range = Collections.binarySearch(temp_elems, new Lemma("Termes associés au corpus"));
 				
 				if (end_range < 0) end_range = -end_range - 1;
 			}

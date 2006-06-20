@@ -207,13 +207,16 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 				Lemma temp_lemma = (Lemma) this.results.get(this.parsers.indexOf(this.terms_parser)).get(this.current_result[1]);
 				if (temp_lemma!=null)
 				{
-					System.out.println(temp_doc + " " + temp_lemma);
-					Relation temp_rel;
-					int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION));
-					temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
-	
-					temp_lemma.link(temp_rel, temp_doc);
-					temp_doc.link(temp_rel, temp_lemma);
+					if (temp_doc!=null)
+					{
+						System.out.println(temp_doc + " " + temp_lemma);
+						Relation temp_rel;
+						int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION));
+						temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
+		
+						temp_lemma.link(temp_rel, temp_doc);
+						temp_doc.link(temp_rel, temp_lemma);
+					}
 				}
 			}
 		}

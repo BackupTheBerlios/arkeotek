@@ -6,17 +6,27 @@
 package ontologyEditor;
 
 import java.util.ArrayList;
+import java.util.Set;
 
+import javax.swing.DefaultBoundedRangeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import ontologyEditor.gui.MainFrame;
 import ontologyEditor.gui.panels.CorpusPanel;
 import ontologyEditor.gui.panels.LinguisticPanel;
 import ontologyEditor.gui.panels.OntologyPanel;
+import ontologyEditor.gui.tables.LemmaTableModel;
+import ontologyEditor.gui.treeviews.ConceptualTM;
+import ontologyEditor.gui.treeviews.ConceptualTreeModel;
+import ontologyEditor.gui.treeviews.CorpusTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
+import arkeotek.ontology.Ontology;
+import arkeotek.ontology.Relation;
 
 /**
  * This class is responsible of managing display
@@ -70,46 +80,53 @@ public class DisplayManager
 //			repercussion sur OntologyPanel.tree et EditionPanel
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 			{
-				mainFrame.getPanel(MainFrame.TOP_PANEL).elementAdded(element);
-				mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
+				mainFrame.getPanel(mainFrame.TOP_PANEL).refresh();
+				//((ConceptualTM)mainFrame.getPanel(mainFrame.TOP_PANEL).getTree().getModel()).remplirArbreConcept();
+				//mainFrame.getPanel(MainFrame.TOP_PANEL).elementAdded(element);
+				//mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 			}
 			if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof OntologyPanel)
 			{
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).elementAdded(element);
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
+				mainFrame.getPanel(mainFrame.BOTTOM_PANEL).refresh();
+				//mainFrame.getPanel(MainFrame.BOTTOM_PANEL).elementAdded(element);
+				//mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 			}
-			mainFrame.getEditionPanel().elementAdded(element);
-			mainFrame.changeState(true);
+			//mainFrame.getEditionPanel().elementAdded(element);
+			//mainFrame.changeState(true);
 		}
 		else if (element instanceof Lemma)
 		{
 //			repercussion sur LinguisticPanel.tree et EditionPanel
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof LinguisticPanel)
 			{
-				mainFrame.getPanel(MainFrame.TOP_PANEL).elementAdded(element);
-				mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
+				mainFrame.getPanel(mainFrame.TOP_PANEL).refresh();
+				//mainFrame.getPanel(MainFrame.TOP_PANEL).elementAdded(element);
+				//mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 			}
 			if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof LinguisticPanel)
 			{
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).elementAdded(element);
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
+				mainFrame.getPanel(mainFrame.BOTTOM_PANEL).refresh();
+				//mainFrame.getPanel(MainFrame.BOTTOM_PANEL).elementAdded(element);
+				//mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 			}
-			mainFrame.getEditionPanel().elementAdded(element);
-			mainFrame.changeState(true);
+			//mainFrame.getEditionPanel().elementAdded(element);
+			//mainFrame.changeState(true);
 		}	
 		//we cannot add a DocumentPart, but in case of evolution, code is ready to use
 		else if (element instanceof DocumentPart)
 		{
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof CorpusPanel)
 			{
-				mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
+				mainFrame.getPanel(mainFrame.TOP_PANEL).refresh();
+				//mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 			}
 			if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof CorpusPanel)
 			{
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
+				mainFrame.getPanel(mainFrame.BOTTOM_PANEL).refresh();
+				//mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 			}
-			mainFrame.getEditionPanel().elementAdded(element);
-			mainFrame.changeState(true);
+			//mainFrame.getEditionPanel().elementAdded(element);
+			//mainFrame.changeState(true);
 		}
 	}
 	
@@ -125,13 +142,13 @@ public class DisplayManager
 			//repercussion sur OntologyPanel.tree, OntologyPanel.navigation et EditionPanel
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 			{
-				//mainFrame.getPanel(MainFrame.TOP_PANEL).elementRemoved(element, indexes[0]);
+				mainFrame.getPanel(MainFrame.TOP_PANEL).elementRemoved(element, indexes[0]);
 				mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.TOP_PANEL).refreshNavigation(element);
 			}
 			if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof OntologyPanel)
 			{
-				//mainFrame.getPanel(MainFrame.BOTTOM_PANEL).elementRemoved(element, indexes[1]);
+				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).elementRemoved(element, indexes[1]);
 				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).refreshNavigation(element);
 			}
@@ -407,6 +424,38 @@ public class DisplayManager
 		this.addElement(element);
 	}
 	
+	
+	/**
+	 * Return elements of specified type selected in tables
+	 * @param categoryKey categoryKey of elements to return
+	 * @return elements selected
+	 */
+	public ArrayList<LinkableElement> getSelectedElementsTable(int categoryKey)
+	{
+		ArrayList<LinkableElement> elements = new ArrayList<LinkableElement>();
+		
+		if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof LinguisticPanel)
+		{
+			int[] lignes=mainFrame.getPanel(MainFrame.BOTTOM_PANEL).getTable().getSelectedRows();
+			for (int i=0;i<lignes.length;i++)
+			{
+				LinkableElement courant=(LinkableElement)mainFrame.getPanel(MainFrame.BOTTOM_PANEL).getTable().getValueAt(lignes[i],0);
+				elements.add(courant);
+			}
+		}
+		else if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof LinguisticPanel)
+		{
+			int[] lignes=mainFrame.getPanel(MainFrame.TOP_PANEL).getTable().getSelectedRows();
+			for (int i=0;i<lignes.length;i++)
+			{
+				LinkableElement courant=(LinkableElement)mainFrame.getPanel(MainFrame.TOP_PANEL).getTable().getValueAt(lignes[i],0);
+				elements.add(courant);
+			}
+		}
+		return elements;
+	}
+	
+	
 	/**
 	 * Return elements of specified type selected in trees
 	 * @param categoryKey categoryKey of elements to return
@@ -442,5 +491,5 @@ public class DisplayManager
 		}
 		return elements;
 	}
-	
+
 }

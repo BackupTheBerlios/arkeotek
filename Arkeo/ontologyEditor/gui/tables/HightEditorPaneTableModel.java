@@ -60,11 +60,13 @@ public class HightEditorPaneTableModel extends EditorTableModel
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
+		System.out.println("getValueAt");
 		return this.getElementsFromLinkableElement(this.getElement()).get(rowIndex)[columnIndex];
 	}
 	
 	private ArrayList<Object[]> getElementsFromLinkableElement(LinkableElement element)
-	{
+	{	
+		System.out.println("getElementsFromLinkableElement Higt Editor TM");
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		if (element.getLinks(Concept.KEY) != null)
 		{

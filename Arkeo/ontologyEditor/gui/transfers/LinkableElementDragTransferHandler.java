@@ -11,8 +11,13 @@ import java.awt.datatransfer.Transferable;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.JTree;
 import javax.swing.TransferHandler;
+import javax.swing.tree.DefaultMutableTreeNode;
 
+import ontologyEditor.ApplicationManager;
+import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.panels.OntologyNavigationPanel;
 import ontologyEditor.gui.treeviews.LinkableElementTree;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.Lemma;
@@ -68,12 +73,22 @@ public class LinkableElementDragTransferHandler extends TransferHandler
 		if (c instanceof JTable)
 		{
 			JTable source = (JTable) c;
-			element = (LinkableElement)source.getValueAt(source.getSelectedRow(), 1);
+			element = (LinkableElement)source.getValueAt(source.getSelectedRow(), 0);
 		}
 		else
 		{
-			LinkableElementTree source = (LinkableElementTree) c;
-			element = (LinkableElement)source.getSelectionPath().getLastPathComponent();
+			JTree source = (JTree) c;
+			if (ApplicationManager.ontology!=null)
+			{
+				String nomConcept=source.getLastSelectedPathComponent().toString();
+				for (int i=0;i<ApplicationManager.ontology.get(Concept.KEY).size();i++)
+				{
+					if (ApplicationManager.ontology.get(Concept.KEY).get(i).toString().equals(nomConcept))
+					{
+						element=(LinkableElement)ApplicationManager.ontology.get(Concept.KEY).get(i);
+					}
+				}
+			}
 		}
 		
 		if (element instanceof Concept)

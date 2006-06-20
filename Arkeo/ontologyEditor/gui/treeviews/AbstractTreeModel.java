@@ -120,7 +120,7 @@ public abstract class AbstractTreeModel implements TreeModel
 	 */
 	public void fireTreeStructureChanged()
     {
-        if (this.getRoot() != null)
+		if (this.getRoot() != null)
 		{
 			Ontology root = this.getRoot();
 			Object[] listeners = this.listenerList.getListenerList();
@@ -158,6 +158,7 @@ public abstract class AbstractTreeModel implements TreeModel
             int[] childIndices, 
             Object[] children) 
 	{
+		System.out.println("fireTreeStructureChanged");
 		/*if (getChildCount(path[path.length-1]) > 0)
 		{*/
 			// Guaranteed to return a non-null array
@@ -215,6 +216,7 @@ public abstract class AbstractTreeModel implements TreeModel
 	 */
 	public void fireTreeNodesAdded(LinkableElement element)
     {
+		System.out.println("fireTreeStructureAdded");
         Object[] listeners = this.listenerList.getListenerList();
         TreeModelEvent treeModelEvent = null;
 

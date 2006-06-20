@@ -22,6 +22,13 @@ public class LinkableElementTree extends JTree
 	/**
 	 * @param model The <code>TreeModel</code> to use for filling this subclass of <code>JTree</code>. 
 	 */
+	private AbstractTreeModel model;
+	
+	public LinkableElementTree()
+	{
+		super();
+	}
+	
 	public LinkableElementTree(TreeModel model)
 	{
 		super(model);
@@ -55,6 +62,14 @@ public class LinkableElementTree extends JTree
 
 		for(int i = 0; i < expandedPaths.size(); i++)
 			this.expandPath(expandedPaths.get(i));
+	}
+
+	public AbstractTreeModel getModel() {
+		return model;
+	}
+
+	public void setModel(AbstractTreeModel model) {
+		this.model = model;
 	}
 
 	/**

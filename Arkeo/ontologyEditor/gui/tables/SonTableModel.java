@@ -53,6 +53,7 @@ public class SonTableModel extends EditorTableModel
 	 */
 	private ArrayList<Object[]> getElementsFromLinkableElement(LinkableElement parent)
 	{
+		System.out.println("getElementsFromLinkableElement SonTableModel");
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		if (parent != null)
 		{

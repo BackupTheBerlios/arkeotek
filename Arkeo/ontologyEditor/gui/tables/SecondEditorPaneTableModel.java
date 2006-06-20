@@ -67,6 +67,7 @@ public class SecondEditorPaneTableModel extends EditorTableModel
 
 	private ArrayList<Object[]> getElementsFromLinkableElement(LinkableElement element)
 	{
+		System.out.println("getElementsFromLinkableElement");
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		if (element.getLinks(Lemma.KEY) != null)
 		{

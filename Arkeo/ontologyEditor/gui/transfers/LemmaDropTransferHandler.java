@@ -16,7 +16,11 @@ import javax.swing.TransferHandler;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.panels.CorpusNavigationPanel;
+import ontologyEditor.gui.panels.LinguisticNavigationPanel;
+import ontologyEditor.gui.tables.ConceptIndexantTM;
 import ontologyEditor.gui.tables.EditorTableModel;
+import ontologyEditor.gui.tables.SecondEditorPaneTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
@@ -74,18 +78,31 @@ public class LemmaDropTransferHandler extends TransferHandler
 							relations, relations[0]);
 					if (relation != null)
 					{
-						if (((EditorTableModel) target.getModel()).getElement() instanceof Lemma)
+						
+						if (target.getModel() instanceof SecondEditorPaneTM)
 						{
-							Object[] possibleValues = {"de l'\u00e9l\u00e9ment \u00e9dit\u00e9", "vers l'\u00e9l\u00e9ment \u00e9dit\u00e9" };
-							Object selectedValue = JOptionPane.showInputDialog(null, 
-							"Selectionnez le sens de la relation", "Input",
-							JOptionPane.INFORMATION_MESSAGE, null,
-							possibleValues, possibleValues[0]);
-							((EditorTableModel) target.getModel()).addRelation(element, relation, (((String)selectedValue).equals("vers l'\u00e9l\u00e9ment \u00e9dit\u00e9")?1:0));
-						}
-						else
-							((EditorTableModel) target.getModel()).addRelation(element, relation, 2);
-					}
+							Boolean trouver=false;
+							for(int i=0;i<target.getRowCount();i++)
+							{
+								LinkableElement courant=(LinkableElement)target.getValueAt(i,1);
+								if (courant.equals(element))
+								{
+									trouver=true;
+									break;
+								}
+							}
+							if (!trouver)
+							{
+								
+								ApplicationManager.ontology.addRelation(DisplayManager.mainFrame.getEditionPanel().getCourant(),element,relation);
+								DisplayManager.mainFrame.getEditionPanel().remplirTableBasParent(DisplayManager.mainFrame.getEditionPanel().getCourant());
+								DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(DisplayManager.mainFrame.getEditionPanel().getCourant());
+//								on regarde dans quel panel s'est fait le drag and drop
+								DisplayManager.mainFrame.mAJ(DisplayManager.mainFrame.getEditionPanel().getCourant());
+							}
+							
+							
+						}}
 				}
 				else
 					JOptionPane.showMessageDialog(DisplayManager.mainFrame, "Aucune relation n'est cr\u00e9\u00e9e, veuillez en cr\u00e9er une avant", "Information", JOptionPane.INFORMATION_MESSAGE);

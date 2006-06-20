@@ -9,11 +9,14 @@ import info.clearthought.layout.TableLayout;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -22,16 +25,31 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.TransferHandler;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
+import ontologyEditor.ApplicationManager;
+import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
+import ontologyEditor.gui.tables.ConceptDefiniTM;
+import ontologyEditor.gui.tables.ConceptFilsTM;
+import ontologyEditor.gui.tables.ConceptIndexantTM;
+import ontologyEditor.gui.tables.ConceptLemmeTM;
+import ontologyEditor.gui.tables.ConceptPereTM;
 import ontologyEditor.gui.tables.EditorTableModel;
+import ontologyEditor.gui.tables.HighEditorPaneTM;
+import ontologyEditor.gui.tables.LemmeAssocieTM;
 import ontologyEditor.gui.tables.ParentTableModel;
 import ontologyEditor.gui.tables.SonTableModel;
 import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
+import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
+import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
+import arkeotek.ontology.Ontology;
+import arkeotek.ontology.Relation;
 
 /**
  * @author Bernadou Pierre
@@ -39,41 +57,18 @@ import arkeotek.ontology.LinkableElement;
  */
 public class OntologyNavigationPanel extends AbstractNavigationPanel
 {
-	private JTable centralTable;
+	private JTable conceptFilsTable;
 
-	private JTable rightTable;
+	private JLabel labelPere;
+	
+	private JLabel conceptPere;
 
-	private JTable parentsTable;
+	private JTable lemmeAssocieTable;
+	
+	private JTable conceptDefiniTable;
 
 	private LinkableElement currentElement;
 	
-	private MouseMotionListener parentTableListener = new MouseMotionAdapter()
-	{
-		public void mouseDragged(MouseEvent e)
-		{
-			TransferHandler handler = OntologyNavigationPanel.this.parentsTable.getTransferHandler();
-			handler.exportAsDrag(OntologyNavigationPanel.this.parentsTable, e, TransferHandler.COPY);
-		}
-	};
-	
-	private MouseMotionListener centralTableListener = new MouseMotionAdapter()
-	{
-		public void mouseDragged(MouseEvent e)
-		{
-			TransferHandler handler = OntologyNavigationPanel.this.centralTable.getTransferHandler();
-			handler.exportAsDrag(OntologyNavigationPanel.this.centralTable, e, TransferHandler.COPY);
-		}
-	};
-	
-	private MouseMotionListener rightTableListener = new MouseMotionAdapter()
-	{
-		public void mouseDragged(MouseEvent e)
-		{
-			TransferHandler handler = OntologyNavigationPanel.this.rightTable.getTransferHandler();
-			handler.exportAsDrag(OntologyNavigationPanel.this.rightTable, e, TransferHandler.COPY);
-		}
-	};
-
 	/**
 	 * 
 	 */
@@ -83,102 +78,149 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		// Create a TableLayout for the panel
 		double border = 10;
 		double size[][] = { { border, TableLayout.FILL, border, TableLayout.FILL, border, TableLayout.FILL, border }, // Columns
-				{ border, TableLayout.FILL, border } }; // Rows
+				{ border,20,border, TableLayout.FILL, border } }; // Rows
 		this.setLayout(new TableLayout(size));
-
-		this.parentsTable = new JTable(new ParentTableModel(null));
-		this.parentsTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.parentsTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
-		this.parentsTable.setTransferHandler(new LinkableElementDragTransferHandler());
-		this.parentsTable.setDragEnabled(DisplayManager.editionState);
-		this.parentsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.parentsTable.addMouseListener(new MouseAdapter()
+		
+		this.labelPere=new JLabel("Concept Père : ");
+		this.conceptPere=new JLabel();
+		conceptPere.setFont(new Font("Serif", Font.PLAIN, 16));
+		String[] titreF={"Fils"};
+		ConceptFilsTM tableCFModel = new ConceptFilsTM();
+		tableCFModel.setColumnNames(titreF);
+		this.conceptFilsTable = new JTable(null,titreF);
+		this.conceptFilsTable.setModel(tableCFModel);
+		this.conceptFilsTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
+		this.conceptFilsTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		this.conceptFilsTable.setTransferHandler(new LinkableElementDragTransferHandler());
+		this.conceptFilsTable.setDragEnabled(false);
+		this.conceptFilsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.conceptFilsTable.addMouseListener(new MouseAdapter()
 		{
 
 			public void mouseClicked(MouseEvent e)
 			{
-				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
-				if (e.getClickCount() >= 2)
-					OntologyNavigationPanel.this.rollFirstPanel(element);
-				DisplayManager.getInstance().reflectNavigation(element);
-			}
-		});
-//		following code in comments is for removing an element by pressing suppr key
-		/*this.parentsTable.addKeyListener(new KeyAdapter()
-		{
-			public void keyPressed(KeyEvent evt)
-			{
-				if (!evt.isConsumed()) doNavigationKeyPressed(evt);
-			}
-		});*/
-
-		this.centralTable = new JTable(new SonTableModel(null));
-		this.centralTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.centralTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
-		this.centralTable.setTransferHandler(new LinkableElementDragTransferHandler());
-		this.centralTable.setDragEnabled(DisplayManager.editionState);
-		this.centralTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.centralTable.addMouseListener(new MouseAdapter()
-		{
-
-			public void mouseClicked(MouseEvent e)
-			{
-				if (e.getClickCount() >= 2)
+				/*if (e.getClickCount() >= 2)
 				{
 					OntologyNavigationPanel.this.rollSecondPanel(((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1)));
 					showParents(((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1)));
-				}
-				DisplayManager.getInstance().reflectNavigation(((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1)));
+				}*/
+				//DisplayManager.getInstance().reflectNavigation(((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1)));
 			}
-		});//		the following code in comments is for removing an element by pressing suppr key
-/*		this.centralTable.addKeyListener(new KeyAdapter()
+		});		
+		this.conceptFilsTable.addMouseMotionListener(new MouseMotionAdapter()
 		{
-			public void keyPressed(KeyEvent evt)
+			public void mouseDragged(MouseEvent e)
 			{
-				if (!evt.isConsumed()) doNavigationKeyPressed(evt);
+				if (DisplayManager.editionState)
+				{
+					TransferHandler handler = OntologyNavigationPanel.this.conceptFilsTable.getTransferHandler();
+					handler.exportAsDrag(OntologyNavigationPanel.this.conceptFilsTable, e, TransferHandler.COPY);
+				}
 			}
 		});
-*/		this.rightTable = new JTable(new SonTableModel(null));
-		this.rightTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.rightTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
-		this.rightTable.setTransferHandler(new LinkableElementDragTransferHandler());
-		this.rightTable.setDragEnabled(DisplayManager.editionState);
-		this.rightTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.rightTable.addMouseListener(new MouseAdapter()
+		
+		String[] titreL={"Termes Associés"};
+		ConceptLemmeTM tableCLModel = new ConceptLemmeTM();
+		tableCLModel.setColumnNames(titreL);
+		this.lemmeAssocieTable = new JTable(tableCLModel);
+		this.lemmeAssocieTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
+		this.lemmeAssocieTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		this.lemmeAssocieTable.setTransferHandler(new LinkableElementDragTransferHandler());
+		this.lemmeAssocieTable.setDragEnabled(DisplayManager.editionState);
+		this.lemmeAssocieTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.lemmeAssocieTable.addMouseListener(new MouseAdapter()
 		{
 
 			public void mouseClicked(MouseEvent e)
 			{
-				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
-				if (e.getClickCount() >= 2)
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0));
+				/*if (e.getClickCount() >= 2)
 				{
-					OntologyNavigationPanel.this.rollFirstPanel(((SonTableModel) OntologyNavigationPanel.this.rightTable.getModel()).getElement());
+					OntologyNavigationPanel.this.rollFirstPanel(((SonTableModel) OntologyNavigationPanel.this.lemmeAssocieTable.getModel()).getElement());
 					OntologyNavigationPanel.this.rollSecondPanel(element);
 					showParents(element);
-				}
-				DisplayManager.getInstance().reflectNavigation(element);
+				}*/
+				//DisplayManager.getInstance().reflectNavigation(element);
 			}
 		});
-//		the following code in comments is for removing an element by pressing suppr key
-/*		this.rightTable.addKeyListener(new KeyAdapter()
+		
+		this.lemmeAssocieTable.addMouseMotionListener(new MouseMotionAdapter()
 		{
-			public void keyPressed(KeyEvent evt)
+			public void mouseDragged(MouseEvent e)
 			{
-				if (!evt.isConsumed()) doNavigationKeyPressed(evt);
+				if (DisplayManager.editionState)
+				{
+					TransferHandler handler = OntologyNavigationPanel.this.lemmeAssocieTable.getTransferHandler();
+					handler.exportAsDrag(OntologyNavigationPanel.this.lemmeAssocieTable, e, TransferHandler.COPY);
+				}
 			}
 		});
-*/		JScrollPane parentsScrollPane = new JScrollPane();
-		parentsScrollPane.setViewportView(this.parentsTable);
-		parentsScrollPane.setBorder(BorderFactory.createTitledBorder("Concepts parents"));
-		JScrollPane centerScrollPane = new JScrollPane();
-		centerScrollPane.setViewportView(this.centralTable);
-		centerScrollPane.setBorder(BorderFactory.createTitledBorder("Navigation 1"));
-		JScrollPane rightScrollPane = new JScrollPane();
-		rightScrollPane.setViewportView(this.rightTable);
-		rightScrollPane.setBorder(BorderFactory.createTitledBorder("Navigation 2"));
-		this.add(parentsScrollPane, "1, 1, 1, 1");
-		this.add(centerScrollPane, "3, 1, 3, 1");
-		this.add(rightScrollPane, "5, 1, 5, 1");
+		
+		String[] titreD={"Relation","Concepts Définis"};
+		ConceptDefiniTM tableCDModel = new ConceptDefiniTM();
+		tableCDModel.setColumnNames(titreD);
+		this.conceptDefiniTable = new JTable(tableCDModel);
+		this.conceptDefiniTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
+		this.conceptDefiniTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		this.conceptDefiniTable.setTransferHandler(new LinkableElementDragTransferHandler());
+		this.conceptDefiniTable.setDragEnabled(DisplayManager.editionState);
+		this.conceptDefiniTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.conceptDefiniTable.addMouseListener(new MouseAdapter()
+				{
+
+					public void mouseClicked(MouseEvent e)
+					{
+						LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+						/*if (e.getClickCount() >= 2)
+						{
+							OntologyNavigationPanel.this.rollFirstPanel(((SonTableModel) OntologyNavigationPanel.this.lemmeAssocieTable.getModel()).getElement());
+							OntologyNavigationPanel.this.rollSecondPanel(element);
+							showParents(element);
+						}*/
+						//DisplayManager.getInstance().reflectNavigation(element);
+					}
+				});
+		
+		
+		this.conceptDefiniTable.addMouseMotionListener(new MouseMotionAdapter()
+		{
+			public void mouseDragged(MouseEvent e)
+			{
+				if (DisplayManager.editionState)
+				{
+					TransferHandler handler = OntologyNavigationPanel.this.conceptDefiniTable.getTransferHandler();
+					handler.exportAsDrag(OntologyNavigationPanel.this.conceptDefiniTable, e, TransferHandler.COPY);
+				}
+			}
+		});
+
+		
+		JScrollPane filsScrollPane = new JScrollPane();
+		filsScrollPane.setViewportView(this.conceptFilsTable);
+		filsScrollPane.setBorder(BorderFactory.createTitledBorder("Fils"));
+		JScrollPane lemmeScrollPane = new JScrollPane();
+		lemmeScrollPane.setViewportView(this.lemmeAssocieTable);
+		lemmeScrollPane.setBorder(BorderFactory.createTitledBorder("Termes associés"));
+		JScrollPane definiScrollPane = new JScrollPane();
+		definiScrollPane.setViewportView(this.conceptDefiniTable);
+		definiScrollPane.setBorder(BorderFactory.createTitledBorder("Concepts définis"));
+		
+		//mise en place des renderer
+		this.rendererTableConcept(this.conceptDefiniTable);
+		this.rendererTableLemme(this.lemmeAssocieTable);
+		this.rendererTableConcept(this.conceptFilsTable);
+		
+		TableColumn columncon1 = conceptDefiniTable.getColumnModel().getColumn(0);
+		columncon1.setPreferredWidth(80);
+		TableColumn columncon2 = conceptDefiniTable.getColumnModel().getColumn(1);
+		columncon2.setPreferredWidth(150);
+		
+		// mise en place des composant dasn le panel
+		this.add(labelPere, "1, 1, 1, 1");
+		this.add(conceptPere,"3, 1, 1, 1");
+		this.add(filsScrollPane, "1, 3, 1, 1");
+		this.add(lemmeScrollPane, "3, 3, 1, 1");
+		this.add(definiScrollPane, "5, 3, 1, 1");
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation"));
 
 	}
@@ -191,8 +233,8 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void rollFirstPanel(LinkableElement element)
 	{
-		((SonTableModel) (this.centralTable.getModel())).setElement(element);
-		((SonTableModel) (this.rightTable.getModel())).setElement(null);
+		//((SonTableModel) (this.centralTable.getModel())).setElement(element);
+		//((SonTableModel) (this.rightTable.getModel())).setElement(null);
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element));
 		showParents(element);
 	}
@@ -205,13 +247,13 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void rollSecondPanel(LinkableElement element)
 	{
-		((SonTableModel) (this.rightTable.getModel())).setElement(element);
+		//((SonTableModel) (this.rightTable.getModel())).setElement(element);
 		OntologyNavigationPanel.this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element));
 	}
 
 	public void showParents(LinkableElement element)
 	{
-		((ParentTableModel) this.parentsTable.getModel()).setElement(element);
+		//((ParentTableModel) this.parentsTable.getModel()).setElement(element);
 	}
 
 	/**
@@ -222,7 +264,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void reflectNavigation(LinkableElement element)
 	{
-		this.currentElement = element;
+		//this.currentElement = element;
 	}
 
 	/**
@@ -233,7 +275,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void changeState(boolean state)
 	{
-		this.parentsTable.setDragEnabled(state);
+		/*this.parentsTable.setDragEnabled(state);
 		this.centralTable.setDragEnabled(state);
 		this.rightTable.setDragEnabled(state);
 		if (state)
@@ -247,7 +289,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			this.parentsTable.removeMouseMotionListener(this.parentTableListener);
 			this.centralTable.removeMouseMotionListener(this.centralTableListener);
 			this.rightTable.removeMouseMotionListener(this.rightTableListener);
-		}
+		}*/
 	}
 
 	/**
@@ -255,9 +297,11 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void refresh()
 	{
-		((ParentTableModel) this.parentsTable.getModel()).setElement(null);
-		((EditorTableModel) this.centralTable.getModel()).setElement(null);
-		((EditorTableModel) this.rightTable.getModel()).setElement(null);
+		((ConceptFilsTM)conceptFilsTable.getModel()).setDonnees(null);
+		this.conceptPere.setText(null);
+		((ConceptLemmeTM)lemmeAssocieTable.getModel()).setDonnees(null);
+		((ConceptDefiniTM)conceptDefiniTable.getModel()).setDonnees(null);
+		this.updateUI();
 	}
 
 	/**
@@ -289,13 +333,13 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 
 	public void elementRemoved(LinkableElement element)
 	{
-		if (((ParentTableModel) this.parentsTable.getModel()).getElement() == element) ((ParentTableModel) this.parentsTable.getModel()).setElement(null);
+		/*if (((ParentTableModel) this.parentsTable.getModel()).getElement() == element) ((ParentTableModel) this.parentsTable.getModel()).setElement(null);
 		else ((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
 		if (((SonTableModel) this.centralTable.getModel()).getElement() == element) ((SonTableModel) this.centralTable.getModel()).setElement(null);
 		else ((SonTableModel) this.centralTable.getModel()).fireTableStructureChanged();
 		if (((SonTableModel) this.rightTable.getModel()).getElement() == element) ((SonTableModel) this.rightTable.getModel()).setElement(null);
 		else ((SonTableModel) this.rightTable.getModel()).fireTableStructureChanged();
-	}
+	*/}
 	
 	/**
 	 * @see ontologyEditor.gui.panels.AbstractNavigationPanel#relationChanged(arkeotek.ontology.LinkableElement, arkeotek.ontology.LinkableElement)
@@ -305,31 +349,31 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	{
 		if (this.currentElement == source || this.currentElement == target)
 		{
-			((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
+	/*		((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
 			((SonTableModel) this.centralTable.getModel()).fireTableStructureChanged();
 			((SonTableModel) this.rightTable.getModel()).fireTableStructureChanged();
-		}		
+		*/}		
 	}
 
 	@Override
 	public void reload()
 	{
-		((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
+	/*	((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
 		((SonTableModel) this.centralTable.getModel()).fireTableStructureChanged();
 		((SonTableModel) this.rightTable.getModel()).fireTableStructureChanged();
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+this.currentElement.getName()));
-		
+		*/
 	}
 
 	public void refreshNavigation(LinkableElement element)
 	{
-		if (((ParentTableModel) this.parentsTable.getModel()).getElement() == element) ((ParentTableModel) this.parentsTable.getModel()).setElement(null);
+		/*if (((ParentTableModel) this.parentsTable.getModel()).getElement() == element) ((ParentTableModel) this.parentsTable.getModel()).setElement(null);
 		else ((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
 		if (((SonTableModel) this.centralTable.getModel()).getElement() == element) ((SonTableModel) this.centralTable.getModel()).setElement(null);
 		else ((SonTableModel) this.centralTable.getModel()).fireTableStructureChanged();
 		if (((SonTableModel) this.rightTable.getModel()).getElement() == element) ((SonTableModel) this.rightTable.getModel()).setElement(null);
 		else ((SonTableModel) this.rightTable.getModel()).fireTableStructureChanged();
-	}
+*/	}
 
 	private class TableComponentCellRenderer extends JLabel implements TableCellRenderer
 	{
@@ -364,6 +408,219 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			// Since the renderer is a component, return itself
 			return this;
 		}
+	}
+
+	public void remplirLabelPere(LinkableElement concept) {
+		// TODO Auto-generated method stub
+		conceptPere.setText(null);
+		ArrayList<Object[]> elements = new ArrayList<Object[]>();
+		elements.addAll(ApplicationManager.ontology.getParentsOf(concept, Concept.KEY));
+		if (elements.size()!=0)
+		{
+			conceptPere.setText(((LinkableElement)elements.get(0)[1]).getName());
+		}
+		this.updateUI();
+	}
+
+	public void remplirTableFils(LinkableElement concept) {
+		// TODO Auto-generated method stub
+		conceptFilsTable.removeAll();
+		//String[] titreF={"Fils"};
+		ArrayList<Object[]> elements = new ArrayList<Object[]>();
+		if (concept != null)
+		{
+			if (concept instanceof Ontology)
+			{
+				for (LinkableElement concept2 : ((Ontology)concept).get(Concept.KEY))
+				{
+					Object[] couple = {"", concept2};
+					elements.add(couple);
+				}
+			}
+			else
+			{
+				Set<Relation> keys = null;
+				/*if (concept.getLinks(Lemma.KEY) != null)
+				{
+					keys = concept.getLinks(Lemma.KEY).keySet();
+					for (Relation key : keys)
+					{
+						for (LinkableElement elem : concept.getLinks(Lemma.KEY, key))
+						{
+							Object[] couple = {key, elem};
+							elements.add(couple);
+						}
+					}
+				}
+				if (concept.getLinks(DocumentPart.KEY) != null)
+				{
+					keys = concept.getLinks(DocumentPart.KEY).keySet();
+					for (Relation key : keys)
+					{
+						for (LinkableElement elem : concept.getLinks(DocumentPart.KEY, key))
+						{
+							Object[] couple = {key, elem};
+							elements.add(couple);
+						}
+					}
+				}*/
+				if (concept.getLinks(Concept.KEY) != null)
+				{
+					keys = concept.getLinks(Concept.KEY).keySet();
+					for (Relation key : keys)
+					{
+						for (LinkableElement elem : concept.getLinks(Concept.KEY, key))
+						{
+							System.out.println(key);
+							if (key.getName().equals("généralise"))
+							{
+								Object[] couple = {key, elem};
+								elements.add(couple);
+							}
+						}
+					}
+				}	
+			}
+		}
+		
+		if (elements.size()!=0)
+		{
+			Object [][] donnees=new Object[elements.size()][1];
+			for (int i=0;i<elements.size();i++)
+			{
+				donnees[i][0]=((LinkableElement)elements.get(i)[1]);
+			}
+			((ConceptFilsTM)conceptFilsTable.getModel()).setDonnees(donnees);
+		}
+		else
+		{
+			Object [][] donnees=new Object[0][1];
+			((ConceptFilsTM)conceptFilsTable.getModel()).setDonnees(donnees);
+		}
+		lemmeAssocieTable.updateUI();
+		conceptFilsTable.updateUI();
+		conceptDefiniTable.updateUI();
+		this.updateUI();
+		
+	}
+
+	public void remplirTableLemme(LinkableElement concept) {
+		// TODO Auto-generated method stub
+		lemmeAssocieTable.removeAll();
+		ArrayList<Object[]> elements = new ArrayList<Object[]>();
+		//elements.addAll(ApplicationManager.ontology.getParentsOf(concept, Lemma.KEY));
+		Set<Relation> keys = null;
+		if (concept.getLinks(Lemma.KEY) != null)
+		{
+			keys = concept.getLinks(Lemma.KEY).keySet();
+			for (Relation key : keys)
+			{
+				for (LinkableElement elem : concept.getLinks(Lemma.KEY, key))
+				{
+					Object[] couple = {key, elem};
+					elements.add(couple);
+				}
+			}
+		}
+		if (elements.size()!=0)
+		{
+			Object [][] donnees=new Object[elements.size()][1];
+			for (int i=0;i<elements.size();i++)
+			{
+				donnees[i][0]=((LinkableElement)elements.get(i)[1]);
+			}
+			((ConceptLemmeTM)lemmeAssocieTable.getModel()).setDonnees(donnees);
+		}
+		else
+		{
+			Object [][] donnees=new Object[0][1];
+			((ConceptLemmeTM)lemmeAssocieTable.getModel()).setDonnees(donnees);
+		}
+		
+		this.updateUI();
+	}
+
+	public void remplirTableDefini(LinkableElement concept) {
+		// TODO Auto-generated method stub
+		conceptDefiniTable.removeAll();
+		ArrayList<Object[]> elements = new ArrayList<Object[]>();
+		if (concept != null)
+		{
+			/*if (concept instanceof Ontology)
+			{
+				for (LinkableElement concept2 : ((Ontology)concept).get(Concept.KEY))
+				{
+					Object[] couple = {"", concept2};
+					elements.add(couple);
+				}
+			}
+			else
+			{*/
+				Set<Relation> keys = null;
+				if (concept.getLinks(Concept.KEY) != null)
+				{
+					keys = concept.getLinks(Concept.KEY).keySet();
+					for (Relation key : keys)
+					{
+						for (LinkableElement elem : concept.getLinks(Concept.KEY, key))
+						{
+							System.out.println(key);
+							if (!key.getName().equals("généralise"))
+							{
+								Object[] couple = {key, elem};
+								elements.add(couple);
+							}
+						}
+					}
+				}	
+			//}
+		}
+		
+		if (elements.size()!=0)
+		{
+			Object [][] donnees=new Object[elements.size()][2];
+			for (int i=0;i<elements.size();i++)
+			{
+				donnees[i][0]=((LinkableElement)elements.get(i)[0]);
+				donnees[i][1]=((LinkableElement)elements.get(i)[1]);
+			}
+			((ConceptDefiniTM)conceptDefiniTable.getModel()).setDonnees(donnees);
+		}
+		else
+		{
+			Object [][] donnees=new Object[0][2];
+			((ConceptDefiniTM)conceptDefiniTable.getModel()).setDonnees(donnees);
+		}
+		
+		lemmeAssocieTable.updateUI();
+		conceptFilsTable.updateUI();
+		conceptDefiniTable.updateUI();
+		this.updateUI();
+		
+	}
+	
+	private void rendererTableConcept(JTable table) {     
+		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
+		custom.setHorizontalAlignment(JLabel.CENTER);
+		try {
+			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_CONCEPT_ICON));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		table.getColumnModel().getColumn(0).setCellRenderer(custom);
+	}
+	
+	private void rendererTableLemme(JTable table) {     
+		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
+		custom.setHorizontalAlignment(JLabel.CENTER);
+		try {
+			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_LEMMA_ICON));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		table.getColumnModel().getColumn(0).setCellRenderer(custom);
 	}
 
 }
