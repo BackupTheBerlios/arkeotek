@@ -21,6 +21,7 @@ import java.util.Vector;
 import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.table.AbstractTableModel;
 
 import ontologyEditor.actions.AProposAction;
 import ontologyEditor.actions.BottomPanelChangeAction;
@@ -52,6 +53,7 @@ import ontologyEditor.gui.filechoosers.SyntexFileChooser;
 import ontologyEditor.gui.filechoosers.TermontoFileChooser;
 import ontologyEditor.gui.panels.AbstractPanel;
 import ontologyEditor.gui.tables.LemmaTableModel;
+import ontologyEditor.gui.tables.LinkableLemmeTM;
 import ontologyEditor.gui.treeviews.ConceptualTreeModel;
 import ontologyEditor.gui.panels.LinguisticNavigationPanel;
 import ontologyEditor.gui.panels.LinguisticPanel;
@@ -608,12 +610,57 @@ public class ApplicationManager
 									matching_lemmas.add(all_lemmas.get(i));
 								}
 							}
+							if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL) instanceof LinguisticPanel)
+							{
+								LinguisticPanel panel=(LinguisticPanel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL);
+								panel.getTable().removeAll();
+								Object[][] donnees=new Object[matching_lemmas.size()][1];
+		
+								if (matching_lemmas.size()!=0)
+								{
+									for (int i=0;i<matching_lemmas.size();i++)
+									{
+										donnees[i][0]=(matching_lemmas.get(i));
+									}
+									((LemmaTableModel)panel.getTable().getModel()).setDonnees(donnees);
+									panel.getTable().updateUI();
+								}
+								else
+								{
+									((LemmaTableModel)panel.getTable().getModel()).setDonnees(donnees);
+									panel.getTable().updateUI();
+								}
+							}
 							
+							if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL) instanceof LinguisticPanel)
+							{
+								LinguisticPanel panel=(LinguisticPanel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL);
+								panel.getTable().removeAll();
+								Object[][] donnees=new Object[matching_lemmas.size()][1];
+		
+								if (matching_lemmas.size()!=0)
+								{
+									for (int i=0;i<matching_lemmas.size();i++)
+									{
+										donnees[i][0]=(matching_lemmas.get(i));
+									}
+									((LemmaTableModel)panel.getTable().getModel()).setDonnees(donnees);
+									panel.getTable().updateUI();
+								}
+								else
+								{
+									((LemmaTableModel)panel.getTable().getModel()).setDonnees(donnees);
+									panel.getTable().updateUI();
+								}
+							}
+							
+							
+							/*
 							// affichage pour verif
 							for(int i=0;i<matching_lemmas.size();i++)
 							{
 								System.out.println(matching_lemmas.get(i));
-							}
+							}*/
 						}
 					}
 					else
