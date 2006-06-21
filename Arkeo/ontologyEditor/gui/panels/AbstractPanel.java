@@ -121,7 +121,7 @@ public abstract class AbstractPanel extends JPanel
 			if (treeModel instanceof CorpusTM)
 			{
 				((CorpusTM)treeModel).setRacine(new DefaultMutableTreeNode("Corpus"));
-				((CorpusTM)treeModel).remplirArbreDocument();
+				((CorpusTM)treeModel).remplirArbreDocumentSeq();
 			}
 			else if (treeModel instanceof ConceptualTM)
 			{
