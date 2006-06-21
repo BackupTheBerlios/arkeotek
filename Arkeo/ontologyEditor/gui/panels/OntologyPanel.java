@@ -7,10 +7,12 @@ package ontologyEditor.gui.panels;
 
 import java.awt.event.MouseEvent;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.dialogs.popup.PopupArbreConcept;
 import ontologyEditor.gui.treeviews.ConceptualTM;
 import ontologyEditor.gui.treeviews.ConceptualTreeModel;
 import ontologyEditor.gui.treeviews.CorpusTM;
@@ -41,13 +43,22 @@ public class OntologyPanel extends AbstractPanel {
 					if (ApplicationManager.ontology.get(Concept.KEY).get(i).toString().equals(nomConcept))
 					{
 						concept=(Concept)ApplicationManager.ontology.get(Concept.KEY).get(i);
-						((OntologyNavigationPanel) this.navigationPanel).remplirLabelPere(concept);
-						((OntologyNavigationPanel) this.navigationPanel).remplirTableFils(concept);
-						((OntologyNavigationPanel) this.navigationPanel).remplirTableLemme(concept);
-						((OntologyNavigationPanel) this.navigationPanel).remplirTableDefini(concept);
-						//((OntologyNavigationPanel) this.navigationPanel).rollFirstPanel((LinkableElement)((JTree)e.getSource()).getSelectionPath().getLastPathComponent());
-						DisplayManager.getInstance().reflectNavigation(concept);
-						return;
+						//Bouton GAUCHE enfoncé
+						if ( e.getButton() == MouseEvent.BUTTON1) {
+							((OntologyNavigationPanel) this.navigationPanel).remplirLabelPere(concept);
+							((OntologyNavigationPanel) this.navigationPanel).remplirTableFils(concept);
+							((OntologyNavigationPanel) this.navigationPanel).remplirTableLemme(concept);
+							((OntologyNavigationPanel) this.navigationPanel).remplirTableDefini(concept);
+							DisplayManager.getInstance().reflectNavigation(concept);
+						} 
+						//Bouton DROIT enfoncé
+						else if( e.getButton() == MouseEvent.BUTTON3) {
+							PopupArbreConcept popup=new PopupArbreConcept(concept);
+							e.consume();
+							// afficher le menu contextuel
+							popup.show(this, e.getX(), e.getY());
+						}
+						break;
 					}
 				}
 			}
