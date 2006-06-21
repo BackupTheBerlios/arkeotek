@@ -10,6 +10,7 @@ import javax.swing.JPopupMenu;
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.dialogs.AjouterNouveauConceptFils;
+import ontologyEditor.gui.dialogs.FenetreRenommerConcept;
 import ontologyEditor.gui.panels.EditionPanel;
 
 import arkeotek.ontology.LinkableElement;
@@ -44,8 +45,8 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 		// si on renomme ouverte d'une fenetre
 		if (source == this.renommer)
 		{
-			//FenetreRenommerScenario fsc=new FenetreRenommerScenario(Application.getApplication().getFenetrePrincipale(),this.nomScenario);
-			//fsc.show();
+			FenetreRenommerConcept fsc=new FenetreRenommerConcept(this.concept);
+			fsc.show();
 		}
 		//sinon on supprime un concept 
 		else if (source == this.supprimer)
