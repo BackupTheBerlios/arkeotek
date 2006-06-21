@@ -207,7 +207,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.potentialConceptsTable.addMouseMotionListener(new MouseMotionAdapter()
 		{
 			public void mouseDragged(MouseEvent e)
-			{
+			{	
 				TransferHandler handler = CorpusNavigationPanel.this.potentialConceptsTable.getTransferHandler();
 				handler.exportAsDrag(CorpusNavigationPanel.this.potentialConceptsTable, e, TransferHandler.MOVE);
 			}
