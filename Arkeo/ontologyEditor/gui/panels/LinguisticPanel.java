@@ -11,6 +11,8 @@ import javax.swing.JTree;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.dialogs.popup.PopupArbreConcept;
+import ontologyEditor.gui.dialogs.popup.PopupTableLemme;
 import ontologyEditor.gui.tables.LemmaTableModel;
 import ontologyEditor.gui.tables.LinkableElementTable;
 import ontologyEditor.gui.treeviews.CorpusTM;
@@ -31,12 +33,29 @@ public class LinguisticPanel extends AbstractPanel {
     }
     
 	protected void performMouseClicked(MouseEvent e) {
-			LinkableElement lemme=((Lemma)((LinkableElementTable)e.getSource()).getValueAt(((LinkableElementTable)e.getSource()).getSelectedRow(),0));
-			((LinguisticNavigationPanel) this.navigationPanel).remplirTableLemmeParent(lemme);
-			((LinguisticNavigationPanel) this.navigationPanel).remplirTableLemmeLier(lemme);
-			((LinguisticNavigationPanel) this.navigationPanel).remplirTableConcept(lemme);
-			((LinguisticNavigationPanel) this.navigationPanel).remplirTableDocumentParent(lemme);
-			DisplayManager.getInstance().reflectNavigation(lemme);
+		if (ApplicationManager.ontology!=null)
+		{
+			if (e.getButton()==MouseEvent.BUTTON1)
+			{
+				LinkableElement lemme=((Lemma)((LinkableElementTable)e.getSource()).getValueAt(((LinkableElementTable)e.getSource()).getSelectedRow(),0));
+				((LinguisticNavigationPanel) this.navigationPanel).remplirTableLemmeParent(lemme);
+				((LinguisticNavigationPanel) this.navigationPanel).remplirTableLemmeLier(lemme);
+				((LinguisticNavigationPanel) this.navigationPanel).remplirTableConcept(lemme);
+				((LinguisticNavigationPanel) this.navigationPanel).remplirTableDocumentParent(lemme);
+				DisplayManager.getInstance().reflectNavigation(lemme);
+			}
+			else if (e.getButton()==MouseEvent.BUTTON3)
+			{
+				if (this.getTable().getSelectedRowCount()>1)
+				{
+					PopupTableLemme popup=new PopupTableLemme();
+					e.consume();
+					// afficher le menu contextuel
+					popup.show(this, e.getX(), e.getY());
+				}
+			}
+		}
+		
 	}
 	
 	public void elementRemoved(LinkableElement element, int index)

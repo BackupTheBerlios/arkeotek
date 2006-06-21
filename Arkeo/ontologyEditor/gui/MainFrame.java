@@ -104,7 +104,6 @@ public class MainFrame extends JFrame
 	 * Refreshes the display of the <code>MainFrame</code> and its <code>Components</code>. 
 	 */
 	public void refresh() {
-		System.out.println("huhu refresh 1");
 		this.jSplitPane1.setLeftComponent(this.loadingPanel);
 		this.topPanel.refresh();
 		this.bottomPanel.refresh();
