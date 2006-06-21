@@ -9,7 +9,7 @@ import javax.swing.JPopupMenu;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.dialogs.AjouterNouveauConceptFils;
+import ontologyEditor.gui.dialogs.FenetreAjouterConceptFils;
 import ontologyEditor.gui.dialogs.FenetreRenommerConcept;
 import ontologyEditor.gui.panels.EditionPanel;
 
@@ -66,7 +66,7 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 		// si on ajoute un concept
 		else if (source== this.ajouter)
 		{
-			AjouterNouveauConceptFils fsc=new AjouterNouveauConceptFils(this.concept);
+			FenetreAjouterConceptFils fsc=new FenetreAjouterConceptFils(this.concept);
 			fsc.show();
 		}
 	}

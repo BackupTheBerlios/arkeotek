@@ -9,7 +9,7 @@ import javax.swing.JPopupMenu;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.dialogs.AjouterNouveauConceptFils;
+import ontologyEditor.gui.dialogs.FenetreAjouterConceptFils;
 import ontologyEditor.gui.dialogs.FenetreRenommerConcept;
 import ontologyEditor.gui.panels.AbstractPanel;
 import ontologyEditor.gui.panels.CorpusNavigationPanel;
