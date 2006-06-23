@@ -45,7 +45,7 @@ public class Relation extends LinkableElement
 	/**
 	 * Default relation between lemmas and concepts
 	 */
-	public static final String DEFAULT_LEMMA_CONCEPT_RELATION = "caract\u00e9rise";
+	public static final String DEFAULT_LEMMA_CONCEPT_RELATION = "caractérise";
 
 	/**
 	 * Default relation between two <code>LinkableElements</code>. 
@@ -55,7 +55,7 @@ public class Relation extends LinkableElement
 	/**
 	 * Default relation between two <code>Concepts</code>. 
 	 */
-	public static final String DEFAULT_CONCEPTS_RELATION = "g\u00e9n\u00e9ralise";
+	public static final String DEFAULT_CONCEPTS_RELATION = "généralise";
 	
 	static {
 		KEY = obtainCategoryKey();

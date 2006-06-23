@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
@@ -26,6 +28,7 @@ import arkeotek.ontology.Relation;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.treeviews.ConceptualTM;
 
 public class FenetreAjouterConceptFils extends JDialog implements ActionListener {
 
@@ -95,16 +98,16 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 		
 		// Annulation Button Action
 		this.cancel_button.addMouseListener(new MouseAdapter()
-				{
-					/**
-					 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
-					 */
-					@Override
-					public void mouseClicked(MouseEvent e)
-					{
-						FenetreAjouterConceptFils.this.cancelInput();
-					}
-				});
+		{
+			/**
+			 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+			 */
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				FenetreAjouterConceptFils.this.cancelInput();
+			}
+		});
 		this.add(this.cancel_button, "3, 3, 3, 3");
 		
 		this.setResizable(false);
@@ -123,17 +126,28 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 		else
 		{
 			Concept fils=new Concept(this.txt_contain.getText());
-			Relation rel=new Relation("généralise");
 			//on créer une nouvelle relation
 			try {
 				ApplicationManager.ontology.get(Concept.KEY).add(fils);
+				ArrayList<LinkableElement> relations = ApplicationManager.ontology.get(Relation.KEY);
+				Relation rel=new Relation(Relation.DEFAULT_CONCEPTS_RELATION);
+				for (int i=0;i<relations.size();i++)
+				{
+					if (rel.getName().equals(((Relation)relations.get(i)).getName()))
+					{
+						rel.setId(((Relation)relations.get(i)).getId());
+					}
+				}
 				ApplicationManager.ontology.addRelation(conceptSource,fils,rel);
+				DefaultMutableTreeNode courant=(DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(0).getTree().getLastSelectedPathComponent();
+				courant.add(new DefaultMutableTreeNode(fils));
+				DisplayManager.mainFrame.getPanel(0).getTree().expandPath(DisplayManager.mainFrame.getPanel(0).getTree().getSelectionPath());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			// on met a jour l'interface
-			DisplayManager.mainFrame.refresh();
+			//DisplayManager.mainFrame.refresh();
 			this.dispose();
 		}
 	}

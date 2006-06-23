@@ -573,7 +573,7 @@ public class ApplicationManager
 							}
 							//int[] indexes = DisplayManager.mainFrame.getChildIndexesInTrees(lemma);
 							ApplicationManager.ontology.unlink(lemma);
-							DisplayManager.getInstance().mainFrame.refresh();
+							DisplayManager.mainFrame.refresh();
 							//DisplayManager.getInstance().removeElement(lemma, indexes);
 						}
 					}
@@ -600,7 +600,6 @@ public class ApplicationManager
 						{
 							// TODO appeler la fonction de recherche qui doit se situer
 							// dans le SearchAction  ...
-							System.out.println("huhu : " + lcn);
 							ArrayList<LinkableElement> all_lemmas = ApplicationManager.ontology.get(Lemma.KEY);
 							ArrayList<LinkableElement> matching_lemmas = new ArrayList<LinkableElement>();
 							for(int i=0;i<all_lemmas.size();i++)
@@ -627,8 +626,9 @@ public class ApplicationManager
 								}
 								else
 								{
-									((LemmaTableModel)panel.getTable().getModel()).setDonnees(donnees);
-									panel.getTable().updateUI();
+									JOptionPane.showMessageDialog(DisplayManager.mainFrame, "Il n'y aucun terme qui correspond à "+lcn);
+									//((LemmaTableModel)panel.getTable().getModel()).setDonnees(donnees);
+									//panel.getTable().updateUI();
 								}
 							}
 							

@@ -275,7 +275,7 @@ public class Service implements IService
 			
 			for (LinkableElement object : list)
 			{
-				System.out.println("Objet courant : " + object.getId());
+				System.out.println("Objet courant : " + object);
 				// on crée une dto pour l'objet courant (transaction + objet)
 				dto = new DTO(transaction, object);
 				// links with ontology

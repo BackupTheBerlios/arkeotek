@@ -329,6 +329,7 @@ public class IOPerformer
 							(LinkableElement) dto.getElement(), 
 							((LinkableElement) dto.getElement()).getLinks(key), 
 							new StringBuffer("select * from L_Concept2Concept where idSource = " + ((LinkableElement) dto.getElement()).getId()));
+							
 				}
 			}
 			else if (key.equals(Lemma.KEY))
@@ -1106,7 +1107,6 @@ public class IOPerformer
 	  {
 	   ps = transaction.getConnexion().prepareStatement(req.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 	   rs = ps.executeQuery();
-	   
 	   while (rs.first())
 	    rs.deleteRow();
 	 
@@ -1117,6 +1117,9 @@ public class IOPerformer
 	    for (LinkableElement target : sources)
 	    {
 	     rs.moveToInsertRow();
+	     System.out.println("idSource "+ source.getId());
+	     System.out.println("idSource "+ target.getId());
+	     System.out.println("idSource "+ relation.getId());
 	     rs.updateInt("idSource", source.getId());
 	     rs.updateInt("idTarget", target.getId());
 	     rs.updateInt("idRelation", relation.getId());

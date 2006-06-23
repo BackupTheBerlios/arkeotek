@@ -81,17 +81,12 @@ public class LemmaTableModel extends AbstractTableModel {
 	
 	public void remplirTableLemme()
 	{
-		System.out.println("ca passe");
 		ArrayList<LinkableElement> listLemme=ApplicationManager.ontology.get(Lemma.KEY);
 		Object [][] donnees=new Object[listLemme.size()][1];
 		for (int i=0;i<listLemme.size();i++)
 		{
 			donnees[i][0]=listLemme.get(i);
 		}
-		System.out.println("bottom "+DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable());
-		System.out.println("bottom "+DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree());
-		System.out.println("top "+DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTable());
-		System.out.println("top "+DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree());
 		if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTable()!=null)
 		{
 			((LemmaTableModel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTable().getModel()).setDonnees(donnees);

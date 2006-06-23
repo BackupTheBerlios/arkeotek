@@ -5,7 +5,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
@@ -16,14 +18,35 @@ import arkeotek.ontology.LinkableElement;
 public class PopupTableLemme extends JPopupMenu implements ActionListener{
 
 	private JMenuItem fusion;
-	//private ArrayList<LinkableElement> lemmes;
+	private JMenuItem recherche;
+	private JMenuItem ajouter;
+	private JMenuItem supprimer;
+	private JTable table;
 	
-	public PopupTableLemme(/*ArrayList<LinkableElement> lemmes*/) {
-		//this.lemmes=lemmes;
-		
-		this.fusion = new JMenuItem ("Fusionner les lemmes") ;
-		this.add (this.fusion) ;
-		this.fusion.addActionListener (this) ;                 
+	public PopupTableLemme(JTable table) {
+		this.table=table;
+		if (table.getSelectedRowCount()>1)
+		{
+			this.fusion = new JMenuItem ("Fusionner les lemmes") ;
+			this.add (this.fusion) ;
+			this.fusion.addActionListener (this) ;
+		}
+		else
+		{
+			this.recherche = new JMenuItem ("Recherche un lemme du corpus") ;
+			this.add (this.recherche) ;
+			this.recherche.addActionListener (this) ; 
+			
+			this.addSeparator();
+			
+			this.supprimer = new JMenuItem ("Supprimer le terme") ;
+			this.add (this.supprimer) ;
+			this.supprimer.addActionListener (this) ;  
+			
+			this.ajouter = new JMenuItem ("Ajouter un terme") ;
+			this.add (this.ajouter) ;
+			this.ajouter.addActionListener (this) ; 
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -33,6 +56,29 @@ public class PopupTableLemme extends JPopupMenu implements ActionListener{
 		{
 			ApplicationManager.getApplicationManager().manageRequest(Request.LEMMAS_FUSION);
 		}
+		else if (source == this.recherche)
+		{
+			ApplicationManager.getApplicationManager().manageRequest(Request.LEMMA_SEARCH);
+		}
+		else if (source == this.ajouter)
+		{
+			ApplicationManager.getApplicationManager().manageRequest(Request.CREATE_NEW_LEMMA);
+		}
+		else if (source == this.supprimer)
+		{
+			Object[] options = {"Oui", "Non"};
+			int choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, "Vous êtes sur le point de supprimer définitivement le concept. Désirez-vous continuer?", "Avertissement", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+			if (choice == 0)
+			{
+				try {
+					ApplicationManager.ontology.unlinkElement((LinkableElement)table.getValueAt(table.getSelectedRow(),0));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				DisplayManager.mainFrame.refresh();
+			}
+		}
+		
 	}
 	
 

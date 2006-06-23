@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
@@ -83,7 +84,6 @@ public class ConceptualTM extends AbstractTM {
 		ArrayList<LinkableElement> concepts = ApplicationManager.ontology.get(Concept.KEY);
 		//ConceptualTM model=((ConceptualTM)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel());
 		DefaultMutableTreeNode racine=this.getRacine();
-		System.out.println(racine);
 		for (int i=0;i<concepts.size();i++)
 		{
 			// creation du neoud courant
@@ -109,7 +109,6 @@ public class ConceptualTM extends AbstractTM {
 	}
 	
 	
-	
 	private void creerSousNoeud(DefaultMutableTreeNode courant, LinkableElement element) {
 		
 		ArrayList<LinkableElement> tmp=new ArrayList<LinkableElement>();
@@ -129,6 +128,11 @@ public class ConceptualTM extends AbstractTM {
 			creerSousNoeud(fils,tmp.get(j));
 			courant.add(fils);
 		}
+	}
+
+	public void supprimerNoeud(DefaultMutableTreeNode courant) {
+		courant.removeFromParent();
+		
 	}
 
 }

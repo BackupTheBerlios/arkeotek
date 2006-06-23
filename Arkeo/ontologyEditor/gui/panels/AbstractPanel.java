@@ -172,6 +172,39 @@ public abstract class AbstractPanel extends JPanel
 				}
 			}
 		});
+		
+		/*if (this.tree.getModel() instanceof ConceptualTM)
+		{
+			this.tree.setDropTarget(new DropTarget(this.tree, new DropTargetAdapter()
+			{
+				@Override
+				public void dragEnter(DropTargetDragEvent dtde)
+				{
+					Transferable transferable = dtde.getTransferable();
+					if (transferable.isDataFlavorSupported(TransferableConcept.conceptFlavor))
+						super.dragEnter(dtde);
+					else
+						dtde.rejectDrag();
+				}
+	
+				public void drop(DropTargetDropEvent dtde)
+				{
+					try {
+			            Transferable transferable = dtde.getTransferable();
+			            if (transferable.isDataFlavorSupported(TransferableConcept.conceptFlavor))
+			            {
+							AbstractPanel.this.tree.getTransferHandler().importData(AbstractPanel.this.tree, transferable);
+			            }
+			            dtde.rejectDrop();
+			            dtde.dropComplete(false);
+			        }       
+			        catch (Exception e) {   
+			            dtde.rejectDrop();
+			            dtde.dropComplete(false);
+			        } 
+			    }	
+			}));
+		}*/
 		this.tree.setCellRenderer(new TreeCellRenderer());
 		 
 		jScrollPane1.setViewportView(this.tree);		

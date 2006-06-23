@@ -6,12 +6,15 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.ApplicationManager.Request;
 import ontologyEditor.gui.dialogs.FenetreAjouterConceptFils;
 import ontologyEditor.gui.dialogs.FenetreRenommerConcept;
 import ontologyEditor.gui.panels.EditionPanel;
+import ontologyEditor.gui.treeviews.ConceptualTM;
 
 import arkeotek.ontology.LinkableElement;
 
@@ -57,15 +60,21 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 			{
 				try {
 					ApplicationManager.ontology.unlinkElement(concept);
+					DefaultMutableTreeNode courant=((DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(0).getTree().getLastSelectedPathComponent());
+					courant.removeFromParent();
+					DisplayManager.mainFrame.getPanel(0).getTree().updateUI();
+					
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				DisplayManager.mainFrame.refresh();
+				
+				//DisplayManager.mainFrame.refresh();
 			}
 		}
 		// si on ajoute un concept
 		else if (source== this.ajouter)
 		{
+			//ApplicationManager.getApplicationManager().manageRequest(Request.CREATE_NEW_CONCEPT);
 			FenetreAjouterConceptFils fsc=new FenetreAjouterConceptFils(this.concept);
 			fsc.show();
 		}

@@ -46,13 +46,10 @@ public class LinguisticPanel extends AbstractPanel {
 			}
 			else if (e.getButton()==MouseEvent.BUTTON3)
 			{
-				if (this.getTable().getSelectedRowCount()>1)
-				{
-					PopupTableLemme popup=new PopupTableLemme();
-					e.consume();
-					// afficher le menu contextuel
-					popup.show(this, e.getX(), e.getY());
-				}
+				PopupTableLemme popup=new PopupTableLemme(this.getTable());
+				e.consume();
+				// afficher le menu contextuel
+				popup.show(this, e.getX(), e.getY());
 			}
 		}
 		

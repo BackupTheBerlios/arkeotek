@@ -30,7 +30,7 @@ public class FenetreRenommerConcept extends JDialog implements ActionListener {
 	private JLabel lbl_contain;
 	private JTextField txt_contain;
    
-	private static final String SEARCH_CAPTION = "Ajouter";
+	private static final String SEARCH_CAPTION = "Renommer";
 	private static final String CANCEL_CAPTION = "Annuler";
 
 	private LinkableElement conceptSource;

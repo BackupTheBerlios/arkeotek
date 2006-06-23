@@ -9,6 +9,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
@@ -52,7 +54,8 @@ public class OntologyPanel extends AbstractPanel {
 							DisplayManager.getInstance().reflectNavigation(concept);
 						} 
 						//Bouton DROIT enfoncé
-						else if( e.getButton() == MouseEvent.BUTTON3) {
+						else if( e.getButton() == MouseEvent.BUTTON3) 
+						{
 							PopupArbreConcept popup=new PopupArbreConcept(concept);
 							e.consume();
 							// afficher le menu contextuel
