@@ -107,7 +107,8 @@ public class ConceptDropTransferHandler extends TransferHandler
 								// on créer une nouvelle relation
 								ApplicationManager.ontology.addRelation(concept,element,relation);
 								// on met a jour l'interface
-								DisplayManager.mainFrame.refresh();
+								DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(element);
+								//DisplayManager.mainFrame.refresh();
 							//}
 						}
 						

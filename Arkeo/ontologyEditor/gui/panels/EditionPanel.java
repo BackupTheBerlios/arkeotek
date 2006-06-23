@@ -341,7 +341,7 @@ public class EditionPanel extends JPanel
 				//System.out.println(parentsEditionTable.getModel().getClass());
 				((SecondEditorPaneTM)rightEditionTable.getModel()).setDonnees(donnees);
 			}
-			else if(parentsEditionTable.getRowCount()!=0)
+			if(parentsEditionTable.getRowCount()!=0)
 			{
 				parentsEditionTable.removeAll();
 				Object [][] donnees=new Object[0][2];

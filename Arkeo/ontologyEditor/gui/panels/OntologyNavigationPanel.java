@@ -425,6 +425,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	public void remplirTableFils(LinkableElement concept) {
 		// TODO Auto-generated method stub
 		conceptFilsTable.removeAll();
+		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation : "+concept));
 		//String[] titreF={"Fils"};
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		if (concept != null)
