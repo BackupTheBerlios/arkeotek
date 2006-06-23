@@ -42,23 +42,24 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 
 	private LinkableElement conceptSource;
 
-	private boolean valid = false;
-	
 	private JButton search_button = new JButton(SEARCH_CAPTION);
 	private JButton cancel_button = new JButton(CANCEL_CAPTION);
+	
+	private int panel;
 
 
-	public FenetreAjouterConceptFils(LinkableElement concept)
+	public FenetreAjouterConceptFils(LinkableElement concept, int panel)
 	{
-		this(DisplayManager.mainFrame,concept);
+		this(DisplayManager.mainFrame,concept,panel);
 	}
 
  	/**
 	 * @param frame The <code>JFrame</code> holding this <code>JPanel</code>. 
 	 */
-	private FenetreAjouterConceptFils(JFrame frame,LinkableElement concept)
+	private FenetreAjouterConceptFils(JFrame frame,LinkableElement concept,int panel)
 	{
         super(frame, "Ajouter un fils au concept", true);
+        this.panel=panel;
         this.frame = frame;
         this.conceptSource=concept;
 		double border = 10;
@@ -139,9 +140,10 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 					}
 				}
 				ApplicationManager.ontology.addRelation(conceptSource,fils,rel);
-				DefaultMutableTreeNode courant=(DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(0).getTree().getLastSelectedPathComponent();
+				DefaultMutableTreeNode courant=(DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(panel).getTree().getLastSelectedPathComponent();
 				courant.add(new DefaultMutableTreeNode(fils));
-				DisplayManager.mainFrame.getPanel(0).getTree().expandPath(DisplayManager.mainFrame.getPanel(0).getTree().getSelectionPath());
+				DisplayManager.mainFrame.getPanel(panel).getTree().expandPath(DisplayManager.mainFrame.getPanel(panel).getTree().getSelectionPath());
+				DisplayManager.mainFrame.getPanel(panel).getTree().updateUI();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

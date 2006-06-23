@@ -56,7 +56,13 @@ public class OntologyPanel extends AbstractPanel {
 						//Bouton DROIT enfoncé
 						else if( e.getButton() == MouseEvent.BUTTON3) 
 						{
-							PopupArbreConcept popup=new PopupArbreConcept(concept);
+							int panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+							if (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()==1)
+							{
+								panel=DisplayManager.mainFrame.TOP_PANEL;
+							}
+							PopupArbreConcept popup=new PopupArbreConcept(concept,panel);
+							
 							e.consume();
 							// afficher le menu contextuel
 							popup.show(this, e.getX(), e.getY());

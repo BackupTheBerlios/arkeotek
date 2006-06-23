@@ -26,10 +26,11 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 	private JMenuItem supprimer;
 	private JMenuItem renommer;
 	private LinkableElement concept;
+	private int panel;
 	
-	public PopupArbreConcept(LinkableElement concept) {
+	public PopupArbreConcept(LinkableElement concept, int panel) {
 		this.concept=concept;
-		
+		this.panel=panel;
 		this.renommer = new JMenuItem ("Renommer le concept") ;
 		this.add (this.renommer) ;
 		this.renommer.addActionListener (this) ;               
@@ -62,7 +63,7 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 					ApplicationManager.ontology.unlinkElement(concept);
 					DefaultMutableTreeNode courant=((DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(0).getTree().getLastSelectedPathComponent());
 					courant.removeFromParent();
-					DisplayManager.mainFrame.getPanel(0).getTree().updateUI();
+					DisplayManager.mainFrame.getPanel(panel).getTree().updateUI();
 					
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -75,9 +76,17 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 		else if (source== this.ajouter)
 		{
 			//ApplicationManager.getApplicationManager().manageRequest(Request.CREATE_NEW_CONCEPT);
-			FenetreAjouterConceptFils fsc=new FenetreAjouterConceptFils(this.concept);
+			FenetreAjouterConceptFils fsc=new FenetreAjouterConceptFils(this.concept,panel);
 			fsc.show();
 		}
+	}
+
+	public int getPanel() {
+		return panel;
+	}
+
+	public void setPanel(int panel) {
+		this.panel = panel;
 	}
 
 }
