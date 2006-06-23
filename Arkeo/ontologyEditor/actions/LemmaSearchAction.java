@@ -23,7 +23,7 @@ public class LemmaSearchAction extends AbstractAction
 	/**
 	 * Default icon associated to this action
 	 */
-	public static final String DEFAULT_ICON = "new.gif";
+	public static final String DEFAULT_ICON = "loupe.gif";
 
 	/**
 	 * @throws Exception
