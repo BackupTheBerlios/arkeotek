@@ -25,6 +25,9 @@ import java.sql.Statement;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.swing.JOptionPane;
+
+import ontologyEditor.gui.dialogs.OntologyWizard;
 
 import org.omg.CORBA.SystemException;
 
@@ -131,7 +134,9 @@ public class Transaction
 			String password = properties.getEncryptedProperty(EncryptedProperties.STORAGE_USER_PASSWORD);
 			
 			try {this.connexion = DriverManager.getConnection(url,user,password);}
-			catch (SQLException e){ System.err.println("echec connection ï¿½ la bdd: "+e);}
+			catch (SQLException e){ 
+				System.err.println("echec connection à la bdd: "+e);
+			}
 		} catch (NoSuchAlgorithmException e1)
 		{
 			// TODO Auto-generated catch block

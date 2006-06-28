@@ -801,7 +801,9 @@ public class ApplicationManager
 	{
 		availableLanguages = new Vector(); // vector initialisation
 		File file = new File(CHEMIN);			// file language directory
+		System.out.println(" FILE : -------------> "+file);
 		File[] fliste = file.listFiles();		// listing of all files in the directory
+		System.out.println(" FLIST : -------------> "+fliste);
 		for (int i = 0 ; i < fliste.length ; i++ )
 		{
 			if (fliste[i].isFile())

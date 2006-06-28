@@ -34,6 +34,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 
 import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
@@ -474,6 +477,68 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.validationButton.setText((doc.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation du corpus : "+doc.getName()));
 		this.txtArea_docText.setText(((DocumentPart)doc).getValue());
+		/*
+		ArrayList<String> mot=new ArrayList<String>();
+		String courant=new String();
+		for (int i=0;i<txtArea_docText.getText().length();i++)
+		{
+			if ((txtArea_docText.getText().charAt(i)==' ') || (txtArea_docText.getText().charAt(i)=='.') || (txtArea_docText.getText().charAt(i)==',') || (i==txtArea_docText.getText().length()))
+			{
+				mot.add(courant);
+				courant="";
+			}
+			else
+			{
+				courant=courant+txtArea_docText.getText().charAt(i);
+			}
+		}
+		
+		//on cherche les concept indexant
+		ArrayList<Concept> conceptIndexant = new ArrayList<Concept>();
+		ArrayList<Integer> links_categoriesCI = new ArrayList<Integer>(1);
+		links_categoriesCI.add(Concept.KEY);
+		for (Integer category : links_categoriesCI) {
+			if (doc.getLinks(category.intValue()) != null) {
+				Set<Relation> keys = doc.getLinks(category.intValue()).keySet();
+				for (Relation key : keys)
+				{
+					for (LinkableElement temp : doc.getLinks(category.intValue(), key))
+					{
+						ArrayList<Object[]> elements = new ArrayList<Object[]>();
+						//elements.addAll(ApplicationManager.ontology.getParentsOf(concept, Lemma.KEY));
+						Set<Relation> keys = null;
+						if (concept.getLinks(Lemma.KEY) != null)
+						{
+							keys = concept.getLinks(Lemma.KEY).keySet();
+							for (Relation key : keys)
+							{
+								for (LinkableElement elem : concept.getLinks(Lemma.KEY, key))
+								{
+									Object[] couple = {key, elem};
+									elements.add(couple);
+								}
+							}
+						}
+						conceptIndexant.add((Concept)temp);
+					}
+				}
+			}
+		}
+		
+		
+		for(String m : mot)
+		{
+			
+		}
+		
+		Highlighter h= this.txtArea_docText.getHighlighter();
+		h.removeAllHighlights();
+		try {
+			h.addHighlight(0,10,DefaultHighlighter.DefaultPainter);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		this.conceptsIndexingTable.removeAll();
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		ArrayList<Integer> links_categories = new ArrayList<Integer>(1);
@@ -682,4 +747,5 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		}
 		table.getColumnModel().getColumn(1).setCellRenderer(custom);
 	}
+	
 }

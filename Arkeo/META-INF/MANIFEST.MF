@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: ontologyEditor.ApplicationManager
+Class-Path: lib/mysql-connector-java-3.1.8-bin.jar lib/TableLayout.jar
