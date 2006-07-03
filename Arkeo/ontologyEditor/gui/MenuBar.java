@@ -107,6 +107,11 @@ public class MenuBar extends JMenuBar
 		miEditionRelations.setText(ApplicationManager.getApplicationManager().getTraduction("editionrelations"));
         mEdit.add(miEditionRelations);
 
+        JMenuItem miTypeRelations = new JMenuItem(ActionManager.getActionManager().getAction(
+                Constants.ACTION_TYPE_RELATIONS));
+		miTypeRelations.setText(ApplicationManager.getApplicationManager().getTraduction("relationstype"));
+        mEdit.add(miTypeRelations);
+        
         this.add(mEdit);
 
 		// "View" menu creation

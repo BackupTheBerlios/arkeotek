@@ -9,11 +9,14 @@ import info.clearthought.layout.TableLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -29,18 +32,22 @@ import ontologyEditor.gui.tables.RelationsEditorTableModel;
  * @author Czerny Jean
  *
  */
-public class RelationsEditorDialog extends JDialog  implements ActionListener
+public class RelationsEditorDialog extends JDialog  implements ItemListener
 {
 	private JFrame frame;
+	private JScrollPane borderedPane;
 	
+	private JComboBox typeComboBox = new JComboBox();
 	private JButton okButton = new JButton();
-	private JButton cancelButton = new JButton();
+	//private JButton cancelButton = new JButton();
 	private JTextField textField = new JTextField();
 	private JButton addButton = new JButton();
 	private JButton delButton = new JButton();
 	
-	private RelationsEditorTableModel model = new RelationsEditorTableModel();
-	private JTable liste = new JTable(model);
+	private RelationsEditorTableModel  models[] = new RelationsEditorTableModel[5];
+	private JTable [] listes = new JTable[5];
+	
+	private int currentList = 0;
 	
 	public RelationsEditorDialog()
 	{
@@ -52,6 +59,11 @@ public class RelationsEditorDialog extends JDialog  implements ActionListener
         super(frame, ApplicationManager.getApplicationManager().getTraduction("relationseditor"), true);
         this.frame = frame;
         
+        for(int i=0;i<models.length;i++)
+        {
+        	models[i] = new RelationsEditorTableModel(i);
+        	listes[i] = new JTable(models[i]);
+        }
         
         
         /*
@@ -63,7 +75,7 @@ public class RelationsEditorDialog extends JDialog  implements ActionListener
 		double buttonWidth = 105;
 		double size[][] = {  
 							{ espacement, TableLayout.FILL, buttonWidth, longSpace, espacement, buttonWidth, espacement }, // Columns
-							{ espacement, buttonHeight, buttonHeight, buttonHeight, TableLayout.FILL, espacement, buttonHeight, espacement }  // Rows
+							{ espacement, buttonHeight, buttonHeight, buttonHeight, buttonHeight, buttonHeight, buttonHeight, buttonHeight, TableLayout.FILL, espacement, buttonHeight, espacement }  // Rows
 						  };
 		this.setLayout(new TableLayout(size));
 		/*
@@ -71,17 +83,21 @@ public class RelationsEditorDialog extends JDialog  implements ActionListener
 		 */
 
 		
-		JScrollPane borderedPane = new JScrollPane();
+		borderedPane = new JScrollPane();
 		borderedPane.setBorder(BorderFactory.createTitledBorder("Relations"));
+		borderedPane.setViewportView(listes[currentList]);
+		this.add(borderedPane, "1, 3, 3, 8");
 		
-		this.liste = new JTable(model);
-		borderedPane.setViewportView(liste);
-		//this.liste.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		//panel.add(this.liste);
-        this.add(borderedPane, "1, 1, 3, 4");
-		
+        typeComboBox.addItem("Concept - Concept");
+        typeComboBox.addItem("Terme - Concept");
+        typeComboBox.addItem("Terme - Document");
+        typeComboBox.addItem("Terme - Terme");
+        typeComboBox.addItem("Concept - Document");
+        typeComboBox.addItemListener(this);
+        this.add(typeComboBox,"1, 1, 2, 1");
+        
 		okButton.setText(ApplicationManager.getApplicationManager().getTraduction("okbutton"));
-        this.add(this.okButton, "5, 6, 5, 6");
+        this.add(this.okButton, "5, 10, 5, 10");
 		this.okButton.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
@@ -90,8 +106,9 @@ public class RelationsEditorDialog extends JDialog  implements ActionListener
 			}
 		});
 
-		cancelButton.setText(ApplicationManager.getApplicationManager().getTraduction("cancelbutton"));
-		this.add(this.cancelButton, "1, 6, 2, 6");
+/*		
+ 		cancelButton.setText(ApplicationManager.getApplicationManager().getTraduction("cancelbutton"));
+		this.add(this.cancelButton, "1, 10, 2, 10");
 		this.cancelButton.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
@@ -99,12 +116,12 @@ public class RelationsEditorDialog extends JDialog  implements ActionListener
 				RelationsEditorDialog.this.cancelInput();
 			}
 		});
-
+*/
 		textField.setText("");
-		this.add(textField,"5, 1, 5, 1");
+		this.add(textField,"5, 4, 5, 4");
 		
 		addButton.setText(ApplicationManager.getApplicationManager().getTraduction("addbutton"));
-		this.add(this.addButton, "5, 2, 5, 2");
+		this.add(this.addButton, "5, 5, 5, 5");
 		this.addButton.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
@@ -114,7 +131,7 @@ public class RelationsEditorDialog extends JDialog  implements ActionListener
 		});
 		
 		delButton.setText(ApplicationManager.getApplicationManager().getTraduction("delbutton"));
-		this.add(this.delButton, "5, 3, 5, 3");
+		this.add(this.delButton, "5, 7, 5, 7");
 		this.delButton.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
@@ -126,6 +143,17 @@ public class RelationsEditorDialog extends JDialog  implements ActionListener
 		this.setSize(450,350);
 		this.setLocation((frame.getLocation().x) + (frame.getSize().width/2) - (this.getSize().width/2),(frame.getLocation().y) + (frame.getSize().height/2) - (this.getSize().height/2));
 		this.setVisible(true);
+	}
+	
+	public void itemStateChanged(ItemEvent evt)  
+    {
+		changerTable(typeComboBox.getSelectedIndex());
+    }
+	
+	public void changerTable(int viewNum)
+	{
+		this.currentList=viewNum;
+		borderedPane.setViewportView(listes[viewNum]);
 	}
 
 	/**
@@ -149,21 +177,28 @@ public class RelationsEditorDialog extends JDialog  implements ActionListener
     
     private void delInput()
     {
-    	int [] sr = liste.getSelectedRows();
+    	/*
+    	 * Lors de la suppression le cas suivant devra etre traité !
+    	 * 
+    	 * Si la relation est utilisée alors dire à l'utilisateur
+    	 * qu'il ne peut le faire car il ne doit pas utiliser la relation.
+    	 */
+    	
+    	int [] sr = listes[currentList].getSelectedRows();
     	if(sr.length>0)
     	{
-    		model.delRows(sr);
+    		models[currentList].delRows(sr);
     	}
-    	liste.changeSelection(0,0,false,false);
-    	liste.updateUI();
+    	listes[currentList].changeSelection(0,0,false,false);
+    	listes[currentList].updateUI();
 	}
 
     private void addInput()
     {
 		String nom = textField.getText();
-    	if(!nom.equals(""))	model.addRow(nom);
+    	if(!nom.equals(""))	models[currentList].addRow(nom);
     	textField.setText("");
-    	liste.updateUI();
+    	listes[currentList].updateUI();
 	}
     
     private class StorageCell

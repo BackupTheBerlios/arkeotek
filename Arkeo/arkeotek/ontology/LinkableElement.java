@@ -25,6 +25,11 @@ public abstract class LinkableElement implements IIndexable {
 	public static final int NEW_ELEMENT_ID = -1;
 	
 	/**
+	 * Constant used for new elements not yet in the base. 
+	 */
+	public static final int TODEL_ELEMENT_ID = -2;
+	
+	/**
 	 * Constant used to define if an element is ignored
 	 */
 	public static final int IGNORED = 1;
@@ -215,6 +220,7 @@ public abstract class LinkableElement implements IIndexable {
 		this.dirty = true;
 	}
 
+	
     /**
      * @return An <code>Object</code> as a key for the category of this element. 
      * In the facts, there is to be a key for each class extending <code>LinkableElement</code>. 
@@ -277,7 +283,6 @@ public abstract class LinkableElement implements IIndexable {
 		}
 	}
 
-	
 	/**
 	 * @see arkeotek.ontology.IIndexable#setName(java.lang.String)
 	 */

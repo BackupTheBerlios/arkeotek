@@ -14,6 +14,22 @@ package arkeotek.ontology;
  */
 public class Relation extends LinkableElement
 {
+	
+	protected int type;
+	
+	/*
+	 * Définition de tous les types de relations
+	 */
+	public static final int RELATION_INUTILE = -1;
+	public static final int RELATION_CONCEPT_CONCEPT = 0;
+	public static final int RELATION_CONCEPT_DOCUMENT = 1;
+	
+	public static final int RELATION_TERME_CONCEPT = 2;
+	public static final int RELATION_TERME_DOCUMENT = 3;
+	public static final int RELATION_TERME_TERME = 4;
+	
+	public static final int RELATION_DOCUMENT_DOCUMENT = 5;
+	
 	/**
 	 * Default value for weighting attribute. 
 	 */
@@ -67,18 +83,38 @@ public class Relation extends LinkableElement
      * @param name the name of the <code>Relation</code>. 
      * @param state the state of the <code>Relation</code>. 
      */
-    public Relation(int id, String name, int state) {
+    public Relation(int id, String name, int state)
+    {
         super(id, name, state);
+        type=RELATION_CONCEPT_CONCEPT;
     }
-
+    
+    public Relation(int id, String name, int state, int type)
+    {
+        super(id, name, state);
+        this.type=type;
+    }
     /**
      * @see arkeotek.ontology.LinkableElement#LinkableElement(String)
      * @param name the name of the <code>Relation</code>. 
      */
-    public Relation(String name) {
+    public Relation(String name)
+    {
         super(name);
     }
-
+    
+    public Relation(String name, int type)
+    {
+        super(name);
+        this.type=type;
+        this.dirty=true;
+    }
+    
+    public void setToDel()
+    {
+    	type=RELATION_INUTILE;
+    	dirty=true;
+    }
 	/**
 	 * @see arkeotek.ontology.LinkableElement#getCategoryKey()
 	 */
@@ -86,5 +122,10 @@ public class Relation extends LinkableElement
 	public int getCategoryKey()
 	{
 		return KEY;
+	}
+
+	public int getType()
+	{
+		return type;
 	}
 }

@@ -10,11 +10,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Vector;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.AbstractTableModel;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import sun.security.krb5.internal.tools.Kinit;
+
+import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.Link;
 import arkeotek.ontology.LinkableElement;
@@ -25,23 +32,14 @@ import arkeotek.ontology.Relation;
  * @author Czerny Jean
  *
  */
-public class RelationsEditorTableModel extends EditorTableModel
+public class RelationsTypeComboModel extends DefaultListModel implements ComboBoxModel
 {
 	protected ArrayList<Object> relations = null;
-	protected String titre = null;
-	protected int typeRelation;
 	
-	/**
-	 * Initialize attributes ..
-	 * list of the kind of relations ..
-	 * Column name ..
-	 */
-	public RelationsEditorTableModel(int typeRelation)
+	public RelationsTypeComboModel()
 	{
-		super(new Lemma("JeNeSertARien"));
-		this.titre = ""; // ApplicationManager.getApplicationManager().getTraduction("relations");
-		this.typeRelation=typeRelation;
-		
+		super();
+		System.out.println("pouet pouet c moi !");
 		ArrayList<LinkableElement> aLR = null;
 		
 		try
@@ -55,7 +53,7 @@ public class RelationsEditorTableModel extends EditorTableModel
 		this.relations = new ArrayList<Object>();
 		for(int i=0;i<aLR.size();i++)
 		{
-			if(((Relation)aLR.get(i)).getType()==typeRelation) this.relations.add(aLR.get(i));
+			this.relations.add(aLR.get(i));
 		}
 	}
 	
@@ -68,26 +66,26 @@ public class RelationsEditorTableModel extends EditorTableModel
 	// Retourne le nombre de colonnes
 	public int getColumnCount()
 	{
-		if (this.getElement() != null)
+		/*if (this.getElement() != null)
 		{
 			return 1;
 		}
 		else
 		{
 			return 0;
-		}
+		}*/ return 1;
 	}
 	
 	// Retourne le nombre de lignes
-	public int getRowCount()
+	/*public int getRowCount()
 	{
 		if (this.getElement() != null)
 			return relations.size();
 		return 0;
-	}
+	}*/
 	
 	// Retourne le nom de la colonne
-	public String getColumnName(int column)
+	/*public String getColumnName(int column)
 	{
 		if(column==0)
 		{
@@ -97,7 +95,7 @@ public class RelationsEditorTableModel extends EditorTableModel
 		{
 			return("");
 		}
-	}
+	}*/
 	
 	// Retourne le type d'objet de la colonne passée en paramètre
 	public Class getColumnClass(int columnIndex)
@@ -174,7 +172,7 @@ public class RelationsEditorTableModel extends EditorTableModel
 			}
 			if(!res)
 			{
-				Relation rel = new Relation(nom,typeRelation);
+				Relation rel = new Relation(nom,1);
 				ApplicationManager.ontology.get(Relation.KEY).add(rel);
 				relations.add(rel);
 				ApplicationManager.ontology.setDirty();
@@ -230,6 +228,16 @@ public class RelationsEditorTableModel extends EditorTableModel
 	public void supprimerRelation()
 	{
 		
+	}
+
+	public void setSelectedItem(Object anItem) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getSelectedItem() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

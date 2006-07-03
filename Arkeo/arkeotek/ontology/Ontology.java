@@ -118,6 +118,11 @@ public class Ontology extends LinkableElement {
 		this(name, null);
 	}
     
+	public void setDirty()
+	{
+		this.dirty = true;
+	}
+	
     private void importProperties() throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException, NoSuchAlgorithmException, NoSuchPaddingException
 	{
 		EncryptedProperties properties = new EncryptedProperties();
@@ -173,14 +178,16 @@ public class Ontology extends LinkableElement {
 	 * Generates a <code>LinkedList</code> with dirty <code>IIndexable</code> as values. If no dirty <code>IIndexable</code> is found in the ontology, then a <code>null</code> value is returned.
 	 * @return A <code>LinkedList</code> of <code>IIndexable</code>. 
 	 */
-	public Object isDirty()
+	public LinkedList<LinkableElement> isDirty()
 	{
 		LinkedList<LinkableElement> dirtyElements = new LinkedList<LinkableElement>();
 		
 		for (int ctg : this.elements.keySet())
 			for (LinkableElement elem : this.elements.get(ctg))
 				if (elem.isDirty() != null)
+				{
 					dirtyElements.add((LinkableElement) elem.isDirty());
+				}
 		// For optimization reasons, we use a unique "for"
 /*		for (int i = 0; i < Math.max(Math.max(Math.max(this.relations.size(), this.lemmas.size()), this.concepts.size()), this.documents.size()); i++) {
 			if (i < this.lemmas.size()) {
@@ -461,7 +468,7 @@ public class Ontology extends LinkableElement {
 	 */
 	public void save() throws Exception
 	{
-		List<LinkableElement> elements_list = (List<LinkableElement>) this.isDirty();
+		LinkedList<LinkableElement> elements_list = this.isDirty();
 		if (elements_list != null)
 		{
 			this.getDataAccessor().save(elements_list);

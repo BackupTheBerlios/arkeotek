@@ -121,8 +121,13 @@ public interface Constants
 	/**
 	 * Edition of the relations
 	 */
-	public static final String ACTION_EDITION_RELATIONS = "Changer la langue de l'application";
-
+	public static final String ACTION_EDITION_RELATIONS = "Ouvrir l'editeur de relations";
+	
+	/**
+	 * Edition of the relations
+	 */
+	public static final String ACTION_TYPE_RELATIONS = "Changer le type d'une ou plusieurs relations";
+	
 	/**
 	 * Default path where resources are located. 
 	 */

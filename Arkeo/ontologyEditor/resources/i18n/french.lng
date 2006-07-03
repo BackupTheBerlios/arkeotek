@@ -19,6 +19,7 @@ breed=Enrichir...
 mergeterms=Fusionner les termes
 indexdocumentgeneric=Indexer le document (g\u00e9n\u00e9rique)
 editionrelations=Edition des relations
+relationstype=Changer le type des relations
 
 # Display Menu
 display=Affichage

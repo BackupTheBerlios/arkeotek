@@ -19,6 +19,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import ontologyEditor.ApplicationManager;
+
 import arkeotek.io.IService;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
@@ -212,9 +214,10 @@ public class Service implements IService
 		Transaction transaction = new Transaction(this, !Transaction.AUTOCOMMIT);
 		DTO dto = null;
 		
+			
 			for (LinkableElement object : list)
 			{
-				System.out.println(object.getId());
+				System.out.println(object.getName());
 				dto = new DTO(transaction, object);
 				if (object instanceof Concept)
 				{
@@ -260,12 +263,23 @@ public class Service implements IService
 					if (object.getId() == LinkableElement.NEW_ELEMENT_ID)
 					{
 						// creation in database
+						System.out.println("Pouet : " + object.getName());
 						IOPerformer.createRelation(dto);
 					}
 					else
 					{
-						// update in database
-						IOPerformer.updateRelation(dto);
+						// Suppression des relations inutilisées dans l'application
+						if( ((Relation) object ).getType()==Relation.RELATION_INUTILE)
+						{
+							System.out.println("Brooooooooooooooooooooonnnn");
+							delete(object);
+							ApplicationManager.ontology.get(Relation.KEY).remove(object);
+						}
+						else
+						{
+							// update in database
+							IOPerformer.updateRelation(dto);
+						}
 					}
 				}
 			}

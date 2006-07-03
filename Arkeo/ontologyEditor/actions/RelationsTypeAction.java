@@ -14,12 +14,12 @@ import ontologyEditor.ApplicationManager;
  * @author Czerny Jean
  *
  */
-public class RelationsEditionAction extends AbstractAction
+public class RelationsTypeAction extends AbstractAction
 {
 	/**
 	 * Default label associated to this action
 	 */
-	public static final String DEFAULT_LABEL = "edition des relations";
+	public static final String DEFAULT_LABEL = "Changer le type des relations";
 	/**
 	 * Default icon associated to this action
 	 */
@@ -28,9 +28,9 @@ public class RelationsEditionAction extends AbstractAction
     /**
      * @throws Exception
      */
-    public RelationsEditionAction() throws Exception
+    public RelationsTypeAction() throws Exception
     {
-		this(DEFAULT_LABEL, DEFAULT_ICON, ApplicationManager.Request.EDITION_RELATIONS);
+		this(DEFAULT_LABEL, DEFAULT_ICON, ApplicationManager.Request.TYPE_RELATIONS);
     }
 	
 	/**
@@ -39,7 +39,7 @@ public class RelationsEditionAction extends AbstractAction
 	 * @param request The request corresponding to this action. 
 	 * @throws Exception The keystroke invoking this action. 
 	 */
-    public RelationsEditionAction(String label, String icon, ApplicationManager.Request request) throws Exception
+    public RelationsTypeAction(String label, String icon, ApplicationManager.Request request) throws Exception
     {
 		super(label, icon, request);
     }
@@ -51,7 +51,7 @@ public class RelationsEditionAction extends AbstractAction
 	 * @param keystroke The keystroke invoking this action. 
 	 * @throws Exception The keystroke invoking this action. 
 	 */
-	public RelationsEditionAction(String label, String icon, ApplicationManager.Request request, KeyStroke keystroke) throws Exception                                
+	public RelationsTypeAction(String label, String icon, ApplicationManager.Request request, KeyStroke keystroke) throws Exception                                
 	{
 		super(label, icon, request, keystroke);
 	}

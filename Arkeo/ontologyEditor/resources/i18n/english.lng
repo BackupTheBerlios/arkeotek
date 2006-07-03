@@ -19,6 +19,7 @@ breed=Breed...
 mergeterms=Merge terms
 indexdocumentgeneric=Index the document (generic)
 editionrelations=Relations edition
+relationstype=Change type of relations
 
 # Display Menu
 display=Display

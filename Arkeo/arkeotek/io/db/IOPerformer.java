@@ -159,11 +159,13 @@ public class IOPerformer
 	{
 		StringBuffer req = new StringBuffer();
 		PreparedStatement ps = null;
+		
+		req.append("delete FROM T_Relation where id=?");
 
 		try
 		{
-			ps = dto.getTransaction().getConnexion().prepareStatement(
-					req.toString());
+			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
+			System.out.println(req.toString());
 			ps.setInt(1, ((LinkableElement) dto.getElement()).getId());
 			ps.executeUpdate();
 		} catch (SQLException e)
@@ -186,13 +188,14 @@ public class IOPerformer
 		PreparedStatement ps = null;
 
 		// Quotes allow MySQL to use auto increment
-		req.append("insert into T_Relation (id, name, state) values (NULL, ?, ?) ");
+		req.append("insert into T_Relation (id, name, state, type) values (NULL, ?, ?, ?) ");
 		try
 		{
 
 			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
 			ps.setString(1, ((LinkableElement) dto.getElement()).getName());
 			ps.setInt(2, ((LinkableElement) dto.getElement()).getState());
+			ps.setInt(3, ((Relation) dto.getElement()).getType());
 			//System.out.println(ps);
 			ps.executeUpdate();
 			if (ps instanceof com.mysql.jdbc.PreparedStatement)
@@ -246,7 +249,7 @@ public class IOPerformer
 		StringBuffer req = new StringBuffer();
 		PreparedStatement ps = null;
 
-		req.append("update T_Relation set name = ?, state = ? where id=?");
+		req.append("update T_Relation set name = ?, state = ?, type = ? where id=?");
 
 		try
 		{
@@ -254,7 +257,8 @@ public class IOPerformer
 			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
 			ps.setString(1, ((LinkableElement) dto.getElement()).getName());
 			ps.setInt(2, ((LinkableElement) dto.getElement()).getState());
-			ps.setInt(3, ((LinkableElement) dto.getElement()).getId());
+			ps.setInt(3, ((Relation) dto.getElement()).getType());
+			ps.setInt(4, ((LinkableElement) dto.getElement()).getId());
 			ps.executeUpdate();
 
 		} catch (SQLException e)
@@ -932,7 +936,7 @@ public class IOPerformer
 			
 			while (rs.next())
 			{
-				relations.put(rs.getInt("id"), new Relation(rs.getInt("id"), rs.getString("name"), rs.getInt("state")));
+				relations.put(rs.getInt("id"), new Relation(rs.getInt("id"), rs.getString("name"), rs.getInt("state"), rs.getInt("type")));
 			}
 		} catch (SQLException e)
 		{
