@@ -10,6 +10,11 @@ import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.panels.CorpusPanel;
 import arkeotek.ontology.LinkableElement;
 
+/**
+ * @author sanmartin
+ * affiche le popup relatif à l'arbre des documents
+ */
+
 public class PopupArbreDocument extends JPopupMenu implements ActionListener{
 
 	private JMenuItem id;

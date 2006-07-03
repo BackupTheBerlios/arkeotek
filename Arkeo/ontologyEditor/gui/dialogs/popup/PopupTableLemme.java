@@ -13,6 +13,11 @@ import ontologyEditor.DisplayManager;
 import ontologyEditor.ApplicationManager.Request;
 import arkeotek.ontology.LinkableElement;
 
+/**
+ * @author sanmartin
+ * affiche le popup relatif à la table des lemmes
+ */
+
 public class PopupTableLemme extends JPopupMenu implements ActionListener{
 
 	private JMenuItem fusion;
@@ -54,14 +59,17 @@ public class PopupTableLemme extends JPopupMenu implements ActionListener{
 		{
 			ApplicationManager.getApplicationManager().manageRequest(Request.LEMMAS_FUSION);
 		}
+		// recherche de lemme
 		else if (source == this.recherche)
 		{
 			ApplicationManager.getApplicationManager().manageRequest(Request.LEMMA_SEARCH);
 		}
+		// ajout d'un lemme
 		else if (source == this.ajouter)
 		{
 			ApplicationManager.getApplicationManager().manageRequest(Request.CREATE_NEW_LEMMA);
 		}
+		// supprimer un lemme
 		else if (source == this.supprimer)
 		{
 			Object[] options = {"Oui", "Non"};

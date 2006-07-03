@@ -14,6 +14,11 @@ import ontologyEditor.gui.dialogs.FenetreAjouterConceptFils;
 import ontologyEditor.gui.dialogs.FenetreRenommerConcept;
 import arkeotek.ontology.LinkableElement;
 
+/**
+ * @author sanmartin
+ * permet d'afficher le popup lié à l'arbre des concepts
+ */
+
 public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 
 	private JMenuItem ajouter;
@@ -40,7 +45,7 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
-		// si on renomme ouverte d'une fenetre
+		// si on renomme ouverture d'une fenetre
 		if (source == this.renommer)
 		{
 			FenetreRenommerConcept fsc=new FenetreRenommerConcept(this.concept);
@@ -62,14 +67,11 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				
-				//DisplayManager.mainFrame.refresh();
 			}
 		}
 		// si on ajoute un concept
 		else if (source== this.ajouter)
 		{
-			//ApplicationManager.getApplicationManager().manageRequest(Request.CREATE_NEW_CONCEPT);
 			FenetreAjouterConceptFils fsc=new FenetreAjouterConceptFils(this.concept,panel);
 			fsc.show();
 		}
