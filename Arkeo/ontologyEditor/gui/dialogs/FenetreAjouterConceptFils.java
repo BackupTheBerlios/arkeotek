@@ -21,6 +21,10 @@ import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 
+/**
+ * @author sanmartin
+ * fenetre relative à l'ajout d'un concept fils à conceptSource
+ */
 public class FenetreAjouterConceptFils extends JDialog implements ActionListener {
 
 	private JFrame frame;
@@ -31,6 +35,7 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 	private static final String SEARCH_CAPTION = "Ajouter";
 	private static final String CANCEL_CAPTION = "Annuler";
 
+	// concept pere
 	private LinkableElement conceptSource;
 
 	private JButton search_button = new JButton(SEARCH_CAPTION);
@@ -82,6 +87,7 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
+				// quand on clique sur Ajouter
 				FenetreAjouterConceptFils.this.validateInput();
 			}
 		});
@@ -118,11 +124,14 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 		else
 		{
 			Concept fils=new Concept(this.txt_contain.getText());
-			//on créer une nouvelle relation
+			//création d'une nouvelle relation
 			try {
+				// ajoute le fils dans la liste des concept
 				ApplicationManager.ontology.get(Concept.KEY).add(fils);
+				// création d'une nouvelle relation DEFAULT_CONCEPTS_RELATION entre le pere et le fils
 				ArrayList<LinkableElement> relations = ApplicationManager.ontology.get(Relation.KEY);
 				Relation rel=new Relation(Relation.DEFAULT_CONCEPTS_RELATION);
+				// on recherche l'identifiant de cette relation
 				for (int i=0;i<relations.size();i++)
 				{
 					if (rel.getName().equals(((Relation)relations.get(i)).getName()))
@@ -130,17 +139,18 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 						rel.setId(((Relation)relations.get(i)).getId());
 					}
 				}
+				// on ajoute la relation
 				ApplicationManager.ontology.addRelation(conceptSource,fils,rel);
+				// on ajoute le concept à l'arbre
 				DefaultMutableTreeNode courant=(DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(panel).getTree().getLastSelectedPathComponent();
 				courant.add(new DefaultMutableTreeNode(fils));
+				// MAJ de l'interface
 				DisplayManager.mainFrame.getPanel(panel).getTree().expandPath(DisplayManager.mainFrame.getPanel(panel).getTree().getSelectionPath());
 				DisplayManager.mainFrame.getPanel(panel).getTree().updateUI();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// on met a jour l'interface
-			//DisplayManager.mainFrame.refresh();
 			this.dispose();
 		}
 	}

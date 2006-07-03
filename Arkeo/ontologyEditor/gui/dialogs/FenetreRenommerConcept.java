@@ -16,6 +16,10 @@ import javax.swing.JTextField;
 import ontologyEditor.DisplayManager;
 import arkeotek.ontology.LinkableElement;
 
+/**
+ * @author sanmartin
+ * renomme le nom d'un concept
+ */
 public class FenetreRenommerConcept extends JDialog implements ActionListener {
 
 	private JFrame frame;
