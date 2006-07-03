@@ -106,15 +106,11 @@ public class ConceptDropTransferHandler extends TransferHandler
 						}
 						// on recupere le concept source
 						LinkableElement concept=DisplayManager.mainFrame.getEditionPanel().getCourant();
-						System.out.println("concept pere : "+concept);
-						//if (concept instanceof Concept)
-						//{
-							// on créer une nouvelle relation
-							ApplicationManager.ontology.addRelation(concept,element,relation);
-							// on met a jour l'interface
-							DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(concept);
-							//DisplayManager.mainFrame.refresh();
-						//}
+						// on créer une nouvelle relation
+						ApplicationManager.ontology.addRelation(concept,element,relation);
+						// on met a jour l'interface
+						DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(concept);
+						//DisplayManager.mainFrame.refresh();
 					}
 				}
 				return true;
