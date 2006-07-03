@@ -6,27 +6,17 @@
 package ontologyEditor;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-import javax.swing.DefaultBoundedRangeModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import ontologyEditor.gui.MainFrame;
 import ontologyEditor.gui.panels.CorpusPanel;
 import ontologyEditor.gui.panels.LinguisticPanel;
 import ontologyEditor.gui.panels.OntologyPanel;
-import ontologyEditor.gui.tables.LemmaTableModel;
-import ontologyEditor.gui.treeviews.ConceptualTM;
-import ontologyEditor.gui.treeviews.ConceptualTreeModel;
-import ontologyEditor.gui.treeviews.CorpusTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
-import arkeotek.ontology.Ontology;
-import arkeotek.ontology.Relation;
 
 /**
  * This class is responsible of managing display

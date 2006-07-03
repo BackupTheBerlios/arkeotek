@@ -4,17 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
-import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.dialogs.FenetreAjouterConceptFils;
-import ontologyEditor.gui.dialogs.FenetreRenommerConcept;
-import ontologyEditor.gui.panels.AbstractPanel;
-import ontologyEditor.gui.panels.CorpusNavigationPanel;
 import ontologyEditor.gui.panels.CorpusPanel;
-import ontologyEditor.gui.treeviews.CorpusTM;
 import arkeotek.ontology.LinkableElement;
 
 public class PopupArbreDocument extends JPopupMenu implements ActionListener{

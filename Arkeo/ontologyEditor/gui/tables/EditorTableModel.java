@@ -9,7 +9,6 @@ import javax.swing.table.AbstractTableModel;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 

@@ -2,10 +2,6 @@ package ontologyEditor.gui.dialogs;
 
 import info.clearthought.layout.TableLayout;
 
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -17,11 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
-import arkeotek.ontology.Relation;
 
 public class FenetreRenommerConcept extends JDialog implements ActionListener {
 

@@ -6,16 +6,11 @@
 package ontologyEditor.gui.tables;
 
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.JOptionPane;
-import javax.swing.table.AbstractTableModel;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-
-import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;

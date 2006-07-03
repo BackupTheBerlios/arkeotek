@@ -2,33 +2,24 @@ package ontologyEditor.gui.dialogs;
 
 import info.clearthought.layout.TableLayout;
 
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import ontologyEditor.ApplicationManager;
+import ontologyEditor.DisplayManager;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
-
-import ontologyEditor.ApplicationManager;
-import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.treeviews.ConceptualTM;
 
 public class FenetreAjouterConceptFils extends JDialog implements ActionListener {
 

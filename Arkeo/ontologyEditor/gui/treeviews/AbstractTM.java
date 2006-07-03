@@ -1,7 +1,6 @@
 package ontologyEditor.gui.treeviews;
 
 import javax.swing.event.TreeModelListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 

@@ -2,7 +2,6 @@ package ontologyEditor.gui.dialogs.popup;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -12,7 +11,6 @@ import javax.swing.JTable;
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ApplicationManager.Request;
-import ontologyEditor.gui.panels.CorpusPanel;
 import arkeotek.ontology.LinkableElement;
 
 public class PopupTableLemme extends JPopupMenu implements ActionListener{

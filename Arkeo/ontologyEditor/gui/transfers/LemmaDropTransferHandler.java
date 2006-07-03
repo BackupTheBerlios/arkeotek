@@ -16,10 +16,6 @@ import javax.swing.TransferHandler;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.panels.CorpusNavigationPanel;
-import ontologyEditor.gui.panels.LinguisticNavigationPanel;
-import ontologyEditor.gui.tables.ConceptIndexantTM;
-import ontologyEditor.gui.tables.EditorTableModel;
 import ontologyEditor.gui.tables.SecondEditorPaneTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.Lemma;

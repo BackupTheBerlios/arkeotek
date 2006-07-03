@@ -19,8 +19,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import ontologyEditor.ApplicationManager;
-
 import arkeotek.io.IService;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;

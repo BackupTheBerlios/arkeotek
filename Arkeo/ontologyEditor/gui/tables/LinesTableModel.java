@@ -5,15 +5,7 @@
  */
 package ontologyEditor.gui.tables;
 
-import java.util.ArrayList;
-import java.util.Set;
-
 import javax.swing.table.AbstractTableModel;
-
-import ontologyEditor.ApplicationManager;
-import arkeotek.ontology.DocumentPart;
-import arkeotek.ontology.LinkableElement;
-import arkeotek.ontology.Relation;
 
 /**
  * @author Bernadou Pierre 

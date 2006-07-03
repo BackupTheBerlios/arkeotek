@@ -4,16 +4,12 @@ import java.util.ArrayList;
 
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.tables.LemmaTableModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
-import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 

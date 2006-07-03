@@ -15,7 +15,6 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 
 import ontologyEditor.ApplicationManager;
-
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Ontology;

@@ -25,9 +25,6 @@ import java.sql.Statement;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.swing.JOptionPane;
-
-import ontologyEditor.gui.dialogs.OntologyWizard;
 
 import org.omg.CORBA.SystemException;
 

@@ -10,15 +10,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.ApplicationManager.Request;
 import ontologyEditor.gui.dialogs.FenetreAjouterConceptFils;
 import ontologyEditor.gui.dialogs.FenetreRenommerConcept;
-import ontologyEditor.gui.panels.EditionPanel;
-import ontologyEditor.gui.treeviews.ConceptualTM;
-
 import arkeotek.ontology.LinkableElement;
-
-import com.sun.corba.se.spi.orbutil.fsm.Action;
 
 public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 

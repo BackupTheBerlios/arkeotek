@@ -5,45 +5,22 @@ package ontologyEditor.gui.dialogs;
 
 import info.clearthought.layout.TableLayout;
 
-import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
-import java.awt.HeadlessException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
-import javax.swing.text.Utilities;
 
-import ontologyEditor.ApplicationManager;
-import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.panels.LinguisticNavigationPanel;
-import ontologyEditor.gui.tables.EditorTableModel;
-import ontologyEditor.gui.tables.LemmaParentTM;
-import ontologyEditor.gui.tables.LemmaTableModel;
 import ontologyEditor.gui.tables.LinesTableModel;
-import ontologyEditor.gui.tables.LinkableElementTable;
-
-import arkeotek.io.db.Service;
-import arkeotek.ontology.DocumentPart;
-import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
-import arkeotek.ontology.Relation;
 
 /**
  * @author sanmartin

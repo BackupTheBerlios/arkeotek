@@ -1,19 +1,13 @@
 package ontologyEditor.gui.tables;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import javax.swing.table.AbstractTableModel;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.MainFrame;
-import ontologyEditor.gui.panels.LinguisticPanel;
-import ontologyEditor.gui.treeviews.ConceptualTM;
-import arkeotek.ontology.Concept;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
-import arkeotek.ontology.Relation;
 
 public class LemmaTableModel extends AbstractTableModel {
 

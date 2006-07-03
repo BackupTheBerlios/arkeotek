@@ -6,7 +6,6 @@
 package ontologyEditor.gui.dialogs;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -21,7 +20,6 @@ import javax.swing.JTable;
 
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
-import sun.awt.VerticalBagLayout;
 
 /**
  * @author Sanmartin Julien

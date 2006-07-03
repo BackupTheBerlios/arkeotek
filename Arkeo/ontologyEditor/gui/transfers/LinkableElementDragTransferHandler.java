@@ -13,12 +13,8 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.TransferHandler;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import ontologyEditor.ApplicationManager;
-import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.panels.OntologyNavigationPanel;
-import ontologyEditor.gui.treeviews.LinkableElementTree;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;

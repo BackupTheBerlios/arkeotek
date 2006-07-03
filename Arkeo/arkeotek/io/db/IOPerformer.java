@@ -13,13 +13,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import arkeotek.io.IService;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.Link;
 import arkeotek.ontology.LinkableElement;
-import arkeotek.ontology.Ontology;
 import arkeotek.ontology.Relation;
 
 /**

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import arkeotek.indexing.Indexer;
 import arkeotek.indexing.Rule;
-import arkeotek.io.importer.syntex.OldImporter;
 import arkeotek.io.importer.termonto.OldImporterT;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Ontology;

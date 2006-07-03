@@ -25,12 +25,8 @@ import java.util.Set;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.swing.JOptionPane;
 
-import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
-import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.tables.LemmaTableModel;
 import arkeotek.io.EncryptedProperties;
 import arkeotek.io.IService;
 import arkeotek.io.importer.syntex.Importer;

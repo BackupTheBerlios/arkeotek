@@ -7,21 +7,17 @@ package ontologyEditor.gui.transfers;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.util.ArrayList;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
-import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.panels.CorpusNavigationPanel;
 import ontologyEditor.gui.tables.ConceptIndexantTM;
-import ontologyEditor.gui.tables.ConceptPotentielTM;
-import ontologyEditor.gui.tables.EditorTableModel;
 import ontologyEditor.gui.tables.HighEditorPaneTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.Lemma;
