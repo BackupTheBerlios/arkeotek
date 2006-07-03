@@ -7,61 +7,38 @@ package ontologyEditor.gui.panels;
 
 import info.clearthought.layout.TableLayout;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.datatransfer.Transferable;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetAdapter;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
-import javax.swing.ListSelectionModel;
 import javax.swing.TransferHandler;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
-import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.tables.LemmaTableModel;
 import ontologyEditor.gui.tables.LinkableElementTable;
-import ontologyEditor.gui.transfers.ConceptDropTransferHandler;
 import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
-import ontologyEditor.gui.transfers.TransferableConcept;
 import ontologyEditor.gui.treeviews.AbstractTM;
 import ontologyEditor.gui.treeviews.AbstractTreeModel;
 import ontologyEditor.gui.treeviews.ConceptualTM;
-import ontologyEditor.gui.treeviews.ConceptualTreeModel;
 import ontologyEditor.gui.treeviews.CorpusTM;
 import ontologyEditor.gui.treeviews.LinkableElementTree;
-import arkeotek.ontology.Concept;
-import arkeotek.ontology.DocumentPart;
-import arkeotek.ontology.IIndexable;
-import arkeotek.ontology.Lemma;
-import arkeotek.ontology.Link;
 import arkeotek.ontology.LinkableElement;
 
 /**

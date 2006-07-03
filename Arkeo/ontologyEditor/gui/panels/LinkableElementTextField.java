@@ -9,7 +9,6 @@ import javax.swing.Icon;
 import javax.swing.JTextField;
 
 import ontologyEditor.ImagesManager;
-
 import arkeotek.ontology.LinkableElement;
 
 /**

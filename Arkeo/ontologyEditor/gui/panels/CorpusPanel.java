@@ -12,14 +12,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.dialogs.popup.PopupArbreConcept;
 import ontologyEditor.gui.dialogs.popup.PopupArbreDocument;
-import ontologyEditor.gui.tables.LinkableElementTable;
 import ontologyEditor.gui.treeviews.CorpusTM;
-import ontologyEditor.gui.treeviews.CorpusTreeModel;
-import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
-import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 
 /**

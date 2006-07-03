@@ -7,17 +7,13 @@ package ontologyEditor.gui.panels;
 
 import java.awt.event.MouseEvent;
 
-import javax.swing.JPopupMenu;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.dialogs.popup.PopupArbreConcept;
 import ontologyEditor.gui.treeviews.ConceptualTM;
 import ontologyEditor.gui.treeviews.ConceptualTreeModel;
-import ontologyEditor.gui.treeviews.CorpusTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
 
