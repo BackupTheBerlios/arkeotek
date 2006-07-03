@@ -597,7 +597,7 @@ public class EditionPanel extends JPanel
 	
 	private void rendererTableConcept(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
-		custom.setHorizontalAlignment(JLabel.CENTER);
+		//custom.setHorizontalAlignment(JLabel.CENTER);
 		try {
 			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_CONCEPT_ICON));
 		} catch (Exception e) {
@@ -611,7 +611,7 @@ public class EditionPanel extends JPanel
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
 		//DefaultTableCellRenderer custom2 = new DefaultTableCellRenderer();
 		//custom2.setHorizontalAlignment(JLabel.CENTER);
-		custom.setHorizontalAlignment(JLabel.CENTER);
+		//custom.setHorizontalAlignment(JLabel.CENTER);
 		try {
 			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_LEMMA_ICON));
 			//custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_DOCUMENTPART_ICON));

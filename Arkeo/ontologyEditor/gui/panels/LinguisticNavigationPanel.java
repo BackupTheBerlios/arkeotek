@@ -678,7 +678,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 	
 	private void rendererTableConcept(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
-		custom.setHorizontalAlignment(JLabel.CENTER);
+		//custom.setHorizontalAlignment(JLabel.CENTER);
 		try {
 			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_CONCEPT_ICON));
 		} catch (Exception e) {
@@ -690,7 +690,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 	
 	private void rendererTableLemme(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
-		custom.setHorizontalAlignment(JLabel.CENTER);
+		//custom.setHorizontalAlignment(JLabel.CENTER);
 		try {
 			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_LEMMA_ICON));
 		} catch (Exception e) {
@@ -702,7 +702,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 	
 	private void rendererTableDocument(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
-		custom.setHorizontalAlignment(JLabel.CENTER);
+		//custom.setHorizontalAlignment(JLabel.CENTER);
 		try {
 			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_DOCUMENTPART_ICON));
 		} catch (Exception e) {

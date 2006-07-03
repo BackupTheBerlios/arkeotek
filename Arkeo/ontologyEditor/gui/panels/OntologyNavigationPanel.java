@@ -594,7 +594,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	
 	private void rendererTableConcept(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
-		custom.setHorizontalAlignment(JLabel.CENTER);
+		//custom.setHorizontalAlignment(JLabel.CENTER);
 		try {
 			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_CONCEPT_ICON));
 		} catch (Exception e) {
@@ -606,7 +606,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	
 	private void rendererTableLemme(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
-		custom.setHorizontalAlignment(JLabel.CENTER);
+		//custom.setHorizontalAlignment(JLabel.CENTER);
 		try {
 			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_LEMMA_ICON));
 		} catch (Exception e) {
