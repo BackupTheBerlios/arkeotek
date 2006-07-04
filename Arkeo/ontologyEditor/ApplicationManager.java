@@ -37,7 +37,6 @@ import ontologyEditor.actions.NewRelationAction;
 import ontologyEditor.actions.OpenAction;
 import ontologyEditor.actions.QuitAction;
 import ontologyEditor.actions.RelationsEditionAction;
-import ontologyEditor.actions.RelationsTypeAction;
 import ontologyEditor.actions.SCDIndexationAction;
 import ontologyEditor.actions.SaveAction;
 import ontologyEditor.actions.TopPanelChangeAction;
@@ -48,7 +47,6 @@ import ontologyEditor.gui.dialogs.FindLemmaDialog;
 import ontologyEditor.gui.dialogs.OntologyWizard;
 import ontologyEditor.gui.dialogs.ProgressBarDialog;
 import ontologyEditor.gui.dialogs.RelationsEditorDialog;
-import ontologyEditor.gui.dialogs.RelationsTypeDialog;
 import ontologyEditor.gui.filechoosers.OntologyFileChooser;
 import ontologyEditor.gui.filechoosers.SyntexFileChooser;
 import ontologyEditor.gui.filechoosers.TermontoFileChooser;
@@ -182,11 +180,7 @@ public class ApplicationManager
         /**
          * Performs Edition Relations
          */
-        EDITION_RELATIONS,
-        /**
-         * Performs changing type of relations
-         */
-        TYPE_RELATIONS
+        EDITION_RELATIONS
     }
     
     // Language
@@ -222,7 +216,6 @@ public class ApplicationManager
 			am.registerAction(Constants.ACTION_SCD_INDEXATION, new SCDIndexationAction());
 			am.registerAction(Constants.ACTION_GENERIC_INDEXATION, new GenericIndexationAction());
 			am.registerAction(Constants.ACTION_EDITION_RELATIONS, new RelationsEditionAction());
-			am.registerAction(Constants.ACTION_TYPE_RELATIONS, new RelationsTypeAction());
 
 			am.registerAction(Constants.ACTION_CHANGE_BOTTOM_PANNEL_CONCEPTS, new BottomPanelChangeAction(Concept.KEY));
             am.registerAction(Constants.ACTION_CHANGE_BOTTOM_PANNEL_LEMMAS, new BottomPanelChangeAction(Lemma.KEY));
@@ -691,12 +684,6 @@ public class ApplicationManager
 				if(ApplicationManager.ontology!=null)
 				{
 					new RelationsEditorDialog();
-				}
-				break;
-			case TYPE_RELATIONS :
-				if(ApplicationManager.ontology!=null)
-				{
-					new RelationsTypeDialog();
 				}
 				break;
 			case QUIT_APPLICATION : System.exit(0);
