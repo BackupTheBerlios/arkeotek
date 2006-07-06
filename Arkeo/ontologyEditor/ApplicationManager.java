@@ -426,51 +426,88 @@ public class ApplicationManager
 				}
 				break;
 			case OPEN_ONTOLOGY_FROM_TERMONTO : 
-				if (ontology != null) {
-					if (ontology.isDirty() != null) {
+				/* On s'assure qu'une ontologie est chargée dans l'application */
+				if (ontology != null)
+				{
+					/* Si l'ontologie chargée n'est pas sauvegardé (modifications réscentes) alors on propose à l'utilisateur de sauvegarder ! */
+					if (ontology.isDirty() != null)
+					{
+						/* Boite de dialogue proposant la sauvegarde de l'ontologie */
 						Object[] options = {"Oui", "Non", "Annuler"};
 						choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, "L'ontologie courante n'a pas \u00e9t\u00e9 enregistr\u00e9e, voulez-vous le faire maintenant ?", "Modifications non enregistr\u00e9es", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
-						if (choice == JOptionPane.OK_OPTION)
-							ontology.save();
+						if (choice == JOptionPane.OK_OPTION) ontology.save();
 					}
-				} else {
+				}
+				else
+				{
+					/* Si aucune ontologie n'est ouverte alors on propose d'en creer une */
 					this.manageRequest(Request.CREATE_NEW_ONTOLOGY);
 				}
-				if (choice != JOptionPane.CANCEL_OPTION) {
+				
+				/* On poursuit le traitement si l'utilisateur n' a pas annulé l'importation par le biais de la boite de dialogue */
+				if (choice != JOptionPane.CANCEL_OPTION)
+				{
+					/* TermontoFileChooser est une boite de dialogue de type File Chooser paramétrée pour l'importation termonto
+					 * On appel la méthode showOpenDialog avec la frame principale en paramètre */
 					TermontoFileChooser fileChooser = new TermontoFileChooser();
 					fileChooser.showOpenDialog(DisplayManager.mainFrame);
-	
-					if (fileChooser.getSelectedFile() != null) {
+System.out.println("debug");
+					if (fileChooser.getSelectedFile() != null)
+					{
+						/* ProgressBarDialog est une boite de dialogue avec une barre d'avancement dedans
+						 * elle permet par l'intermédiaire de la méthode launch d'afficher la boite tout en s'executant en parallèle de l'application
+						 */
 						ProgressBarDialog progressBarDialog = new ProgressBarDialog(DisplayManager.mainFrame, "Chargement", true);
-							
+						
+						
+						/* GenericRunnable est une inner classe de ApplicationManager qui permet de procéder à l'execution d'un traitement
+						 * que l'on définit à l'instanciation de l'objet
+						 * Il y a possibilité de passer un objet en paramètre (structure quelquonque pour le traitement) 
+						 */
 						Object[] parameters = {AbstractParser.addSlash(fileChooser.getSelectedFile().getPath()), progressBarDialog};
 						GenericRunnable termontoRunnable = new GenericRunnable(parameters)
 						{
 							public void run()
 							{
-								try {
-//									OldImporterT termonto = new OldImporterT(ontology, ((String)((Object[])this.getArgument())[0]));
+								try
+								{
+									/* Importer est la classe qui s'occupe de l'importation
+									 * Paramètres : ontologie
+									 */
 									Importer termonto = new Importer(ontology, ((String)((Object[])this.getArgument())[0]));
+									
+									/* Lancement du traitement des données */
 									termonto.performImport();
+									
+									/* Une fois le traitement effectué, on ferme la barre d'avancement */
 									((ProgressBarDialog)((Object[])this.getArgument())[1]).dispose();
-								} catch (DuplicateElementException e) {
+								}
+								catch (DuplicateElementException e)
+								{
 									Object[] options = {"OK"};
 									JOptionPane.showOptionDialog(DisplayManager.mainFrame, "Fichiers Termonto erron\u00e9s : \u00e9l\u00e9ments dupliqu\u00e9s. ", "Action impossible", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-								} catch (IOException e) {
+								}
+								catch (IOException e) {
 									Object[] options = {"OK"};
 									JOptionPane.showOptionDialog(DisplayManager.mainFrame, "Une erreur d'entr\u00e9es/sorties est survenue lors de la r\u00e9cup\u00e9ration des donn\u00e9es Termonto", "Action impossible", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-								} catch (Exception e)
+								}
+								catch (Exception e)
 								{
 									e.printStackTrace();
 								}
+								
+								/* fermeture de nouveau surement au cas ou */
 								((ProgressBarDialog)((Object[])this.getArgument())[1]).dispose();
 							}
 						};
+						
+						/* On lance donc le threads instancié plus haut */
 						termontoRunnable.start();
 						progressBarDialog.setVisible(true);
 						
-						ProgressBarDialog progressBarRefreshDialog = new ProgressBarDialog(DisplayManager.mainFrame, "Chargement", true);
+						ProgressBarDialog progressBarRefreshDialog = new ProgressBarDialog(DisplayManager.mainFrame, "Rafraichissement", true);
 						
+						/* Thread pour le rafraichissement de l'image */
 						GenericRunnable refreshRunnable = new GenericRunnable(progressBarRefreshDialog)
 						{
 							public void run()
@@ -479,9 +516,10 @@ public class ApplicationManager
 								((ProgressBarDialog)(this.getArgument())).dispose();
 							}
 						};
+						
+						/* lancement du thread et affichage de la barre d 'avancement */
 						refreshRunnable.start();
 						progressBarRefreshDialog.setVisible(true);
-							
 					}
 				}
 				break;

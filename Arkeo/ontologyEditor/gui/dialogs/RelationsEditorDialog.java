@@ -89,10 +89,11 @@ public class RelationsEditorDialog extends JDialog  implements ItemListener
 		this.add(borderedPane, "1, 3, 3, 8");
 		
         typeComboBox.addItem("Concept - Concept");
+        typeComboBox.addItem("Concept - Document");
         typeComboBox.addItem("Terme - Concept");
         typeComboBox.addItem("Terme - Document");
         typeComboBox.addItem("Terme - Terme");
-        typeComboBox.addItem("Concept - Document");
+
         typeComboBox.addItemListener(this);
         this.add(typeComboBox,"1, 1, 2, 1");
         

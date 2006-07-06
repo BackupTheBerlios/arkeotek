@@ -108,7 +108,7 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 
 					// ... and we link those two concepts...
 					Relation temp_rel;
-					int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_CONCEPTS_RELATION));
+					int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_CONCEPTS_RELATION,Relation.RELATION_CONCEPT_CONCEPT));
 					temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
 
 					// Linking concepts
@@ -128,7 +128,7 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 
 					// ... and we link those two concepts...
 					Relation temp_rel;
-					int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_CONCEPTS_RELATION));
+					int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_CONCEPTS_RELATION,Relation.RELATION_CONCEPT_CONCEPT));
 					temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
 
 					// Linking concepts
@@ -185,7 +185,7 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 		{
 			// Retrieving Relation.DEFAULT_LEMMA_CONCEPT_RELATION
 			Relation temp_rel;
-			int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_CONCEPT_RELATION));
+			int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_CONCEPT_RELATION,Relation.RELATION_TERME_CONCEPT));
 			temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
 
 			// Retrieving concerned Concept and Lemma
@@ -211,7 +211,7 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 					{
 						System.out.println(temp_doc + " " + temp_lemma);
 						Relation temp_rel;
-						int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION));
+						int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION,Relation.RELATION_TERME_DOCUMENT));
 						temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
 		
 						temp_lemma.link(temp_rel, temp_doc);
@@ -226,10 +226,10 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 		{
 			if (this.current_result[0] != null && this.current_result[1] != null) {
 				// We check wether the read relation exists in the Ontology or not.
-				int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation((String) this.current_result[2]));
+				int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation((String) this.current_result[2],Relation.RELATION_TERME_TERME));
 				Relation temp_rel;
 				if (position < 0) {
-					temp_rel = new Relation((String) this.current_result[2]);
+					temp_rel = new Relation((String) this.current_result[2],Relation.RELATION_TERME_TERME);
 					this.owner.get(Relation.KEY).add(-position - 1, temp_rel);
 				}
 				else
@@ -278,21 +278,21 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 			if (text.get(parent_key) != null)
 			{
 				// Ascending link between paragraphs
-				position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION));
+				position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION,Relation.RELATION_DOCUMENT_DOCUMENT));
 				if (position < 0)
 				{
 					position = -position - 1;
-					this.owner.get(Relation.KEY).add(position, new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION));
+					this.owner.get(Relation.KEY).add(position, new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION,Relation.RELATION_DOCUMENT_DOCUMENT));
 				}
 				temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
 				((DocumentPart) text.get(parent_key)).link(temp_rel, (DocumentPart) element);
 
 				// Down going link between paragraphs
-				position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(particles[particles.length - 2]));
+				position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(particles[particles.length - 2],Relation.RELATION_DOCUMENT_DOCUMENT));
 				if (position < 0)
 				{
 					position = -position - 1;
-					this.owner.get(Relation.KEY).add(position, new Relation(particles[particles.length - 2]));
+					this.owner.get(Relation.KEY).add(position, new Relation(particles[particles.length - 2],Relation.RELATION_DOCUMENT_DOCUMENT));
 				}
 				temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
 				((DocumentPart) element).link(temp_rel, (DocumentPart) text.get(parent_key));
@@ -363,31 +363,31 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 
 		// We check wether the Relation.DEFAULT_CONCEPTS_RELATION
 		// exists in the Ontology or not.
-		position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_CONCEPTS_RELATION));
+		position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_CONCEPTS_RELATION,Relation.RELATION_CONCEPT_CONCEPT));
 		// If not, we create it
 		if (position < 0)
-			this.owner.link(new Relation(Relation.DEFAULT_CONCEPTS_RELATION));
+			this.owner.link(new Relation(Relation.DEFAULT_CONCEPTS_RELATION,Relation.RELATION_CONCEPT_CONCEPT));
 
 		// We check wether the Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION
 		// exists in the Ontology or not.
-		position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION));
+		position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION,Relation.RELATION_TERME_DOCUMENT));
 		// If not, we create it
 		if (position < 0)
-			this.owner.link(new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION));
+			this.owner.link(new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION,Relation.RELATION_TERME_DOCUMENT));
 
 		// We check wether the Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION
 		// exists in the Ontology or not.
-		position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION));
+		position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION,Relation.RELATION_DOCUMENT_DOCUMENT));
 		// If not, we create it
 		if (position < 0)
-			this.owner.link(new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION));
+			this.owner.link(new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION,Relation.RELATION_DOCUMENT_DOCUMENT));
 
 		// We check wether the Relation.DEFAULT_LEMMA_CONCEPT_RELATION
 		// exists in the Ontology or not.
-		position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_CONCEPT_RELATION));
+		position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_CONCEPT_RELATION,Relation.RELATION_TERME_CONCEPT));
 		// If not, we create it
 		if (position < 0)
-			this.owner.link(new Relation(Relation.DEFAULT_LEMMA_CONCEPT_RELATION));
+			this.owner.link(new Relation(Relation.DEFAULT_LEMMA_CONCEPT_RELATION,Relation.RELATION_TERME_CONCEPT));
 	}
 
 	private String[] stripName(String name)
