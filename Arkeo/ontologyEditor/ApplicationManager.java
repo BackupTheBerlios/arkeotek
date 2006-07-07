@@ -615,6 +615,7 @@ System.out.println("debug");
 				new SCDIndexer(ontology, DisplayManager.getInstance().getSelectedElements(DocumentPart.KEY).get(0)).index();
 				break;
 			case GENERIC_INDEXATION :
+				System.out.println(DisplayManager.getInstance());//getSelectedElements(DocumentPart.KEY).get(0));
 				new GenericIndexer(ontology, DisplayManager.getInstance().getSelectedElements(DocumentPart.KEY).get(0)).index();
 				break;
 				

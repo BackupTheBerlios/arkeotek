@@ -15,6 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -39,6 +40,7 @@ import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
+import arkeotek.ontology.Link;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Ontology;
 import arkeotek.ontology.Relation;
@@ -126,6 +128,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0));
+				lemmeAssocieTable.setToolTipText(currentElement.getLinks(element).get(0).getName()+" "+currentElement.getName());
 				/*if (e.getClickCount() >= 2)
 				{
 					OntologyNavigationPanel.this.rollFirstPanel(((SonTableModel) OntologyNavigationPanel.this.lemmeAssocieTable.getModel()).getElement());
@@ -148,7 +151,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			}
 		});
 		
-		String[] titreD={"Relation","Concepts Définis"};
+		String[] titreD={"Relation","Concepts Reliés"};
 		ConceptDefiniTM tableCDModel = new ConceptDefiniTM();
 		tableCDModel.setColumnNames(titreD);
 		this.conceptDefiniTable = new JTable(tableCDModel);
@@ -416,6 +419,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 
 	public void remplirTableFils(LinkableElement concept) {
 		// TODO Auto-generated method stub
+		this.currentElement=concept;
 		conceptFilsTable.removeAll();
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation : "+concept));
 		//String[] titreF={"Fils"};
@@ -464,7 +468,6 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 					{
 						for (LinkableElement elem : concept.getLinks(Concept.KEY, key))
 						{
-							System.out.println(key);
 							if (key.getName().equals("généralise"))
 							{
 								Object[] couple = {key, elem};
@@ -557,7 +560,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 					{
 						for (LinkableElement elem : concept.getLinks(Concept.KEY, key))
 						{
-							System.out.println(key);
+							System.out.println(concept+" "+key+" "+elem);
 							if (!key.getName().equals("généralise"))
 							{
 								Object[] couple = {key, elem};

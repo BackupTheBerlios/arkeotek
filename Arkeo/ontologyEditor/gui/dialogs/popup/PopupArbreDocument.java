@@ -5,9 +5,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.panels.CorpusPanel;
+import ontologyEditor.gui.treeviews.CorpusTM;
+import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.LinkableElement;
 
 /**
@@ -43,15 +48,14 @@ public class PopupArbreDocument extends JPopupMenu implements ActionListener{
 			// vue par id
 			if (source == this.id)
 			{
-				//((CorpusTM)((AbstractPanel)DisplayManager.mainFrame.getPanel(panel)).getTree().getModel()).remplirArbreDocumentId();
 				((CorpusPanel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL)).setVue(1);
 				DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).refresh();
+				
 			}
 			//vue par seq 
 			else if (source == this.seq)
 			{
 				((CorpusPanel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL)).setVue(0);
-				//((CorpusTM)((AbstractPanel)DisplayManager.mainFrame.getPanel(panel)).getTree().getModel()).remplirArbreDocumentSeq();
 				DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).refresh();
 			}
 		}

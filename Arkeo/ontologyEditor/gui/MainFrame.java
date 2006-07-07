@@ -339,13 +339,13 @@ public class MainFrame extends JFrame
 		}
 		else if (courant instanceof DocumentPart)
 		{
-			if (bas instanceof OntologyPanel)
+			if (bas instanceof CorpusPanel)
 			{
 				((CorpusNavigationPanel)((CorpusPanel) bas).getNavigationPanel()).remplirTableConceptIndexant(courant);
 				((CorpusNavigationPanel)((CorpusPanel) bas).getNavigationPanel()).remplirTableConceptPotentiel(courant);
 				((CorpusNavigationPanel)((CorpusPanel) bas).getNavigationPanel()).remplirTableLemmeLier(courant);
 			}
-			else if (haut instanceof OntologyPanel)
+			else if (haut instanceof CorpusPanel)
 			{
 				((CorpusNavigationPanel)((CorpusPanel) haut).getNavigationPanel()).remplirTableConceptIndexant(courant);
 				((CorpusNavigationPanel)((CorpusPanel) haut).getNavigationPanel()).remplirTableConceptPotentiel(courant);

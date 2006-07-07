@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -46,6 +47,7 @@ import ontologyEditor.gui.tables.LinkableLemmeTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
+import arkeotek.ontology.Link;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 
@@ -588,21 +590,23 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		// TODO Auto-generated method stub
 		concept.removeAll();
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
-		ArrayList<Integer> links_categories = new ArrayList<Integer>(1);
-		links_categories.add(Concept.KEY);
-		for (Integer category : links_categories) {
-			if (lemme.getLinks(category.intValue()) != null) {
-				Set<Relation> keys = lemme.getLinks(category.intValue()).keySet();
-				for (Relation key : keys)
+
+		
+		HashMap<Relation,HashMap<LinkableElement,Link>> conc=lemme.getLinks(Concept.KEY);
+		for (Relation rel:conc.keySet())
+		{
+			HashMap<LinkableElement,Link>hm=conc.get(rel);
+			if (!hm.isEmpty())
+			{
+				for (LinkableElement con:hm.keySet())
 				{
-					for (LinkableElement temp : lemme.getLinks(category.intValue(), key))
-					{
-						Object[] triple = {key, temp};
-						elements.add(triple);
-					}
+					Object[] triple = {rel, con};
+					elements.add(triple);
 				}
 			}
 		}
+		
+		
 		if (elements.size()!=0)
 		{
 			Object [][] donnees=new Object[elements.size()][2];

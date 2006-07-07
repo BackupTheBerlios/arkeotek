@@ -19,6 +19,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -33,6 +34,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.tables.ConceptIndexantTM;
@@ -47,6 +49,7 @@ import ontologyEditor.gui.transfers.TransferableConcept;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
+import arkeotek.ontology.Link;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 
@@ -643,7 +646,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 							if (!trouver)
 							{
 								last.add((Concept)temp);
-								Object[] triple = {key, temp};
+								Object[] triple = {"annote", temp};
 								elements.add(triple);
 							}
 						}
@@ -651,6 +654,61 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 				}
 			}
 		}
+		
+		// on regarde les fils du document courant 
+		HashMap<Relation,HashMap<LinkableElement,Link>> docs=doc.getLinks(DocumentPart.KEY);
+		ArrayList<LinkableElement> docFils=new ArrayList<LinkableElement>();
+		for (Relation rel:docs.keySet())
+		{
+			if (rel.toString().equals("englobe"))
+			{
+				HashMap<LinkableElement,Link>hm=docs.get(rel);
+				for (LinkableElement le:hm.keySet())
+				{
+					docFils.add(le);
+				}
+			}
+		}
+		
+		
+		
+		// pour chaque fils on cherche les concept indexant
+		for (LinkableElement le:docFils)
+		{
+			HashMap<Relation,HashMap<LinkableElement,Link>> concep=le.getLinks(Concept.KEY);
+			for (Relation rel:concep.keySet())
+			{
+				HashMap<LinkableElement,Link>hm=concep.get(rel);
+				if (!hm.isEmpty())
+				{
+					for (LinkableElement con:hm.keySet())
+					{
+						Object[] triple = {"annote", con};
+						Boolean deja=false;
+						for (int i=0;i<elements.size();i++)
+						{
+							if (elements.get(i)[1].equals(triple[1]))
+							{
+								deja=true;
+								break;
+							}
+						}
+						if (!deja)
+						{
+							elements.add(triple);
+						}
+					}
+				}
+			}
+		}		
+					
+				
+	
+		
+		
+		
+		
+		
 		if (elements.size()!=0)
 		{
 			Object [][] donnees=new Object[elements.size()][2];
@@ -723,7 +781,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		table.getColumnModel().getColumn(1).setCellRenderer(custom);
+		table.getColumnModel().getColumn(0).setCellRenderer(custom);
 	}
 	
 	private void rendererTableLemme(JTable table) {     

@@ -21,6 +21,7 @@ import ontologyEditor.gui.panels.CorpusNavigationPanel;
 import ontologyEditor.gui.tables.ConceptIndexantTM;
 import ontologyEditor.gui.tables.HighEditorPaneTM;
 import arkeotek.ontology.Concept;
+import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
@@ -70,47 +71,113 @@ public class ConceptDropTransferHandler extends TransferHandler
 			{
             	LinkableElement element = (LinkableElement) t.getTransferData(this.exportedLinkableElement);
 				ArrayList<LinkableElement> relations = ApplicationManager.ontology.get(Relation.KEY);
+				ArrayList<LinkableElement> conceptToConcept=new ArrayList<LinkableElement>();
+				
 				if (relations.size() != 0)
 				{
 					// si la cible c'est les conceptIndexant 
 					if (target.getModel() instanceof ConceptIndexantTM)
 					{
-						Object[] rels=ApplicationManager.ontology.get(Relation.KEY).toArray();
+						//-------------------------->
+						for (LinkableElement rel:relations)
+						{
+							if (((Relation)rel).getType()==Relation.RELATION_CONCEPT_DOCUMENT)
+							{
+								conceptToConcept.add(rel);
+							}
+						}
+						//<-------------------------
+						Object[] rels=conceptToConcept.toArray();
 						Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
 								"Veuillez entrer le nom de la relation:", "Création d'un lien", JOptionPane.INFORMATION_MESSAGE, null,
 								rels, rels[0]);
-						//on regarde dans quel panel s'est fait le drag and drop
-						int panel=DisplayManager.mainFrame.BOTTOM_PANEL;
-						if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getY()==target.getParent().getParent().getParent().getParent().getParent().getY())
+						if (relation !=null)
 						{
-							panel=DisplayManager.mainFrame.TOP_PANEL;
+							//on regarde dans quel panel s'est fait le drag and drop
+							int panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+							if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getY()==target.getParent().getParent().getParent().getParent().getParent().getY())
+							{
+								panel=DisplayManager.mainFrame.TOP_PANEL;
+							}
+							// on recupere le document source
+							LinkableElement doc=((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getDoc();
+							// on créer une nouvelle relation
+							ApplicationManager.ontology.addRelation(doc,element,relation);
+							ApplicationManager.ontology.addRelation(element,doc,relation);
+							// on met a jour les tables correspondantes
+							((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptIndexant(doc);
+							((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptPotentiel(doc);
+							if (DisplayManager.mainFrame.getEditionPanel().getEditionButton().isSelected())
+							{
+								if ((DisplayManager.mainFrame.getEditionPanel().getCourant().equals(doc)))
+								{
+									DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(doc);
+								}
+								else if((DisplayManager.mainFrame.getEditionPanel().getCourant().equals(element)))
+								{
+									DisplayManager.mainFrame.getEditionPanel().remplirTableBasParent(element);
+								}
+							}
 						}
-						// on recupere le document source
-						LinkableElement doc=((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getDoc();
-						// on créer une nouvelle relation
-						ApplicationManager.ontology.addRelation(doc,element,relation);
-						// on met a jour les tables correspondantes
-						((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptIndexant(doc);
-						((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptPotentiel(doc);
 					}
 					// si on glisse un concept dans le panneau haut d'edition
 					else if (target.getModel() instanceof HighEditorPaneTM)
 					{
-						Relation relation=new Relation("généralise");
-						for (LinkableElement rel:relations)
+						//-------------------------->
+						LinkableElement le=DisplayManager.mainFrame.getEditionPanel().getCourant();
+						if (le instanceof Concept)
 						{
-							if (rel.getName().equals("généralise"))
+							for (LinkableElement rel:relations)
 							{
-								relation=(Relation)rel;
+								if (((Relation)rel).getType()==Relation.RELATION_CONCEPT_CONCEPT)
+								{
+									conceptToConcept.add(rel);
+								}
 							}
 						}
-						// on recupere le concept source
-						LinkableElement concept=DisplayManager.mainFrame.getEditionPanel().getCourant();
-						// on créer une nouvelle relation
-						ApplicationManager.ontology.addRelation(concept,element,relation);
-						// on met a jour l'interface
-						DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(concept);
-						//DisplayManager.mainFrame.refresh();
+						else if (le instanceof Lemma)
+						{
+							for (LinkableElement rel:relations)
+							{
+								if (((Relation)rel).getType()==Relation.RELATION_TERME_CONCEPT)
+								{
+									conceptToConcept.add(rel);
+								}
+							}
+						}
+						else if (le instanceof DocumentPart)
+						{
+							for (LinkableElement rel:relations)
+							{
+								if (((Relation)rel).getType()==Relation.RELATION_CONCEPT_DOCUMENT)
+								{
+									conceptToConcept.add(rel);
+								}
+							}
+						}
+						//<-------------------------
+						Object[] rels=conceptToConcept.toArray();
+						if (rels.length!=0)
+						{
+							Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
+									"Veuillez entrer le nom de la relation:", "Création d'un lien", JOptionPane.INFORMATION_MESSAGE, null,
+									rels, rels[0]);
+							if (relation !=null)
+							{
+								// on créer une nouvelle relation
+								ApplicationManager.ontology.addRelation(le,element,relation);
+								ApplicationManager.ontology.addRelation(element,le,relation);
+								// on met a jour l'interface
+								DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(le);
+								DisplayManager.mainFrame.mAJ(le);
+								DisplayManager.mainFrame.mAJ(element);
+								//DisplayManager.mainFrame.refresh();
+							}
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Aucune relation possible entre ces deux types d'objet");
+						}
 					}
 				}
 				return true;
