@@ -35,7 +35,8 @@ public class SyntexFileChooser extends JFileChooser
 	 */
 	public static final String LAST_USED_DIRECTORY;
 	
-	static {
+	static
+	{
 		String value = "";
 		Properties prop = new Properties();
 		File file = new File(Constants.DEFAULT_RESOURCES_PATH );
@@ -46,16 +47,22 @@ public class SyntexFileChooser extends JFileChooser
 		
 			InputStream propertiesStream = classLoader.getResourceAsStream("global.properties");
 			
-			try {
+			try
+			{
 				prop.load(propertiesStream);
 				value = prop.getProperty(LAST_USED_DIRECTORY_KEY);
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				value = System.getProperty("user.home");
 			}
-		} catch (MalformedURLException e1){// TODO Auto-generated catch block
-			e1.printStackTrace();}
+		}
+		catch (MalformedURLException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		LAST_USED_DIRECTORY = value;
-		
 	}
 
 	/**

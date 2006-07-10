@@ -349,25 +349,39 @@ public class ApplicationManager
 					ontology.save();
 				break;
 				
-			case BREED_ONTOLOGY : 
+			case BREED_ONTOLOGY :
+				/* On vérifie qu'une ontologie est chargée dans l'application */
 				if (ontology != null) {
+					/* On averti l'utilisateur que l'opération d'enrichissement est longue et qu'elle surcharge le systeme
+					   On lui demande si il est bien sûr de vouloir continuer le traitement */
 					Object[] options = {"Oui", "Non"};
 					choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, "Cette op\u00e9ration peut s'av\u00e9rer longue et le systÃ¨me peut Ãªtre surcharg\u00e9 pendant toute cette p\u00e9riode. \nEtes vous sÃ»r de vouloir continuer ?", "Avertissement", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
-					if (choice == JOptionPane.OK_OPTION) {
+					/* On procède à l'enrichissement si la réponse de l'utilisateur est positive */					
+					if (choice == JOptionPane.OK_OPTION)
+					{
+						/* On affiche une boite dialogue d'ouverture de dossier pour permettre à l'utilisateur
+						   de choisir le repertoire oùse trouvent les fichiers syntex parser */
 						SyntexFileChooser syntexFileChooser = new SyntexFileChooser();
 						syntexFileChooser.showOpenDialog(DisplayManager.mainFrame);
-		
-						if (syntexFileChooser.getSelectedFile() != null && !syntexFileChooser.getSelectedFile().getPath().equals(SyntexFileChooser.LAST_USED_DIRECTORY)) {
+						
+						/* On verifie le chemin donné par l'utilisateur (apparement le dernier rep utilisé ne peut etre réutilisé) */
+						if (syntexFileChooser.getSelectedFile() != null && !syntexFileChooser.getSelectedFile().getPath().equals(SyntexFileChooser.LAST_USED_DIRECTORY))
+						{
 							Properties prop = new Properties();
 							InputStream inStream = ApplicationManager.ontology.getClass().getClassLoader().getResourceAsStream(Constants.DEFAULT_RESOURCES_PATH + "global.properties");
 							OutputStream outStream = new FileOutputStream(Constants.DEFAULT_RESOURCES_PATH + "global.properties");
-							try {
+							try
+							{
 								prop.load(inStream);
 								prop.setProperty(SyntexFileChooser.LAST_USED_DIRECTORY_KEY, syntexFileChooser.getSelectedFile().getPath());
 								prop.store(outStream, "");
-							} catch (IOException e) {
+							}
+							catch (IOException e)
+							{
 								// Nothing to do. 
-							} finally {
+							}
+							finally
+							{
 								prop.setProperty(SyntexFileChooser.LAST_USED_DIRECTORY_KEY, syntexFileChooser.getSelectedFile().getPath());
 							}
 						}
@@ -451,7 +465,7 @@ public class ApplicationManager
 					 * On appel la méthode showOpenDialog avec la frame principale en paramètre */
 					TermontoFileChooser fileChooser = new TermontoFileChooser();
 					fileChooser.showOpenDialog(DisplayManager.mainFrame);
-System.out.println("debug");
+
 					if (fileChooser.getSelectedFile() != null)
 					{
 						/* ProgressBarDialog est une boite de dialogue avec une barre d'avancement dedans
