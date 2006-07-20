@@ -10,6 +10,7 @@ import info.clearthought.layout.TableLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -36,6 +37,7 @@ import ontologyEditor.gui.tables.ConceptDefiniTM;
 import ontologyEditor.gui.tables.ConceptFilsTM;
 import ontologyEditor.gui.tables.ConceptLemmeTM;
 import ontologyEditor.gui.tables.EditorTableModel;
+import ontologyEditor.gui.tables.LinkableElementTable;
 import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
@@ -129,12 +131,36 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			{
 				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0));
 				lemmeAssocieTable.setToolTipText(currentElement.getLinks(element).get(0).getName()+" "+currentElement.getName());
-				/*if (e.getClickCount() >= 2)
+				if (e.getClickCount() >= 2)
 				{
-					OntologyNavigationPanel.this.rollFirstPanel(((SonTableModel) OntologyNavigationPanel.this.lemmeAssocieTable.getModel()).getElement());
-					OntologyNavigationPanel.this.rollSecondPanel(element);
-					showParents(element);
-				}*/
+					int panel=-1;
+					if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getNavigationPanel() instanceof LinguisticNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()==1))
+					{
+						panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+					}
+					else if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getNavigationPanel() instanceof LinguisticNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()!=1))
+					{
+						panel=DisplayManager.mainFrame.TOP_PANEL;
+					}
+					if (panel!=-1)
+					{
+						// selection de la ligne correpondant au lemme selectionné
+						for (int i=0;i<DisplayManager.mainFrame.getPanel(panel).getTable().getRowCount();i++)
+						{
+							if (DisplayManager.mainFrame.getPanel(panel).getTable().getValueAt(i,0).toString().equals(element.toString()))
+							{
+								DisplayManager.mainFrame.getPanel(panel).getTable().setRowSelectionInterval(i,i);
+								
+							}
+						}
+						// remplisssage de navigation panel
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableLemmeParent(element);
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableLemmeLier(element);
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConcept(element);
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableDocumentParent(element);
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getPrecedent().add(element);
+					}
+				}
 				//DisplayManager.getInstance().reflectNavigation(element);
 			}
 		});

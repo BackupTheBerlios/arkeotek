@@ -36,6 +36,7 @@ import javax.swing.table.TableColumn;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
+import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.tables.ConceptIndexantTM;
 import ontologyEditor.gui.tables.ConceptPotentielTM;
@@ -176,6 +177,46 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		JScrollPane jsp2 = new JScrollPane(this.termeAssocie);
 		jsp2.setBorder(BorderFactory.createTitledBorder("termes liés au document"));
 		this.add(jsp2, "3, 3, 3, 7");
+		this.termeAssocie.addMouseListener(new MouseAdapter()
+		{
+
+			public void mouseClicked(MouseEvent e)
+			{
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				//termeAssocie.setToolTipText(currentElement.getLinks(element).get(0).getName()+" "+currentElement.getName());
+				if (e.getClickCount() >= 2)
+				{
+					int panel=-1;
+					if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getNavigationPanel() instanceof LinguisticNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()==1))
+					{
+						panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+					}
+					else if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getNavigationPanel() instanceof LinguisticNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()!=1))
+					{
+						panel=DisplayManager.mainFrame.TOP_PANEL;
+					}
+					if (panel!=-1)
+					{
+						// selection de la ligne correpondant au lemme selectionné
+						for (int i=0;i<DisplayManager.mainFrame.getPanel(panel).getTable().getRowCount();i++)
+						{
+							if (DisplayManager.mainFrame.getPanel(panel).getTable().getValueAt(i,0).toString().equals(element.toString()))
+							{
+								DisplayManager.mainFrame.getPanel(panel).getTable().setRowSelectionInterval(i,i);
+								
+							}
+						}
+						// remplisssage de navigation panel
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableLemmeParent(element);
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableLemmeLier(element);
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConcept(element);
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableDocumentParent(element);
+						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getPrecedent().add(element);
+					}
+				}
+				//DisplayManager.getInstance().reflectNavigation(element);
+			}
+		});
 		
 		
 		
@@ -470,68 +511,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.validationButton.setText((doc.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation du corpus : "+doc.getName()));
 		this.txtArea_docText.setText(((DocumentPart)doc).getValue());
-		/*
-		ArrayList<String> mot=new ArrayList<String>();
-		String courant=new String();
-		for (int i=0;i<txtArea_docText.getText().length();i++)
-		{
-			if ((txtArea_docText.getText().charAt(i)==' ') || (txtArea_docText.getText().charAt(i)=='.') || (txtArea_docText.getText().charAt(i)==',') || (i==txtArea_docText.getText().length()))
-			{
-				mot.add(courant);
-				courant="";
-			}
-			else
-			{
-				courant=courant+txtArea_docText.getText().charAt(i);
-			}
-		}
 		
-		//on cherche les concept indexant
-		ArrayList<Concept> conceptIndexant = new ArrayList<Concept>();
-		ArrayList<Integer> links_categoriesCI = new ArrayList<Integer>(1);
-		links_categoriesCI.add(Concept.KEY);
-		for (Integer category : links_categoriesCI) {
-			if (doc.getLinks(category.intValue()) != null) {
-				Set<Relation> keys = doc.getLinks(category.intValue()).keySet();
-				for (Relation key : keys)
-				{
-					for (LinkableElement temp : doc.getLinks(category.intValue(), key))
-					{
-						ArrayList<Object[]> elements = new ArrayList<Object[]>();
-						//elements.addAll(ApplicationManager.ontology.getParentsOf(concept, Lemma.KEY));
-						Set<Relation> keys = null;
-						if (concept.getLinks(Lemma.KEY) != null)
-						{
-							keys = concept.getLinks(Lemma.KEY).keySet();
-							for (Relation key : keys)
-							{
-								for (LinkableElement elem : concept.getLinks(Lemma.KEY, key))
-								{
-									Object[] couple = {key, elem};
-									elements.add(couple);
-								}
-							}
-						}
-						conceptIndexant.add((Concept)temp);
-					}
-				}
-			}
-		}
-		
-		
-		for(String m : mot)
-		{
-			
-		}
-		
-		Highlighter h= this.txtArea_docText.getHighlighter();
-		h.removeAllHighlights();
-		try {
-			h.addHighlight(0,10,DefaultHighlighter.DefaultPainter);
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		this.conceptsIndexingTable.removeAll();
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		ArrayList<Integer> links_categories = new ArrayList<Integer>(1);
@@ -572,7 +552,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		// TODO Auto-generated method stub
 		this.potentialConceptsTable.removeAll();
 		((ConceptPotentielTM)potentialConceptsTable.getModel()).setDonnees(null);
-		//on chope les lemme associé au corpus courant : doc
+		//on selectionne les lemme associé au corpus courant : doc
 		ArrayList<LinkableElement> lemmes = new ArrayList<LinkableElement>();
 		ArrayList<Integer> links_categories_lemme = new ArrayList<Integer>(1);
 		links_categories_lemme.add(Lemma.KEY);
@@ -609,10 +589,69 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		}
 		
 		
-		// on compare les concepts lié au lemme - concept indexant = concept potentiel
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		ArrayList<Integer> links_categories = new ArrayList<Integer>(1);
 		ArrayList<Concept> last=new ArrayList<Concept>();
+		// on regarde les fils du document courant 
+		HashMap<Relation,HashMap<LinkableElement,Link>> docs=doc.getLinks(DocumentPart.KEY);
+		ArrayList<LinkableElement> docFils=new ArrayList<LinkableElement>();
+		for (Relation rel:docs.keySet())
+		{
+			if (rel.toString().equals("englobe"))
+			{
+				HashMap<LinkableElement,Link>hm=docs.get(rel);
+				for (LinkableElement le:hm.keySet())
+				{
+					docFils.add(le);
+				}
+			}
+		}
+		
+		// pour chaque fils on cherche les concept indexant
+		for (LinkableElement le:docFils)
+		{
+			HashMap<Relation,HashMap<LinkableElement,Link>> concep=le.getLinks(Concept.KEY);
+			for (Relation rel:concep.keySet())
+			{
+				HashMap<LinkableElement,Link>hm=concep.get(rel);
+				if (!hm.isEmpty())
+				{
+					for (LinkableElement con:hm.keySet())
+					{
+						Object[] triple = {"annote", con};
+						Boolean deja=false;
+						for (int i=0;i<elements.size();i++)
+						{
+							// eviter les doublons
+							if (elements.get(i)[1].equals(triple[1]))
+							{
+								deja=true;
+								break;
+							}
+							if (!deja)
+							{
+								for (int j=0;j<conceptIndexant.size();j++)
+								{
+									System.out.println("courant : "+elements.get(i)[1]);
+									System.out.println("indexant : "+conceptIndexant.get(j).toString());
+									if (elements.get(i)[1].equals(conceptIndexant.get(j).toString()))
+									{
+										deja=true;
+										break;
+									}
+								}
+							}
+						}
+						if (!deja)
+						{
+							elements.add(triple);
+						}
+					}
+				}
+			}
+		}	
+		
+		// on compare les concepts lié au lemme - concept indexant = concept potentiel
 		for (int i=0;i<lemmes.size();i++)
 		{
 			links_categories.add(Concept.KEY);
@@ -645,70 +684,43 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 							// si on ne le trouve pas on le rajoute
 							if (!trouver)
 							{
-								last.add((Concept)temp);
-								Object[] triple = {"annote", temp};
-								elements.add(triple);
+								boolean present=false;
+								for (int n=0;n<elements.size();n++)
+								{
+									//System.out.println("temp : "+temp+" ----------> element : "+elements.get(n)[1]);
+									if (elements.get(n)[1].toString().equals(temp.toString()))
+									{
+										present=true;
+										break;
+									}
+								}
+								if (!present)
+								{
+									last.add((Concept)temp);
+									Object[] triple = {"annote", temp};
+									elements.add(triple);
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-		
-		// on regarde les fils du document courant 
-		HashMap<Relation,HashMap<LinkableElement,Link>> docs=doc.getLinks(DocumentPart.KEY);
-		ArrayList<LinkableElement> docFils=new ArrayList<LinkableElement>();
-		for (Relation rel:docs.keySet())
+		for (int i=0;i<conceptIndexant.size();i++)
 		{
-			if (rel.toString().equals("englobe"))
+			//System.out.println("concept "+i+" : "+elements.get(i)[1]);
+			for (int j=0;j<elements.size();j++)
 			{
-				HashMap<LinkableElement,Link>hm=docs.get(rel);
-				for (LinkableElement le:hm.keySet())
+				if (conceptIndexant.get(i).equals(elements.get(j)[1]))
 				{
-					docFils.add(le);
+					elements.remove(j);
+					break;
 				}
 			}
 		}
 		
-		
-		
-		// pour chaque fils on cherche les concept indexant
-		for (LinkableElement le:docFils)
-		{
-			HashMap<Relation,HashMap<LinkableElement,Link>> concep=le.getLinks(Concept.KEY);
-			for (Relation rel:concep.keySet())
-			{
-				HashMap<LinkableElement,Link>hm=concep.get(rel);
-				if (!hm.isEmpty())
-				{
-					for (LinkableElement con:hm.keySet())
-					{
-						Object[] triple = {"annote", con};
-						Boolean deja=false;
-						for (int i=0;i<elements.size();i++)
-						{
-							if (elements.get(i)[1].equals(triple[1]))
-							{
-								deja=true;
-								break;
-							}
-						}
-						if (!deja)
-						{
-							elements.add(triple);
-						}
-					}
-				}
-			}
-		}		
+			
 					
-				
-	
-		
-		
-		
-		
-		
 		if (elements.size()!=0)
 		{
 			Object [][] donnees=new Object[elements.size()][2];

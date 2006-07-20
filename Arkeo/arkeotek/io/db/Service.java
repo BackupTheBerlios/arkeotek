@@ -263,7 +263,6 @@ public class Service implements IService
 					if (object.getId() == LinkableElement.NEW_ELEMENT_ID)
 					{
 						// creation in database
-						System.out.println("Pouet : " + object.getName());
 						IOPerformer.createRelation(dto);
 					}
 					else
@@ -271,7 +270,6 @@ public class Service implements IService
 						// Suppression des relations inutilisées dans l'application
 						if( ((Relation) object ).getType()==Relation.RELATION_INUTILE)
 						{
-							System.out.println("Brooooooooooooooooooooonnnn");
 							delete(object);
 							ApplicationManager.ontology.get(Relation.KEY).remove(object);
 						}

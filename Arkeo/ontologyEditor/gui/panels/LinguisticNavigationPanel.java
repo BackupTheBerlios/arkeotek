@@ -9,6 +9,7 @@ import info.clearthought.layout.TableLayout;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,6 +19,8 @@ import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -38,9 +41,11 @@ import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.dialogs.DocumentPartToLemme;
+import ontologyEditor.gui.renderer.LemmaTableRenderer;
 import ontologyEditor.gui.tables.ConceptLemmeTM;
 import ontologyEditor.gui.tables.EditorTableModel;
 import ontologyEditor.gui.tables.LemmaParentTM;
+import ontologyEditor.gui.tables.LemmaTableModel;
 import ontologyEditor.gui.tables.LinesTableModel;
 import ontologyEditor.gui.tables.LinkableElementTableModel;
 import ontologyEditor.gui.tables.LinkableLemmeTM;
@@ -71,7 +76,15 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 	
 	private JButton validationButton;
 	
+	private JButton suivantButton;
+	
+	private JButton precedentButton;
+	
 	private LinkableElement currentElement;
+	
+	private ArrayList<LinkableElement> suivant;
+	
+	private ArrayList<LinkableElement> precedent;
 	
 	/**
 	 * 
@@ -85,12 +98,16 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 				{ border, TableLayout.FILL, border, TableLayout.FILL,border, 20, border } }; // Rows
 		this.setLayout(new TableLayout(sizeNavPanel));
 
+		this.suivant=new ArrayList<LinkableElement>();
+		this.precedent=new ArrayList<LinkableElement>();
+		
 		String[] titreLier={"relation","terme"};
 		LinkableLemmeTM tableLLModel = new LinkableLemmeTM();
 		tableLLModel.setColumnNames(titreLier);
 		this.linkedLemmasTable = new JTable(tableLLModel);
 		this.linkedLemmasTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		this.linkedLemmasTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		
 		JScrollPane linkedLemmasScrollPane = new JScrollPane();
 		linkedLemmasScrollPane.setViewportView(this.linkedLemmasTable);
@@ -154,13 +171,94 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				/*LinkableElement element = ((LinesTableModel)LinguisticNavigationPanel.this.appearancesTable.getModel()).getElement();
-				if (element != null)
+				if (currentElement!=null)
 				{
-					LinguisticNavigationPanel.this.validationButton.setText((element.getState() == LinkableElement.VALIDATED)?"Valider":"Invalider");
-					element.setState((element.getState() == LinkableElement.VALIDATED)?LinkableElement.DEFAULT:LinkableElement.VALIDATED);
-					DisplayManager.getInstance().reloadTrees();
-				}*/
+					//LinkableElement element = ((LinesTableModel)LinguisticNavigationPanel.this.appearancesTable.getModel()).getElement();
+					if (currentElement != null)
+					{
+						/*LinguisticNavigationPanel.this.validationButton.setText((currentElement.getState() == LinkableElement.VALIDATED)?"Valider":"Invalider");
+						currentElement.setState((currentElement.getState() == LinkableElement.VALIDATED)?LinkableElement.DEFAULT:LinkableElement.VALIDATED);
+						int panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+						if (e.getComponent().getParent().getParent().getParent().getY()==1)
+						{
+							panel=DisplayManager.mainFrame.TOP_PANEL;
+						}
+						LinguisticPanel lnp=(LinguisticPanel)DisplayManager.mainFrame.getPanel(panel);
+						//LinkableElement selection=((LinkableElement)((LemmaTableModel)lnp.getTable().getModel()).getValueAt(lnp.getTable().getSelectedRow(),0));
+						//LemmaTableRenderer renderer=new LemmaTableRenderer(currentElement.toString());
+						//renderer.getTableCellRendererComponent(lnp.getTable(),currentElement,true,true,lnp.getTable().getSelectedRow(),0);
+						//lnp.getTable().setDefaultRenderer(LinkableElement.class,new LemmaTableRenderer());
+						if (currentElement.getState() == LinkableElement.VALIDATED)
+						{
+							currentElement.setName("--> "+currentElement.getName());
+						}
+						else
+						{
+							currentElement.setName(currentElement.getName().replace("-->",""));
+						}
+						lnp.getTable().setValueAt(currentElement,lnp.getTable().getSelectedRow(),0);//  ((LemmaTableRenderer)lnp.getTable().getDefaultRenderer(LinkableElement.class)).getTableCellRendererComponent(lnp.getTable(),currentElement,true,true,lnp.getTable().getSelectedRow(),0);
+						lnp.getTable().updateUI();
+						//lnp.getTable().repaint();
+						*/
+					}
+				}
+			}
+		});
+		
+		this.precedentButton = new JButton("Retour");
+		this.precedentButton.setIcon(new ImageIcon(Constants.DEFAULT_ICONS_PATH+"previous.gif"));
+		/*if (precedent.size()!=0)
+		{
+			precedentButton.setToolTipText(precedent.get(precedent.size()-1).toString());
+		}
+		else
+		{
+			precedentButton.setToolTipText("Aucun précédent");
+		}*/
+		
+		this.precedentButton.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				suivant.add(0,currentElement);
+				precedent.remove(currentElement);
+				// remplisssage de navigation panel
+				if (precedent.size()!=0)
+				{
+					remplirTableLemmeParent(precedent.get(precedent.size()-1));
+					remplirTableLemmeLier(precedent.get(precedent.size()-1));
+					remplirTableConcept(precedent.get(precedent.size()-1));
+					remplirTableDocumentParent(precedent.get(precedent.size()-1));
+				}
+			}
+		});
+		
+		this.suivantButton = new JButton("Suivant");
+		this.suivantButton.setIcon(new ImageIcon(Constants.DEFAULT_ICONS_PATH+"next.gif"));
+		this.suivantButton.setHorizontalTextPosition(SwingConstants.LEFT);
+		
+		/*if (suivant.size()!=0)
+		{
+			suivantButton.setToolTipText(suivant.get(0).toString());
+		}
+		else
+		{
+			suivantButton.setToolTipText("Aucun suivant");
+		}*/
+		this.suivantButton.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				precedent.add(currentElement);
+				suivant.remove(currentElement);
+				// remplisssage de navigation panel
+				if (suivant.size()!=0)
+				{
+					remplirTableLemmeParent(suivant.get(0));
+					remplirTableLemmeLier(suivant.get(0));
+					remplirTableConcept(suivant.get(0));
+					remplirTableDocumentParent(suivant.get(0));
+				}
 			}
 		});
 		
@@ -193,6 +291,8 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		this.add(conceptScrollPane, "5, 1, 1, 1");
 		this.add(documentScrollPane, "1, 3, 5, 3");
 		this.add(this.validationButton, "3, 5, 1, 1");
+		this.add(this.suivantButton, "5, 5, 1, 1");
+		this.add(this.precedentButton, "1, 5, 1, 1");
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation"));
 }
 
@@ -714,5 +814,21 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 			e.printStackTrace();
 		}
 		table.getColumnModel().getColumn(1).setCellRenderer(custom);
+	}
+
+	public ArrayList<LinkableElement> getPrecedent() {
+		return precedent;
+	}
+
+	public void setPrecedent(ArrayList<LinkableElement> precedent) {
+		this.precedent = precedent;
+	}
+
+	public ArrayList<LinkableElement> getSuivant() {
+		return suivant;
+	}
+
+	public void setSuivant(ArrayList<LinkableElement> suivant) {
+		this.suivant = suivant;
 	}
 }

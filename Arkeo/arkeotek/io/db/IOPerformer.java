@@ -983,7 +983,6 @@ public class IOPerformer
 		}
 		catch (SQLException e)
 		{
-			System.out.println("huhu");
 			System.out.println(e.getErrorCode());
 			System.out.println(e.getMessage());
 			System.out.println(e.getStackTrace());
@@ -1028,7 +1027,6 @@ public class IOPerformer
 			}
 		} catch (SQLException e)
 		{
-			System.out.println("huhu");
 			System.out.println(e.getErrorCode());
 			System.out.println(e.getMessage());
 			System.out.println(e.getStackTrace());
@@ -1119,9 +1117,6 @@ public class IOPerformer
 	    for (LinkableElement target : sources)
 	    {
 	     rs.moveToInsertRow();
-	     System.out.println("idSource "+ source.getId());
-	     System.out.println("idSource "+ target.getId());
-	     System.out.println("idSource "+ relation.getId());
 	     rs.updateInt("idSource", source.getId());
 	     rs.updateInt("idTarget", target.getId());
 	     rs.updateInt("idRelation", relation.getId());

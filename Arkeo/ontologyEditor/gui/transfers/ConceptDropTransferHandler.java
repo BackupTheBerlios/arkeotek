@@ -88,36 +88,43 @@ public class ConceptDropTransferHandler extends TransferHandler
 						}
 						//<-------------------------
 						Object[] rels=conceptToConcept.toArray();
-						Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
-								"Veuillez entrer le nom de la relation:", "Création d'un lien", JOptionPane.INFORMATION_MESSAGE, null,
-								rels, rels[0]);
-						if (relation !=null)
+						if (rels.length!=0)
 						{
-							//on regarde dans quel panel s'est fait le drag and drop
-							int panel=DisplayManager.mainFrame.BOTTOM_PANEL;
-							if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getY()==target.getParent().getParent().getParent().getParent().getParent().getY())
+							Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
+									"Veuillez entrer le nom de la relation:", "Création d'un lien", JOptionPane.INFORMATION_MESSAGE, null,
+									rels, rels[0]);
+							if (relation !=null)
 							{
-								panel=DisplayManager.mainFrame.TOP_PANEL;
-							}
-							// on recupere le document source
-							LinkableElement doc=((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getDoc();
-							// on créer une nouvelle relation
-							ApplicationManager.ontology.addRelation(doc,element,relation);
-							ApplicationManager.ontology.addRelation(element,doc,relation);
-							// on met a jour les tables correspondantes
-							((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptIndexant(doc);
-							((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptPotentiel(doc);
-							if (DisplayManager.mainFrame.getEditionPanel().getEditionButton().isSelected())
-							{
-								if ((DisplayManager.mainFrame.getEditionPanel().getCourant().equals(doc)))
+								//on regarde dans quel panel s'est fait le drag and drop
+								int panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+								if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getY()==target.getParent().getParent().getParent().getParent().getParent().getY())
 								{
-									DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(doc);
+									panel=DisplayManager.mainFrame.TOP_PANEL;
 								}
-								else if((DisplayManager.mainFrame.getEditionPanel().getCourant().equals(element)))
+								// on recupere le document source
+								LinkableElement doc=((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getDoc();
+								// on créer une nouvelle relation
+								ApplicationManager.ontology.addRelation(doc,element,relation);
+								ApplicationManager.ontology.addRelation(element,doc,relation);
+								// on met a jour les tables correspondantes
+								((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptIndexant(doc);
+								((CorpusNavigationPanel)DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptPotentiel(doc);
+								if (DisplayManager.mainFrame.getEditionPanel().getEditionButton().isSelected())
 								{
-									DisplayManager.mainFrame.getEditionPanel().remplirTableBasParent(element);
+									if ((DisplayManager.mainFrame.getEditionPanel().getCourant().equals(doc)))
+									{
+										DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(doc);
+									}
+									else if((DisplayManager.mainFrame.getEditionPanel().getCourant().equals(element)))
+									{
+										DisplayManager.mainFrame.getEditionPanel().remplirTableBasParent(element);
+									}
 								}
 							}
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Aucune relation possible entre ces deux types d'objet");
 						}
 					}
 					// si on glisse un concept dans le panneau haut d'edition

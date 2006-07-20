@@ -37,6 +37,7 @@ public class LinguisticPanel extends AbstractPanel {
 				((LinguisticNavigationPanel) this.navigationPanel).remplirTableLemmeLier(lemme);
 				((LinguisticNavigationPanel) this.navigationPanel).remplirTableConcept(lemme);
 				((LinguisticNavigationPanel) this.navigationPanel).remplirTableDocumentParent(lemme);
+				((LinguisticNavigationPanel) this.navigationPanel).getPrecedent().add(lemme);
 				DisplayManager.getInstance().reflectNavigation(lemme);
 			}
 			else if (e.getButton()==MouseEvent.BUTTON3)
