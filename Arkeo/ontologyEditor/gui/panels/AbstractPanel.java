@@ -31,6 +31,8 @@ import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.renderer.DocumentPartTreeRenderer;
+import ontologyEditor.gui.renderer.LemmaTableRenderer;
 import ontologyEditor.gui.tables.LemmaTableModel;
 import ontologyEditor.gui.tables.LinkableElementTable;
 import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
@@ -182,7 +184,7 @@ public abstract class AbstractPanel extends JPanel
 			    }	
 			}));
 		}*/
-		this.tree.setCellRenderer(new TreeCellRenderer());
+		this.tree.setCellRenderer(new DocumentPartTreeRenderer());
 		 
 		jScrollPane1.setViewportView(this.tree);		
 	
@@ -212,7 +214,8 @@ public abstract class AbstractPanel extends JPanel
 		LemmaTableModel tableModel = new LemmaTableModel();
 		tableModel.setColumnNames(titre);
 		this.table=new LinkableElementTable();
-		//this.setTable(this.table);
+		this.table.setDefaultRenderer(Object.class,new LemmaTableRenderer());
+		this.setTable(this.table);
 		this.table.setModel(tableModel);
 		this.table.setTransferHandler(new LinkableElementDragTransferHandler());
 		this.table.setDragEnabled(false);
@@ -246,7 +249,7 @@ public abstract class AbstractPanel extends JPanel
 		this.jSplitPane1.setRightComponent(this.navigationPanel);
 		this.jSplitPane1.setOneTouchExpandable(true);
 		
-		this.rendererTableLemme(this.table);
+		//this.rendererTableLemme(this.table);
 		
 		this.add(this.jSplitPane1, "0, 0, 0, 0");
 		

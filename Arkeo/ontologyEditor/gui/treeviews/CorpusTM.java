@@ -74,20 +74,28 @@ public class CorpusTM extends AbstractTM {
 	}
 	
 	public void remplirArbreDocumentSeq() {
-		// concepts= liste de tout les concepts
+		// on creer la racine
 		this.setRacine(new DefaultMutableTreeNode("Corpus"));
+		// on selectionne tous les documents 
 		ArrayList<LinkableElement> documents = ApplicationManager.ontology.get(DocumentPart.KEY);
+		// pour chaque document
 		for (int i=0;i<documents.size();i++)
 		{
+			if (documents.get(i).getState()==LinkableElement.VALIDATED)
+	        {
+	        	ApplicationManager.ontology.getDocValider().add(documents.get(i));
+	        }
 			// creation du neoud courant
 			DefaultMutableTreeNode courant=new DefaultMutableTreeNode(documents.get(i));
+			// creation des noued fils par récursivité
 			creerSousNoeudSeq(courant,documents.get(i));
+			// si le noued courant n'a pas de pere on le rattache à la racine
 			if (ApplicationManager.ontology.getParentsOf(documents.get(i),DocumentPart.KEY).size()==0)
 			{
 				racine.add(courant);
 			}
 		}
-		//System.out.println(DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel());
+		// on rempli le model
 		if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree()!=null)
 		{
 			if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel() instanceof CorpusTM)
@@ -98,6 +106,7 @@ public class CorpusTM extends AbstractTM {
 			if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().getModel() instanceof CorpusTM)
 				DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().setModel(this);
 		}
+		// MAJ de l'interface
 		DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).updateUI();
 		DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).updateUI();
 	}
@@ -105,21 +114,39 @@ public class CorpusTM extends AbstractTM {
 	private void creerSousNoeudSeq(DefaultMutableTreeNode courant, LinkableElement element) {
 		
 		ArrayList<LinkableElement> tmp=new ArrayList<LinkableElement>();
+		// pour l'arbre des concepts mais n'est pas utilisé ici
 		if (element instanceof Concept)
 		{
 			tmp = ((Concept) element).getLinks(Concept.KEY, new Relation(Relation.DEFAULT_CONCEPTS_RELATION)); 
 			
 		}
+		// on selectionne tout les liens du documents courant
 		else if (element instanceof DocumentPart)
 		{
 			tmp = ((DocumentPart) element).getLinks(DocumentPart.KEY, new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION));
 		}
+		// pour chaque liens
 		for(int j=0;j<tmp.size();j++)
 		{
-			DefaultMutableTreeNode fils;
-			fils=new DefaultMutableTreeNode(tmp.get(j));
-			creerSousNoeudSeq(fils,tmp.get(j));
-			courant.add(fils);
+			if (!tmp.get(j).getName().contains("-COM"))
+			{
+				// creation du fils 
+				DefaultMutableTreeNode fils;
+				fils=new DefaultMutableTreeNode(tmp.get(j));
+				// recursivité avec le fils
+				creerSousNoeudSeq(fils,tmp.get(j));
+				//on ajoute le fils au noeud courant
+				courant.add(fils);
+			}
+			else if (tmp.get(j).getName().contains("-COM-"))
+			{
+				if (!((DocumentPart)element).getImages().contains((DocumentPart)tmp.get(j)))
+					((DocumentPart)element).getImages().add((DocumentPart)tmp.get(j));
+			}
+			else if (tmp.get(j).getName().contains("-COM"))
+			{
+				((DocumentPart)element).setCommentaire((DocumentPart)tmp.get(j));
+			}
 		}
 	}
 	
@@ -129,6 +156,10 @@ public class CorpusTM extends AbstractTM {
 		ArrayList<LinkableElement> documents = ApplicationManager.ontology.get(DocumentPart.KEY);
 		for (int i=0;i<documents.size();i++)
 		{
+			/*if (documents.get(i).getState()==LinkableElement.VALIDATED)
+	        {
+	        	ApplicationManager.ontology.getLemmeValider().add(documents.get(i));
+	        }*/
 			// creation du neoud courant
 			DefaultMutableTreeNode courant=new DefaultMutableTreeNode(documents.get(i).getName());
 			creerSousNoeudId(courant,documents.get(i));
@@ -166,10 +197,22 @@ public class CorpusTM extends AbstractTM {
 		}
 		for(int j=0;j<tmp.size();j++)
 		{
-			DefaultMutableTreeNode fils;
-			fils=new DefaultMutableTreeNode(tmp.get(j).getName());
-			creerSousNoeudId(fils,tmp.get(j));
-			courant.add(fils);
+			if (!tmp.get(j).getName().contains("-COM"))
+			{
+				DefaultMutableTreeNode fils;
+				fils=new DefaultMutableTreeNode(tmp.get(j).getName());
+				creerSousNoeudId(fils,tmp.get(j));
+				courant.add(fils);
+			}
+			else if (tmp.get(j).getName().contains("-COM-"))
+			{
+				if (!((DocumentPart)element).getImages().contains((DocumentPart)tmp.get(j)))
+					((DocumentPart)element).getImages().add((DocumentPart)tmp.get(j));
+			}
+			else if (tmp.get(j).getName().contains("-COM"))
+			{
+				((DocumentPart)element).setCommentaire((DocumentPart)tmp.get(j));
+			}
 		}
 	}
 

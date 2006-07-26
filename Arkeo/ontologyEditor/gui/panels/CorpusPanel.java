@@ -46,12 +46,13 @@ public class CorpusPanel extends AbstractPanel {
 						if (ApplicationManager.ontology.get(DocumentPart.KEY).get(i).getName().toString().equals(nomDoc))
 						{
 							document=(DocumentPart)ApplicationManager.ontology.get(DocumentPart.KEY).get(i);
-							
+							this.getTree().setToolTipText(document.toString());
 							if (e.getButton()==MouseEvent.BUTTON1)
 							{
 								((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptIndexant(document);
 								((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptPotentiel(document);
 								((CorpusNavigationPanel) this.navigationPanel).remplirTableLemmeLier(document);
+								((CorpusNavigationPanel) this.navigationPanel).remplirTableimages(document);
 								//((OntologyNavigationPanel) this.navigationPanel).rollFirstPanel((LinkableElement)((JTree)e.getSource()).getSelectionPath().getLastPathComponent());
 								DisplayManager.getInstance().reflectNavigation(document);
 							}
@@ -73,12 +74,13 @@ public class CorpusPanel extends AbstractPanel {
 						if (ApplicationManager.ontology.get(DocumentPart.KEY).get(i).toString().equals(nomDoc))
 						{
 							document=(DocumentPart)ApplicationManager.ontology.get(DocumentPart.KEY).get(i);
-							
+							this.getTree().setToolTipText(document.getName());
 							if (e.getButton()==MouseEvent.BUTTON1)
 							{
 								((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptIndexant(document);
 								((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptPotentiel(document);
 								((CorpusNavigationPanel) this.navigationPanel).remplirTableLemmeLier(document);
+								((CorpusNavigationPanel) this.navigationPanel).remplirTableimages(document);
 								//((OntologyNavigationPanel) this.navigationPanel).rollFirstPanel((LinkableElement)((JTree)e.getSource()).getSelectionPath().getLastPathComponent());
 								DisplayManager.getInstance().reflectNavigation(document);
 							}

@@ -24,6 +24,8 @@ public class DocumentPart extends LinkableElement {
 	 */
 	public static final int KEY;
 	private String value = "";
+	private ArrayList<DocumentPart> images;
+	private DocumentPart commentaire;
 	
 	static {
 		KEY = obtainCategoryKey();
@@ -39,6 +41,7 @@ public class DocumentPart extends LinkableElement {
     public DocumentPart(int id, String name, int state, String value) {
         super(id, name, state);
 		this.value = value;
+		this.images=new ArrayList<DocumentPart>();
     }
 
 	/**
@@ -49,6 +52,7 @@ public class DocumentPart extends LinkableElement {
     public DocumentPart(String name, String value) {
         super(name);
 		this.value = value;
+		this.images=new ArrayList<DocumentPart>();
     }
 	/**
      * @see arkeotek.ontology.LinkableElement#LinkableElement(String)
@@ -56,6 +60,7 @@ public class DocumentPart extends LinkableElement {
      */
     public DocumentPart(String name) {
         super(name);
+        this.images=new ArrayList<DocumentPart>();
     }
 
     /**
@@ -113,5 +118,21 @@ public class DocumentPart extends LinkableElement {
 	public String toString()
 	{
 		return this.getValue();
+	}
+
+	public DocumentPart getCommentaire() {
+		return commentaire;
+	}
+
+	public void setCommentaire(DocumentPart commentaire) {
+		this.commentaire = commentaire;
+	}
+
+	public ArrayList<DocumentPart> getImages() {
+		return images;
+	}
+
+	public void setImages(ArrayList<DocumentPart> images) {
+		this.images = images;
 	}
 }

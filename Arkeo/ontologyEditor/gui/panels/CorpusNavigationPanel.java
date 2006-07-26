@@ -41,6 +41,7 @@ import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.tables.ConceptIndexantTM;
 import ontologyEditor.gui.tables.ConceptPotentielTM;
 import ontologyEditor.gui.tables.EditorTableModel;
+import ontologyEditor.gui.tables.ImagesTM;
 import ontologyEditor.gui.tables.LinkableElementTableModel;
 import ontologyEditor.gui.tables.LinkableLemmeTM;
 import ontologyEditor.gui.tables.PotentialConceptsTableModel;
@@ -61,6 +62,8 @@ import arkeotek.ontology.Relation;
 public class CorpusNavigationPanel extends AbstractNavigationPanel
 {
 	private JTextArea txtArea_docText;
+	private JTextArea txtArea_docComm;
+	private JTable imagesTable;
 	private JTable conceptsIndexingTable;
 	private JTable potentialConceptsTable;
 	//private SonDetailPanel pnl_SonDetail;
@@ -79,8 +82,8 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		// Create a TableLayout for the panel
 		double border = 7;
 		double sizeNavPanel[][] = { 
-				{ border, TableLayout.FILL, border, TableLayout.FILL, TableLayout.PREFERRED, border }, // Columns
-				{ border, TableLayout.FILL, border, TableLayout.FILL, TableLayout.FILL, TableLayout.FILL, TableLayout.FILL, 20, border } // Rows 
+				{ border, 400,border, TableLayout.FILL,border, TableLayout.FILL, border/*, TableLayout.FILL, TableLayout.PREFERRED, border */}, // Columns
+				{ border, TableLayout.FILL, border, TableLayout.FILL,border, TableLayout.FILL,border,TableLayout.FILL, border } // Rows 
 			};
 		this.setLayout(new TableLayout(sizeNavPanel));
 		this.setBorder(BorderFactory.createTitledBorder("Détail du document "));
@@ -89,8 +92,15 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.txtArea_docText.setLineWrap(true);
 		this.txtArea_docText.setEditable(false);
 		JScrollPane areaSP = new JScrollPane(this.txtArea_docText);
-		areaSP.setBorder(BorderFactory.createTitledBorder("Aperçu"));
-		this.add(areaSP, "1, 1, 4, 1");
+		areaSP.setBorder(BorderFactory.createTitledBorder("Séquences"));
+		this.add(areaSP, "1, 1, 1, 1");
+		
+		this.txtArea_docComm = new JTextArea("");
+		this.txtArea_docComm.setLineWrap(true);
+		this.txtArea_docComm.setEditable(false);
+		JScrollPane areaC = new JScrollPane(this.txtArea_docComm);
+		areaC.setBorder(BorderFactory.createTitledBorder("Commentaires"));
+		this.add(areaC, "1, 3, 1, 1");
 		
 		String[] Titre={"relation","element"};
 		ConceptIndexantTM tableCIModel = new ConceptIndexantTM();
@@ -158,32 +168,34 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			
 		}));
 		jsp.setBorder(BorderFactory.createTitledBorder("Concepts indexant"));
-		this.add(jsp, "1, 3, 1, 4");
+		this.add(jsp, "3, 1, 1, 3");
 		
 		
 		// table des lemmes associé
+		String[] TitreL={"element"};
 		LinkableLemmeTM tableLemmeModel = new LinkableLemmeTM();
-		tableLemmeModel.setColumnNames(Titre);
+		tableLemmeModel.setColumnNames(TitreL);
 		this.termeAssocie = new JTable(tableLemmeModel);
 		this.termeAssocie.setTransferHandler(new ConceptDropTransferHandler());
 		this.termeAssocie.setDragEnabled(true);
 		this.termeAssocie.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.termeAssocie.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
 		this.termeAssocie.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
-		TableColumn column12 = termeAssocie.getColumnModel().getColumn(0);
-		column12.setPreferredWidth(65);
-		TableColumn column22 = termeAssocie.getColumnModel().getColumn(1);
-		column22.setPreferredWidth(150);
+		//TableColumn column12 = termeAssocie.getColumnModel().getColumn(0);
+		//column12.setPreferredWidth(65);
+		//TableColumn column22 = termeAssocie.getColumnModel().getColumn(1);
+		//column22.setPreferredWidth(150);
 		JScrollPane jsp2 = new JScrollPane(this.termeAssocie);
 		jsp2.setBorder(BorderFactory.createTitledBorder("termes liés au document"));
-		this.add(jsp2, "3, 3, 3, 7");
+		this.add(jsp2, "5, 1, 1, 5");
 		this.termeAssocie.addMouseListener(new MouseAdapter()
 		{
 
 			public void mouseClicked(MouseEvent e)
 			{
-				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0));
 				//termeAssocie.setToolTipText(currentElement.getLinks(element).get(0).getName()+" "+currentElement.getName());
+				termeAssocie.setToolTipText(element.getLinks(doc).get(0).toString());
 				if (e.getClickCount() >= 2)
 				{
 					int panel=-1;
@@ -251,26 +263,60 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		});
 		JScrollPane jspPotential = new JScrollPane(this.potentialConceptsTable);
 		jspPotential.setBorder(BorderFactory.createTitledBorder("Concepts potentiels"));
-		this.add(jspPotential, "1, 5, 1, 7");
+		this.add(jspPotential, "3, 5, 1, 7");
 		
 		this.validationButton = new JButton("Valider");
 		this.validationButton.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				LinkableElement element = getDoc();
-				if (element != null)
+				if (doc!=null)
 				{
-					CorpusNavigationPanel.this.validationButton.setText((element.getState() == LinkableElement.VALIDATED)?"Valider":"Invalider");
-					element.setState((element.getState() == LinkableElement.VALIDATED)?LinkableElement.DEFAULT:LinkableElement.VALIDATED);
-					//DisplayManager.getInstance().reloadTrees();
+					
+					if (doc.getState() == LinkableElement.VALIDATED)
+					{
+						ApplicationManager.ontology.getDocValider().remove(doc);
+					}
+					else
+					{
+						ApplicationManager.ontology.getDocValider().add(doc);
+						//DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().setValueAt(DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().getDefaultRenderer(LinkableElement.class).getTableCellRendererComponent(DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable(),currentElement,true,true,DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().getSelectedRow(),DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().getSelectedColumn()),DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().getSelectedRow(),0);
+					}
+					CorpusNavigationPanel.this.validationButton.setText((doc.getState() == LinkableElement.VALIDATED)?"Valider":"Invalider");
+					doc.setState((doc.getState() == LinkableElement.VALIDATED)?LinkableElement.DEFAULT:LinkableElement.VALIDATED);
+					if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree()!=null)
+						DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().updateUI();
+					if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree()!=null)
+						DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().updateUI();
+				
 				}
 			}
 		});
 		
-		this.add(this.validationButton, "4, 7, 4, 7");
+		this.add(this.validationButton, "5, 7, 1, 1");
 		
-//		 mise en place des renderer
+		String[] TitreI={"Image"};
+		ImagesTM tableIModel = new ImagesTM();
+		tableIModel.setColumnNames(TitreI);
+		this.imagesTable = new JTable(tableIModel);
+		//TableColumn column1I = imagesTable.getColumnModel().getColumn(0);
+		//column1I.setPreferredWidth(75);
+		//TableColumn column2I = imagesTable.getColumnModel().getColumn(1);
+		//column2I.setPreferredWidth(150);
+		JScrollPane jspI = new JScrollPane(this.imagesTable);
+		jspI.setBorder(BorderFactory.createTitledBorder("Images liés au document"));
+		this.add(jspI, "1, 5, 1, 7");
+		this.imagesTable.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0));
+				//termeAssocie.setToolTipText(currentElement.getLinks(element).get(0).getName()+" "+currentElement.getName());
+				imagesTable.setToolTipText(element.getName());
+			}
+		});
+		
+		// mise en place des renderer
 		this.rendererTableConcept(this.conceptsIndexingTable);
 		this.rendererTableConcept(this.potentialConceptsTable);
 		this.rendererTableLemme(this.termeAssocie);
@@ -511,7 +557,8 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.validationButton.setText((doc.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation du corpus : "+doc.getName()));
 		this.txtArea_docText.setText(((DocumentPart)doc).getValue());
-		
+		if (((DocumentPart)doc).getCommentaire()!=null)
+			this.txtArea_docComm.setText(((DocumentPart)doc).getCommentaire().getValue());
 		this.conceptsIndexingTable.removeAll();
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		ArrayList<Integer> links_categories = new ArrayList<Integer>(1);
@@ -543,6 +590,31 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		{
 			Object [][] donnees=new Object[0][2];
 			((ConceptIndexantTM)conceptsIndexingTable.getModel()).setDonnees(donnees);
+		}
+		this.updateUI();
+			
+	}
+	
+	public void remplirTableimages(LinkableElement doc) {
+		// TODO Auto-generated method stub
+		((ImagesTM)imagesTable.getModel()).setDonnees(null);
+		
+		this.imagesTable.removeAll();
+		
+		if (((DocumentPart)doc).getImages().size()!=0)
+		{
+			Object [][] donnees=new Object[((DocumentPart)doc).getImages().size()][1];
+			for (int i=0;i<((DocumentPart)doc).getImages().size();i++)
+			{
+				donnees[i][0]=(((DocumentPart)doc).getImages().get(i));
+				//donnees[i][1]=(((DocumentPart)doc).getImages().get(i));
+			}
+			((ImagesTM)imagesTable.getModel()).setDonnees(donnees);
+		}
+		else
+		{
+			Object [][] donnees=new Object[0][1];
+			((ImagesTM)imagesTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 			
@@ -760,17 +832,17 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		}
 		if (elements.size()!=0)
 		{
-			Object [][] donnees=new Object[elements.size()][2];
+			Object [][] donnees=new Object[elements.size()][1];
 			for (int i=0;i<elements.size();i++)
 			{
-				donnees[i][0]=(elements.get(i)[0]);
-				donnees[i][1]=(elements.get(i)[1]);
+				donnees[i][0]=(elements.get(i)[1]);
+				//donnees[i][1]=(elements.get(i)[1]);
 			}
 			((LinkableLemmeTM)termeAssocie.getModel()).setDonnees(donnees);
 		}
 		else
 		{
-			Object [][] donnees=new Object[0][2];
+			Object [][] donnees=new Object[0][1];
 			((LinkableLemmeTM)termeAssocie.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
@@ -805,7 +877,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		table.getColumnModel().getColumn(1).setCellRenderer(custom);
+		table.getColumnModel().getColumn(0).setCellRenderer(custom);
 	}
 	
 }

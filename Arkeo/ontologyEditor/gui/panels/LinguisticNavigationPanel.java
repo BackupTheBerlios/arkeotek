@@ -9,7 +9,6 @@ import info.clearthought.layout.TableLayout;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,7 +18,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -41,11 +39,9 @@ import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.dialogs.DocumentPartToLemme;
-import ontologyEditor.gui.renderer.LemmaTableRenderer;
 import ontologyEditor.gui.tables.ConceptLemmeTM;
 import ontologyEditor.gui.tables.EditorTableModel;
 import ontologyEditor.gui.tables.LemmaParentTM;
-import ontologyEditor.gui.tables.LemmaTableModel;
 import ontologyEditor.gui.tables.LinesTableModel;
 import ontologyEditor.gui.tables.LinkableElementTableModel;
 import ontologyEditor.gui.tables.LinkableLemmeTM;
@@ -173,34 +169,23 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 			{
 				if (currentElement!=null)
 				{
-					//LinkableElement element = ((LinesTableModel)LinguisticNavigationPanel.this.appearancesTable.getModel()).getElement();
-					if (currentElement != null)
+					
+					if (currentElement.getState() == LinkableElement.VALIDATED)
 					{
-						/*LinguisticNavigationPanel.this.validationButton.setText((currentElement.getState() == LinkableElement.VALIDATED)?"Valider":"Invalider");
-						currentElement.setState((currentElement.getState() == LinkableElement.VALIDATED)?LinkableElement.DEFAULT:LinkableElement.VALIDATED);
-						int panel=DisplayManager.mainFrame.BOTTOM_PANEL;
-						if (e.getComponent().getParent().getParent().getParent().getY()==1)
-						{
-							panel=DisplayManager.mainFrame.TOP_PANEL;
-						}
-						LinguisticPanel lnp=(LinguisticPanel)DisplayManager.mainFrame.getPanel(panel);
-						//LinkableElement selection=((LinkableElement)((LemmaTableModel)lnp.getTable().getModel()).getValueAt(lnp.getTable().getSelectedRow(),0));
-						//LemmaTableRenderer renderer=new LemmaTableRenderer(currentElement.toString());
-						//renderer.getTableCellRendererComponent(lnp.getTable(),currentElement,true,true,lnp.getTable().getSelectedRow(),0);
-						//lnp.getTable().setDefaultRenderer(LinkableElement.class,new LemmaTableRenderer());
-						if (currentElement.getState() == LinkableElement.VALIDATED)
-						{
-							currentElement.setName("--> "+currentElement.getName());
-						}
-						else
-						{
-							currentElement.setName(currentElement.getName().replace("-->",""));
-						}
-						lnp.getTable().setValueAt(currentElement,lnp.getTable().getSelectedRow(),0);//  ((LemmaTableRenderer)lnp.getTable().getDefaultRenderer(LinkableElement.class)).getTableCellRendererComponent(lnp.getTable(),currentElement,true,true,lnp.getTable().getSelectedRow(),0);
-						lnp.getTable().updateUI();
-						//lnp.getTable().repaint();
-						*/
+						ApplicationManager.ontology.getLemmeValider().remove(currentElement);
 					}
+					else
+					{
+						ApplicationManager.ontology.getLemmeValider().add(currentElement);
+						//DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().setValueAt(DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().getDefaultRenderer(LinkableElement.class).getTableCellRendererComponent(DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable(),currentElement,true,true,DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().getSelectedRow(),DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().getSelectedColumn()),DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().getSelectedRow(),0);
+					}
+					LinguisticNavigationPanel.this.validationButton.setText((currentElement.getState() == LinkableElement.VALIDATED)?"Valider":"Invalider");
+					currentElement.setState((currentElement.getState() == LinkableElement.VALIDATED)?LinkableElement.DEFAULT:LinkableElement.VALIDATED);
+					if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable()!=null)
+						DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().updateUI();
+					if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTable()!=null)
+						DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTable().updateUI();
+				
 				}
 			}
 		});

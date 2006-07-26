@@ -76,9 +76,15 @@ public class LemmaTableModel extends AbstractTableModel {
 	public void remplirTableLemme()
 	{
 		ArrayList<LinkableElement> listLemme=ApplicationManager.ontology.get(Lemma.KEY);
+		
 		Object [][] donnees=new Object[listLemme.size()][1];
 		for (int i=0;i<listLemme.size();i++)
 		{
+//			modif aldo 21/07/06
+	        if (listLemme.get(i).getState()==LinkableElement.VALIDATED)
+	        {
+	        	ApplicationManager.ontology.getLemmeValider().add(listLemme.get(i));
+	        }
 			donnees[i][0]=listLemme.get(i);
 		}
 		if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTable()!=null)

@@ -5,6 +5,8 @@
  */
 package arkeotek.ontology;
 
+import ontologyEditor.ApplicationManager;
+
 
 /**
  * @author Bernadou Pierre

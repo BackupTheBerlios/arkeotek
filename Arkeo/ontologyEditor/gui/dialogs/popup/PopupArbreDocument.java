@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JTree;
+import javax.swing.text.Position;
+import javax.swing.text.Position.Bias;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -59,8 +62,54 @@ public class PopupArbreDocument extends JPopupMenu implements ActionListener{
 			// vue par id
 			if (source == this.id)
 			{
+				/*
+				JTree tree=DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree();
+				//System.out.println(tree.getSelectionPath());
+				TreePath path=tree.getSelectionPath();
+				ArrayList documents=ApplicationManager.ontology.get(DocumentPart.KEY);
+				ArrayList<LinkableElement> doc=new ArrayList<LinkableElement>();
+				for (int j=0;j<path.getPathCount();j++)
+				{
+					//System.out.println("path : "+path.getPathComponent(j));
+					for (int i=0;i<documents.size();i++)
+					{
+						if(documents.get(i).toString().equals(path.getPathComponent(j).toString()))
+						{
+							doc.add((LinkableElement)documents.get(i));
+							//System.out.println(documents.get(i));
+							break;
+						}
+					}
+				}
+				String[] chemin=new String[doc.size()+1];
+				chemin[0]="Corpus";
+				int l=1;
+				for (LinkableElement le:doc)
+				{
+					chemin[l]=le.getName();
+					l++;
+				}
+				
+				*/
+				
 				((CorpusPanel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL)).setVue(1);
 				DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).refresh();
+				/*
+				for 
+				tree.setSelectionPath(new TreePath(chemin));
+				System.out.println("Nouveau path : "+tree.getSelectionPath());
+				tree.expandPath(tree.getSelectionPath());*/
+				/*if (doc!=null)
+				{
+					//tree.get
+					tree.setSelectionPath(tree.getNextMatch(doc.getName(),0,Position.Bias.Forward));
+					tree.expandPath(tree.getNextMatch(doc.getName(),0,Position.Bias.Forward));
+					System.out.println(tree.getSelectionPath());
+					tree.updateUI();
+				}*/
+				
+				
+				
 				
 			}
 			//vue par seq 

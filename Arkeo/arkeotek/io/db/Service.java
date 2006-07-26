@@ -318,6 +318,7 @@ public class Service implements IService
 	 */
 	public HashMap<Integer, ArrayList<LinkableElement>> retrieveOntology() throws Exception
 	{
+		
 		Transaction transaction = new Transaction(this, !Transaction.AUTOCOMMIT);
 		HashMap<Integer, ArrayList<LinkableElement>> ontology = null;
 		try

@@ -53,6 +53,14 @@ public class Ontology extends LinkableElement {
 	private URL path;
 	
 	private boolean enBase;
+	
+	// modif aldo 21/07/06
+	// liste des lemmes valides
+	private ArrayList<LinkableElement> lemmeValider=new ArrayList<LinkableElement>();
+	
+	//modif aldo 21/07/06
+	// liste des documents valides
+	private ArrayList<LinkableElement> docValider=new ArrayList<LinkableElement>();
     
 	
 	static {
@@ -76,13 +84,14 @@ public class Ontology extends LinkableElement {
 				this.path = url;
 			TreeTagger.init(this.path);
 			this.importProperties();
-
+			
 			this.elements = this.dataAccessor.retrieveOntology();
 			for (int ctg : this.elements.keySet())
 				Collections.sort(this.elements.get(ctg));
 			
 		} catch (NullPointerException e) {
 			// We simply ignore errors   while retrieving storage properties. 
+			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {
@@ -333,7 +342,6 @@ public class Ontology extends LinkableElement {
 	 */
 	public ArrayList<Object[]> getLemmasParents(LinkableElement element)
 	{
-		System.out.println("getLemmaParents");
 		ArrayList<LinkableElement> lemmasToCheck = (ArrayList<LinkableElement>) this.elements.get(Lemma.KEY).clone();
 		HashMap<LinkableElement, ArrayList<Relation>> parents = new HashMap<LinkableElement, ArrayList<Relation>>();
 		ArrayList<Object[]> parentsToArray = new ArrayList<Object[]>();
@@ -387,7 +395,6 @@ public class Ontology extends LinkableElement {
 	 */
 	public ArrayList<Object[]> getElementsThatReference(LinkableElement element)
 	{
-		System.out.println("getElmentThatReference");
 		HashMap<LinkableElement, ArrayList<Relation>> parents = new HashMap<LinkableElement, ArrayList<Relation>>();
 		ArrayList<Object[]> parentsToArray = new ArrayList<Object[]>();
 		
@@ -508,8 +515,12 @@ public class Ontology extends LinkableElement {
 	public void setSaved()
 	{
 		for (int ctg : this.elements.keySet())
+		{
 			for (LinkableElement elem : this.elements.get(ctg))
+			{
 				elem.setSaved();
+			}
+		}
 	}
 	
 	/**
@@ -684,5 +695,21 @@ public class Ontology extends LinkableElement {
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public ArrayList<LinkableElement> getLemmeValider() {
+		return lemmeValider;
+	}
+
+	public void setLemmeValider(ArrayList<LinkableElement> lemmeValider) {
+		this.lemmeValider = lemmeValider;
+	}
+
+	public ArrayList<LinkableElement> getDocValider() {
+		return docValider;
+	}
+
+	public void setDocValider(ArrayList<LinkableElement> docValider) {
+		this.docValider = docValider;
 	}	
 }
