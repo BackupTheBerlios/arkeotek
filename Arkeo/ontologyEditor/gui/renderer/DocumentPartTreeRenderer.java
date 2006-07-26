@@ -24,11 +24,9 @@ public class DocumentPartTreeRenderer extends DefaultTreeCellRenderer  {
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
         if (value!=null && ApplicationManager.ontology!=null)
         {
-        	//System.out.println("****************************  "+value);
         	boolean trouver=false;
         	for (int i=0;i<ApplicationManager.ontology.getDocValider().size();i++)
         	{
-        		//System.out.println(ApplicationManager.ontology.getDocValider().get(i));
         		if (value.toString().equals(ApplicationManager.ontology.getDocValider().get(i).toString()))
         		{
         			trouver=true;
@@ -44,8 +42,7 @@ public class DocumentPartTreeRenderer extends DefaultTreeCellRenderer  {
 		    {
 		    	this.setForeground(Color.BLACK);
 		    }
-	        //System.out.println(tree.getSelectionPath());
-	        tree.expandPath(tree.getSelectionPath());
+	        //tree.expandPath(tree.getSelectionPath());
 		}
         return this;
     }
