@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.tableModel.RelationsEditorTableModel;
+import ontologyEditor.gui.model.tableModel.RelationsEditorTableModel;
 
 /**
  * @author Bernadou Pierre

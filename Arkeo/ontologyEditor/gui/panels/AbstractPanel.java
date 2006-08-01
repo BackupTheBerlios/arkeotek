@@ -30,13 +30,13 @@ import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.tableModel.LemmaTableModel;
-import ontologyEditor.gui.tableRenderer.DocumentPartTreeRenderer;
-import ontologyEditor.gui.tableRenderer.LemmaTableRenderer;
+import ontologyEditor.gui.model.tableModel.LemmaTableModel;
+import ontologyEditor.gui.model.treeModel.AbstractTreeModel;
+import ontologyEditor.gui.model.treeModel.ConceptualTreeModel;
+import ontologyEditor.gui.model.treeModel.CorpusTreeModel;
+import ontologyEditor.gui.renderer.tableRenderer.LemmaTableRenderer;
+import ontologyEditor.gui.renderer.treeRenderer.DocumentPartTreeRenderer;
 import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
-import ontologyEditor.gui.treeviews.AbstractTreeModel;
-import ontologyEditor.gui.treeviews.ConceptualTreeModel;
-import ontologyEditor.gui.treeviews.CorpusTreeModel;
 import arkeotek.ontology.LinkableElement;
 
 /**

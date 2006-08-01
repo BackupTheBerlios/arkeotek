@@ -12,8 +12,8 @@ import javax.swing.JTable;
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.dialogs.popup.PopupLemmaTable;
+import ontologyEditor.gui.model.tableModel.LemmaTableModel;
 import ontologyEditor.gui.panels.AbstractPanel;
-import ontologyEditor.gui.tableModel.LemmaTableModel;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 

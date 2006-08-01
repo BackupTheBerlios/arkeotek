@@ -12,8 +12,8 @@ import javax.swing.JTree;
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.dialogs.popup.PopupConceptTree;
+import ontologyEditor.gui.model.treeModel.ConceptualTreeModel;
 import ontologyEditor.gui.panels.AbstractPanel;
-import ontologyEditor.gui.treeviews.ConceptualTreeModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
 

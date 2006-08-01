@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import ontologyEditor.ApplicationManager;
+import ontologyEditor.gui.model.tableModel.LemmaTableModel;
 import ontologyEditor.gui.panels.AbstractPanel;
 import ontologyEditor.gui.panels.conceptual.OntologyNavigationPanel;
 import ontologyEditor.gui.panels.conceptual.OntologyPanel;
@@ -23,7 +24,6 @@ import ontologyEditor.gui.panels.corpus.CorpusPanel;
 import ontologyEditor.gui.panels.edition.EditionPanel;
 import ontologyEditor.gui.panels.linguistic.LinguisticNavigationPanel;
 import ontologyEditor.gui.panels.linguistic.LinguisticPanel;
-import ontologyEditor.gui.tableModel.LemmaTableModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;

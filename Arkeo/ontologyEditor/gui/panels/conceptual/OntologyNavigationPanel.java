@@ -31,12 +31,12 @@ import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
+import ontologyEditor.gui.model.tableModel.ChildConceptTableModel;
+import ontologyEditor.gui.model.tableModel.DefinedConceptTableModel;
+import ontologyEditor.gui.model.tableModel.EditorTableModel;
+import ontologyEditor.gui.model.tableModel.LemmasToConceptTableModel;
 import ontologyEditor.gui.panels.AbstractNavigationPanel;
 import ontologyEditor.gui.panels.linguistic.LinguisticNavigationPanel;
-import ontologyEditor.gui.tableModel.ChildConceptTableModel;
-import ontologyEditor.gui.tableModel.DefinedConceptTableModel;
-import ontologyEditor.gui.tableModel.EditorTableModel;
-import ontologyEditor.gui.tableModel.LemmasToConceptTableModel;
 import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
@@ -48,6 +48,9 @@ import arkeotek.ontology.Relation;
 /**
  * @author Bernadou Pierre
  * @author Czerny Jean
+ * @author Sanmartin
+ * 
+ * classe relative au panneau de navigation de l'ontologie. Associé à un concept
  */
 public class OntologyNavigationPanel extends AbstractNavigationPanel
 {
@@ -75,39 +78,39 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 				{ border,20,border, TableLayout.FILL, border } }; // Rows
 		this.setLayout(new TableLayout(size));
 		
+		// affichage du pere
 		this.labelPere=new JLabel("Concept Père : ");
 		this.conceptPere=new JLabel();
 		conceptPere.setFont(new Font("Serif", Font.PLAIN, 16));
+		
+		// table représentant les concepts fils
 		String[] titreF={"Fils"};
+		// création du model de la table
 		ChildConceptTableModel tableCFModel = new ChildConceptTableModel();
+		// ajout du titre
 		tableCFModel.setColumnNames(titreF);
+		// création de la jtable contenant le titre
 		this.conceptFilsTable = new JTable(null,titreF);
+		// attachement du model a la table pour les données
 		this.conceptFilsTable.setModel(tableCFModel);
-		this.conceptFilsTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.conceptFilsTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		// attachement du renderer pour l'apparence
+		//this.conceptFilsTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		// cette table pourra utiliser le drag and drop
 		this.conceptFilsTable.setTransferHandler(new LinkableElementDragTransferHandler());
+		// au depard à false
 		this.conceptFilsTable.setDragEnabled(false);
-		this.conceptFilsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.conceptFilsTable.addMouseListener(new MouseAdapter()
-		{
-
-			public void mouseClicked(MouseEvent e)
-			{
-				/*if (e.getClickCount() >= 2)
-				{
-					OntologyNavigationPanel.this.rollSecondPanel(((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1)));
-					showParents(((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1)));
-				}*/
-				//DisplayManager.getInstance().reflectNavigation(((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1)));
-			}
-		});		
+		// on peut selectionner qu'un concept à la fois
+		this.conceptFilsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);		// quand on dragge
 		this.conceptFilsTable.addMouseMotionListener(new MouseMotionAdapter()
 		{
 			public void mouseDragged(MouseEvent e)
 			{
+				// si le bouton "Modifier" du panneau d'edition est sélectionné
 				if (DisplayManager.editionState)
 				{
+					// on créer l'instance de l'objet transferable
 					TransferHandler handler = OntologyNavigationPanel.this.conceptFilsTable.getTransferHandler();
+					// transfert par copie
 					handler.exportAsDrag(OntologyNavigationPanel.this.conceptFilsTable, e, TransferHandler.COPY);
 				}
 			}
@@ -117,11 +120,12 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		LemmasToConceptTableModel tableCLModel = new LemmasToConceptTableModel();
 		tableCLModel.setColumnNames(titreL);
 		this.lemmeAssocieTable = new JTable(tableCLModel);
-		this.lemmeAssocieTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.lemmeAssocieTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		//this.lemmeAssocieTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		this.lemmeAssocieTable.setTransferHandler(new LinkableElementDragTransferHandler());
 		this.lemmeAssocieTable.setDragEnabled(DisplayManager.editionState);
 		this.lemmeAssocieTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		// quand on clique sur un lemme et que une vue par lemme est active alors le lemme courant de la vue lemme
+		// passe au lemme sur lequel on vient de' cliquer
 		this.lemmeAssocieTable.addMouseListener(new MouseAdapter()
 		{
 
@@ -159,7 +163,6 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 						((LinguisticNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getPrecedent().add(element);
 					}
 				}
-				//DisplayManager.getInstance().reflectNavigation(element);
 			}
 		});
 		
@@ -179,27 +182,10 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		DefinedConceptTableModel tableCDModel = new DefinedConceptTableModel();
 		tableCDModel.setColumnNames(titreD);
 		this.conceptDefiniTable = new JTable(tableCDModel);
-		this.conceptDefiniTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.conceptDefiniTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		//this.conceptDefiniTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		this.conceptDefiniTable.setTransferHandler(new LinkableElementDragTransferHandler());
 		this.conceptDefiniTable.setDragEnabled(DisplayManager.editionState);
 		this.conceptDefiniTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.conceptDefiniTable.addMouseListener(new MouseAdapter()
-				{
-
-					public void mouseClicked(MouseEvent e)
-					{
-						LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
-						/*if (e.getClickCount() >= 2)
-						{
-							OntologyNavigationPanel.this.rollFirstPanel(((SonTableModel) OntologyNavigationPanel.this.lemmeAssocieTable.getModel()).getElement());
-							OntologyNavigationPanel.this.rollSecondPanel(element);
-							showParents(element);
-						}*/
-						//DisplayManager.getInstance().reflectNavigation(element);
-					}
-				});
-		
 		
 		this.conceptDefiniTable.addMouseMotionListener(new MouseMotionAdapter()
 		{
@@ -213,7 +199,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			}
 		});
 
-		
+		// on associe a chaque table un JScrollPane avec un titre
 		JScrollPane filsScrollPane = new JScrollPane();
 		filsScrollPane.setViewportView(this.conceptFilsTable);
 		filsScrollPane.setBorder(BorderFactory.createTitledBorder("Fils"));
@@ -229,6 +215,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		this.rendererTableLemme(this.lemmeAssocieTable);
 		this.rendererTableConcept(this.conceptFilsTable);
 		
+		// defini la taille des colonnes
 		TableColumn columncon1 = conceptDefiniTable.getColumnModel().getColumn(0);
 		columncon1.setPreferredWidth(80);
 		TableColumn columncon2 = conceptDefiniTable.getColumnModel().getColumn(1);
@@ -252,8 +239,6 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void rollFirstPanel(LinkableElement element)
 	{
-		//((SonTableModel) (this.centralTable.getModel())).setElement(element);
-		//((SonTableModel) (this.rightTable.getModel())).setElement(null);
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element));
 		showParents(element);
 	}
@@ -266,13 +251,12 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void rollSecondPanel(LinkableElement element)
 	{
-		//((SonTableModel) (this.rightTable.getModel())).setElement(element);
 		OntologyNavigationPanel.this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element));
 	}
 
 	public void showParents(LinkableElement element)
 	{
-		//((ParentTableModel) this.parentsTable.getModel()).setElement(element);
+		
 	}
 
 	/**
@@ -283,7 +267,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void reflectNavigation(LinkableElement element)
 	{
-		//this.currentElement = element;
+
 	}
 
 	/**
@@ -294,21 +278,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void changeState(boolean state)
 	{
-		/*this.parentsTable.setDragEnabled(state);
-		this.centralTable.setDragEnabled(state);
-		this.rightTable.setDragEnabled(state);
-		if (state)
-		{
-			this.parentsTable.addMouseMotionListener(this.parentTableListener);
-			this.centralTable.addMouseMotionListener(this.centralTableListener);
-			this.rightTable.addMouseMotionListener(this.rightTableListener);
-		}
-		else
-		{
-			this.parentsTable.removeMouseMotionListener(this.parentTableListener);
-			this.centralTable.removeMouseMotionListener(this.centralTableListener);
-			this.rightTable.removeMouseMotionListener(this.rightTableListener);
-		}*/
+		
 	}
 
 	/**
@@ -324,25 +294,6 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	}
 
 	/**
-	 * Delete key delete the current element
-	 * 
-	 * @param evt
-	 * @throws Exception 
-	 */
-	protected void doNavigationKeyPressed(KeyEvent evt) throws Exception
-	{
-		switch (evt.getKeyCode()) {
-		case KeyEvent.VK_DELETE:
-			if (((JTable) evt.getSource()).getRowCount() > 0)
-				((EditorTableModel) ((JTable) evt.getSource()).getModel()).removeElement(((JTable) evt.getSource()).getSelectedRow());
-			evt.consume();
-			break;
-		default:
-			break;
-		}
-	}
-
-	/**
 	 * @return Returns the curentElement.
 	 */
 	public LinkableElement getCurrentElement()
@@ -352,13 +303,8 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 
 	public void elementRemoved(LinkableElement element)
 	{
-		/*if (((ParentTableModel) this.parentsTable.getModel()).getElement() == element) ((ParentTableModel) this.parentsTable.getModel()).setElement(null);
-		else ((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
-		if (((SonTableModel) this.centralTable.getModel()).getElement() == element) ((SonTableModel) this.centralTable.getModel()).setElement(null);
-		else ((SonTableModel) this.centralTable.getModel()).fireTableStructureChanged();
-		if (((SonTableModel) this.rightTable.getModel()).getElement() == element) ((SonTableModel) this.rightTable.getModel()).setElement(null);
-		else ((SonTableModel) this.rightTable.getModel()).fireTableStructureChanged();
-	*/}
+	
+	}
 	
 	/**
 	 * @see ontologyEditor.gui.panels.AbstractNavigationPanel#relationChanged(arkeotek.ontology.LinkableElement, arkeotek.ontology.LinkableElement)
@@ -366,69 +312,21 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	@Override
 	public void relationChanged(LinkableElement source, LinkableElement target)
 	{
-		if (this.currentElement == source || this.currentElement == target)
-		{
-	/*		((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
-			((SonTableModel) this.centralTable.getModel()).fireTableStructureChanged();
-			((SonTableModel) this.rightTable.getModel()).fireTableStructureChanged();
-		*/}		
+				
 	}
 
 	@Override
 	public void reload()
 	{
-	/*	((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
-		((SonTableModel) this.centralTable.getModel()).fireTableStructureChanged();
-		((SonTableModel) this.rightTable.getModel()).fireTableStructureChanged();
-		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+this.currentElement.getName()));
-		*/
+	
 	}
 
 	public void refreshNavigation(LinkableElement element)
 	{
-		/*if (((ParentTableModel) this.parentsTable.getModel()).getElement() == element) ((ParentTableModel) this.parentsTable.getModel()).setElement(null);
-		else ((ParentTableModel) this.parentsTable.getModel()).fireTableStructureChanged();
-		if (((SonTableModel) this.centralTable.getModel()).getElement() == element) ((SonTableModel) this.centralTable.getModel()).setElement(null);
-		else ((SonTableModel) this.centralTable.getModel()).fireTableStructureChanged();
-		if (((SonTableModel) this.rightTable.getModel()).getElement() == element) ((SonTableModel) this.rightTable.getModel()).setElement(null);
-		else ((SonTableModel) this.rightTable.getModel()).fireTableStructureChanged();
-*/	}
-
-	private class TableComponentCellRenderer extends JLabel implements TableCellRenderer
-	{
-		/** This method is called each time a cell in a column
-		/* using this renderer needs to be rendered
-		 * @param table the table on that renderer is applied
-		 * @param value value contained in the cell located at (rowIndex, vColIndex)
-		 * @param isSelected true if the row is selected
-		 * @param hasFocus true if cell has focus
-		 * @param rowIndex row index
-		 * @param vColIndex column index
-		 * @return the component rendered
-		 */
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex)
-		{
-			// 'value' is value contained in the cell located at
-			// (rowIndex, vColIndex)
-
-			this.setOpaque(true);
-			setBackground(isSelected ? table.getSelectionBackground() : Color.white);
-
-			// Configure the component with the specified value
-			setText(((LinkableElement) value).getName());
-			setIcon(ImagesManager.getInstance().getDefaultIcon((LinkableElement)value));
-
-			// Set tool tip if desired
-			if (value instanceof DocumentPart)
-				setToolTipText(((DocumentPart) value).getValue());
-			else
-				setToolTipText(((LinkableElement) value).getName());
-
-			// Since the renderer is a component, return itself
-			return this;
-		}
+		
 	}
 
+	// des qu'un concept est selectionné dans l'arbre à gauche on rempli tout les champ et tables de ce panneau
 	public void remplirLabelPere(LinkableElement concept) {
 		// TODO Auto-generated method stub
 		conceptPere.setText(null);
@@ -461,30 +359,6 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			else
 			{
 				Set<Relation> keys = null;
-				/*if (concept.getLinks(Lemma.KEY) != null)
-				{
-					keys = concept.getLinks(Lemma.KEY).keySet();
-					for (Relation key : keys)
-					{
-						for (LinkableElement elem : concept.getLinks(Lemma.KEY, key))
-						{
-							Object[] couple = {key, elem};
-							elements.add(couple);
-						}
-					}
-				}
-				if (concept.getLinks(DocumentPart.KEY) != null)
-				{
-					keys = concept.getLinks(DocumentPart.KEY).keySet();
-					for (Relation key : keys)
-					{
-						for (LinkableElement elem : concept.getLinks(DocumentPart.KEY, key))
-						{
-							Object[] couple = {key, elem};
-							elements.add(couple);
-						}
-					}
-				}*/
 				if (concept.getLinks(Concept.KEY) != null)
 				{
 					keys = concept.getLinks(Concept.KEY).keySet();
@@ -528,7 +402,6 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		// TODO Auto-generated method stub
 		lemmeAssocieTable.removeAll();
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
-		//elements.addAll(ApplicationManager.ontology.getParentsOf(concept, Lemma.KEY));
 		Set<Relation> keys = null;
 		if (concept.getLinks(Lemma.KEY) != null)
 		{
@@ -566,33 +439,23 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		if (concept != null)
 		{
-			/*if (concept instanceof Ontology)
+			Set<Relation> keys = null;
+			if (concept.getLinks(Concept.KEY) != null)
 			{
-				for (LinkableElement concept2 : ((Ontology)concept).get(Concept.KEY))
+				keys = concept.getLinks(Concept.KEY).keySet();
+				for (Relation key : keys)
 				{
-					Object[] couple = {"", concept2};
-					elements.add(couple);
-				}
-			}
-			else
-			{*/
-				Set<Relation> keys = null;
-				if (concept.getLinks(Concept.KEY) != null)
-				{
-					keys = concept.getLinks(Concept.KEY).keySet();
-					for (Relation key : keys)
+					for (LinkableElement elem : concept.getLinks(Concept.KEY, key))
 					{
-						for (LinkableElement elem : concept.getLinks(Concept.KEY, key))
+						if (!key.getName().equals("généralise"))
 						{
-							if (!key.getName().equals("généralise"))
-							{
-								Object[] couple = {key, elem};
-								elements.add(couple);
-							}
+							Object[] couple = {key, elem};
+							elements.add(couple);
 						}
 					}
-				}	
-			//}
+				}
+			}	
+			
 		}
 		
 		if (elements.size()!=0)
@@ -640,6 +503,12 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			e.printStackTrace();
 		}
 		table.getColumnModel().getColumn(0).setCellRenderer(custom);
+	}
+
+	@Override
+	protected void doNavigationKeyPressed(KeyEvent evt) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -17,9 +17,9 @@ import javax.swing.TransferHandler;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.model.tableModel.HighEditorTableModel;
+import ontologyEditor.gui.model.tableModel.IndexingConceptTableModel;
 import ontologyEditor.gui.panels.corpus.CorpusNavigationPanel;
-import ontologyEditor.gui.tableModel.IndexingConceptTableModel;
-import ontologyEditor.gui.tableModel.HighEditorTableModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
