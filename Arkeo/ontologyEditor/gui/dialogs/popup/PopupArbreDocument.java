@@ -16,8 +16,8 @@ import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.panels.CorpusNavigationPanel;
-import ontologyEditor.gui.panels.CorpusPanel;
+import ontologyEditor.gui.panels.corpus.CorpusNavigationPanel;
+import ontologyEditor.gui.panels.corpus.CorpusPanel;
 import ontologyEditor.gui.treeviews.CorpusTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;

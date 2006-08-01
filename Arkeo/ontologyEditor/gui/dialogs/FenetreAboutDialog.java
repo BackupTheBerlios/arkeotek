@@ -26,7 +26,7 @@ import ontologyEditor.ImagesManager;
  * @author Nouhen Hubert
  *
  */
-public class AboutDialog extends JDialog
+public class FenetreAboutDialog extends JDialog
 {
 	public static final String DEFAULT_IMAGEICON = "lance.jpg";
 	
@@ -37,7 +37,7 @@ public class AboutDialog extends JDialog
 	private String date = "5 Juin 2006";
 	private JButton ok = new JButton("Fermer");
 
-	public AboutDialog()
+	public FenetreAboutDialog()
 	{
 		this(DisplayManager.mainFrame);
 	}
@@ -45,7 +45,7 @@ public class AboutDialog extends JDialog
  	/**
 	 * @param frame The <code>JFrame</code> holding this <code>JPanel</code>. 
 	 */
-	private AboutDialog(JFrame frame)
+	private FenetreAboutDialog(JFrame frame)
 	{
         super(frame, "A Propos D'Arkeotek !", true);
         this.frame = frame;
@@ -91,7 +91,7 @@ public class AboutDialog extends JDialog
 		{
 			public void mouseClicked(MouseEvent e)
 			{
-				AboutDialog.this.dispose();
+				FenetreAboutDialog.this.dispose();
 			}
 		});
 		PanneauDroit.add(ok,BorderLayout.SOUTH);
