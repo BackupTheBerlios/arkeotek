@@ -17,7 +17,7 @@ import javax.swing.TransferHandler;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.tables.SecondEditorPaneTM;
+import ontologyEditor.gui.tableModel.BottomEditorTableModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -119,7 +119,7 @@ public class LemmaDropTransferHandler extends TransferHandler
 						if (relation != null)
 						{
 							
-							if (target.getModel() instanceof SecondEditorPaneTM)
+							if (target.getModel() instanceof BottomEditorTableModel)
 							{
 								Boolean trouver=false;
 								for(int i=0;i<target.getRowCount();i++)

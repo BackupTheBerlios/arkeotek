@@ -7,8 +7,6 @@ package ontologyEditor.gui.panels.corpus;
 
 import info.clearthought.layout.TableLayout;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
@@ -24,14 +22,12 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.TransferHandler;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import ontologyEditor.ApplicationManager;
@@ -40,13 +36,10 @@ import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.panels.AbstractNavigationPanel;
 import ontologyEditor.gui.panels.linguistic.LinguisticNavigationPanel;
-import ontologyEditor.gui.tableModel.ConceptIndexantTM;
-import ontologyEditor.gui.tableModel.ConceptPotentielTM;
-import ontologyEditor.gui.tableModel.EditorTableModel;
-import ontologyEditor.gui.tableModel.ImagesTM;
-import ontologyEditor.gui.tableModel.LinkableElementTableModel;
-import ontologyEditor.gui.tableModel.LinkableLemmeTM;
-import ontologyEditor.gui.tableModel.PotentialConceptsTableModel;
+import ontologyEditor.gui.tableModel.ImagesToDocumentPartTableModel;
+import ontologyEditor.gui.tableModel.IndexingConceptTableModel;
+import ontologyEditor.gui.tableModel.LemmasToDocumentPartTableModel;
+import ontologyEditor.gui.tableModel.PotentialConceptTableModel;
 import ontologyEditor.gui.transfers.ConceptDropTransferHandler;
 import ontologyEditor.gui.transfers.ConceptIndexingDragTranferHandler;
 import ontologyEditor.gui.transfers.TransferableConcept;
@@ -105,14 +98,13 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.add(areaC, "1, 3, 1, 1");
 		
 		String[] Titre={"relation","element"};
-		ConceptIndexantTM tableCIModel = new ConceptIndexantTM();
+		IndexingConceptTableModel tableCIModel = new IndexingConceptTableModel();
 		tableCIModel.setColumnNames(Titre);
 		this.conceptsIndexingTable = new JTable(tableCIModel);
 		this.conceptsIndexingTable.setTransferHandler(new ConceptDropTransferHandler());
 		this.conceptsIndexingTable.setDragEnabled(true);
 		this.conceptsIndexingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.conceptsIndexingTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.conceptsIndexingTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		TableColumn column1 = conceptsIndexingTable.getColumnModel().getColumn(0);
 		column1.setPreferredWidth(65);
 		TableColumn column2 = conceptsIndexingTable.getColumnModel().getColumn(1);
@@ -175,18 +167,13 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		
 		// table des lemmes associé
 		String[] TitreL={"element"};
-		LinkableLemmeTM tableLemmeModel = new LinkableLemmeTM();
+		LemmasToDocumentPartTableModel tableLemmeModel = new LemmasToDocumentPartTableModel();
 		tableLemmeModel.setColumnNames(TitreL);
 		this.termeAssocie = new JTable(tableLemmeModel);
 		this.termeAssocie.setTransferHandler(new ConceptDropTransferHandler());
 		this.termeAssocie.setDragEnabled(true);
 		this.termeAssocie.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.termeAssocie.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.termeAssocie.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
-		//TableColumn column12 = termeAssocie.getColumnModel().getColumn(0);
-		//column12.setPreferredWidth(65);
-		//TableColumn column22 = termeAssocie.getColumnModel().getColumn(1);
-		//column22.setPreferredWidth(150);
 		JScrollPane jsp2 = new JScrollPane(this.termeAssocie);
 		jsp2.setBorder(BorderFactory.createTitledBorder("termes liés au document"));
 		this.add(jsp2, "5, 1, 1, 5");
@@ -235,14 +222,13 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		
 		
 		
-		ConceptPotentielTM tableCPModel = new ConceptPotentielTM();
+		PotentialConceptTableModel tableCPModel = new PotentialConceptTableModel();
 		tableCPModel.setColumnNames(Titre);
 		this.potentialConceptsTable = new JTable(tableCPModel);
 		this.potentialConceptsTable.setTransferHandler(new ConceptIndexingDragTranferHandler());
 		this.potentialConceptsTable.setDragEnabled(true);
 		this.potentialConceptsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.potentialConceptsTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.potentialConceptsTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		TableColumn column13 = potentialConceptsTable.getColumnModel().getColumn(0);
 		column13.setPreferredWidth(65);
 		TableColumn column23 = potentialConceptsTable.getColumnModel().getColumn(1);
@@ -297,7 +283,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.add(this.validationButton, "5, 7, 1, 1");
 		
 		String[] TitreI={"Image"};
-		ImagesTM tableIModel = new ImagesTM();
+		ImagesToDocumentPartTableModel tableIModel = new ImagesToDocumentPartTableModel();
 		tableIModel.setColumnNames(TitreI);
 		this.imagesTable = new JTable(tableIModel);
 		//TableColumn column1I = imagesTable.getColumnModel().getColumn(0);
@@ -325,236 +311,22 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 	}
 
 	/**
-	 * Updates navigation
-	 * 
-	 * @param element the element to set on the first navigation table
-	 */
-	public void fillTable(DocumentPart element)
-	{
-		//this.txtArea_docText.setText(element.getValue());
-		//((LinkableElementTableModel)(this.conceptsIndexingTable.getModel())).setElement(element);
-		//((PotentialConceptsTableModel) (this.potentialConceptsTable.getModel())).setElement(element);
-		
-		//this.validationButton.setText((element.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
-		//this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element.getName()));
-		//this.pnl_SonDetail.refresh();
-	}
-
-	/**
-	 * Update display on components impacted by navigation
-	 * 
-	 * @param element the element to set
-	 */
-	public void reflectNavigation(LinkableElement element)
-	{
-		this.validationButton.setText((element.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
-		//this.pnl_SonDetail.setElement(element);
-	}
-
-	/**
 	 * Clears all the tables and textfields.
 	 */
 	public void refresh()
 	{
 		txtArea_docText.setText(null);
-		((ConceptIndexantTM)conceptsIndexingTable.getModel()).setDonnees(null);
-		((ConceptPotentielTM)potentialConceptsTable.getModel()).setDonnees(null);
-		((LinkableLemmeTM)termeAssocie.getModel()).setDonnees(null);
+		((IndexingConceptTableModel)conceptsIndexingTable.getModel()).setDonnees(null);
+		((PotentialConceptTableModel)potentialConceptsTable.getModel()).setDonnees(null);
+		((LemmasToDocumentPartTableModel)termeAssocie.getModel()).setDonnees(null);
 		this.updateUI();
 	}
 		
-	/**
-	 * @see ontologyEditor.gui.panels.AbstractNavigationPanel#elementRemoved(arkeotek.ontology.LinkableElement)
-	 */
-	public void elementRemoved(LinkableElement element)
-	{
-		if (((LinkableElementTableModel) this.conceptsIndexingTable.getModel()).getElement() == element) ((PotentialConceptsTableModel) this.conceptsIndexingTable.getModel()).setElement(null);
-	}
-	
-	/** 
-     * Delete key delete the current element
-	 * @param evt 
-	 * @throws Exception 
-     **/
-    protected void doNavigationKeyPressed(KeyEvent evt) throws Exception {
-		switch(evt.getKeyCode()){
-			case KeyEvent.VK_DELETE : 
-				if(((JTable)evt.getSource()).getRowCount() > 0)
-				{
-					((EditorTableModel) ((JTable)evt.getSource()).getModel()).removeElement(((JTable)evt.getSource()).getSelectedRow());
-				}
-				evt.consume();
-				break;
-			default : break;
-        }
-    }
-
-	/**
-	 * @see ontologyEditor.gui.panels.AbstractNavigationPanel#changeState(boolean)
-	 */
-	@Override
-	public void changeState(boolean state)
-	{
-		// Nothing special to do for this sub-class of AbstractNavigationPanel.  
-	}
-	
-	/*private class SonDetailPanel extends JPanel {
-		private JTextArea txt_text;
-		private JTable tbl_concepts;
-		private JTable tbl_lemmas;
-		private LinkableElement element;
-		
-		/**
-		 * Creates a new <code>SonDetailPanel</code>. 
-		 */
-		/*public SonDetailPanel() {
-			super();
-			// Create a TableLayout for the panel
-			double border = 10;
-			double sizeNavPanel[][] = { 
-					{ border, TableLayout.FILL, border, TableLayout.FILL, border }, // Columns
-					{ border, TableLayout.FILL, border, TableLayout.FILL, TableLayout.FILL, TableLayout.FILL, border } // Rows 
-				};
-			this.setLayout(new TableLayout(sizeNavPanel));
-			this.setBorder(BorderFactory.createTitledBorder("Détail de l'élément"));
-
-			this.txt_text = new JTextArea("");
-			this.txt_text.setEditable(false);
-			this.txt_text.setOpaque(false);
-			this.txt_text.setLineWrap(true);
-			JScrollPane jsp0 = new JScrollPane(this.txt_text);
-			jsp0.setBorder(BorderFactory.createTitledBorder("Aper\u00e7u"));
-			this.add(jsp0, "1, 1, 3, 1");
-			
-			this.tbl_concepts = new JTable(new LinkableElementTableModel(null, Concept.KEY));
-			this.tbl_concepts.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-			this.tbl_concepts.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
-			JScrollPane jsp1 = new JScrollPane(this.tbl_concepts);
-			jsp1.setBorder(BorderFactory.createTitledBorder("Concepts"));
-			this.add(jsp1, "1, 3, 1, 5");
-
-			this.tbl_lemmas = new JTable(new LinkableElementTableModel(null, Lemma.KEY));
-			this.tbl_lemmas.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-			this.tbl_lemmas.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
-			JScrollPane jsp2 = new JScrollPane(this.tbl_lemmas);
-			jsp2.setBorder(BorderFactory.createTitledBorder("Termes"));
-			this.add(jsp2, "3, 3, 3, 5");
-		}
-
-		/**
-		 * Clears all the tables and textfields.
-		 */
-		/*public void refresh()
-		{
-			this.txt_text.setText("");
-			((EditorTableModel) this.tbl_concepts.getModel()).setElement(null);
-			((LinkableElementTableModel) this.tbl_concepts.getModel()).fireTableStructureChanged();
-			((EditorTableModel) this.tbl_lemmas.getModel()).setElement(null);
-			((LinkableElementTableModel) this.tbl_lemmas.getModel()).fireTableStructureChanged();
-			this.validate();
-		}
-
-		/**
-		 * @return The current <code>LinkableElement</code> on wich is focused this panel.
-		 */
-	/*	public LinkableElement getElement()
-		{
-			return this.element;
-		}
-
-		/**
-		 * @param element The <code>LinkableElement</code> to focus this panel on. 
-		 */
-	/*	public void setElement(LinkableElement element)
-		{
-			this.refresh();
-			this.element = element;
-			((LinkableElementTableModel) this.tbl_concepts.getModel()).setElement(element);
-			((LinkableElementTableModel) this.tbl_lemmas.getModel()).setElement(element);
-			((AbstractTableModel) this.tbl_concepts.getModel()).fireTableStructureChanged();
-			((AbstractTableModel) this.tbl_lemmas.getModel()).fireTableStructureChanged();
-			if (element instanceof DocumentPart)
-				this.txt_text.setText(((DocumentPart) element).getValue());
-			else 
-				this.txt_text.setText(element.toString());
-		}
-		
-		public void refreshNavigation(LinkableElement element)
-		{
-			this.reload();
-		}
-		
-		public void reload()
-		{
-			this.txt_text.setText("");
-			((LinkableElementTableModel) this.tbl_concepts.getModel()).fireTableStructureChanged();
-			((LinkableElementTableModel) this.tbl_lemmas.getModel()).fireTableStructureChanged();
-			this.validate();
-		}
-	}*/
-
-	@Override
-	public void refreshNavigation(LinkableElement element)
-	{
-		//((EditorTableModel) this.conceptsIndexingTable.getModel()).fireTableStructureChanged();
-		//((EditorTableModel) this.potentialConceptsTable.getModel()).fireTableStructureChanged();
-		//this.validationButton.setText("Valider");
-		//this.pnl_SonDetail.refreshNavigation(element);
-	}
-
-	@Override
-	public void relationChanged(LinkableElement source, LinkableElement target)
-	{
-		// Nothing special to do for this sub-class of AbstractNavigationPanel.  
-	}
-
-	@Override
-	public void reload()
-	{
-		//((EditorTableModel) this.conceptsIndexingTable.getModel()).fireTableStructureChanged();
-		//((EditorTableModel) this.potentialConceptsTable.getModel()).fireTableStructureChanged();
-		//this.pnl_SonDetail.reload();
-	}
-	
-	private class TableComponentCellRenderer extends JLabel implements TableCellRenderer
-	{
-		/** This method is called each time a cell in a column
-		/* using this renderer needs to be rendered
-		 * @param table the table on that renderer is applied
-		 * @param value value contained in the cell located at (rowIndex, vColIndex)
-		 * @param isSelected true if the row is selected
-		 * @param hasFocus true if cell has focus
-		 * @param rowIndex row index
-		 * @param vColIndex column index
-		 * @return the component rendered
-		 */
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex)
-		{
-			// 'value' is value contained in the cell located at
-			// (rowIndex, vColIndex)
-
-			this.setOpaque(true);
-			setBackground(isSelected ? table.getSelectionBackground() : Color.white);
-
-			// Configure the component with the specified value
-			setText(((LinkableElement) value).getName());
-			setIcon(ImagesManager.getInstance().getDefaultIcon((LinkableElement)value));
-
-			// Set tool tip if desired
-			if (value instanceof DocumentPart)
-				setToolTipText(((DocumentPart) value).getValue());
-			else
-				setToolTipText(((LinkableElement) value).getName());
-			
-			// Since the renderer is a component, return itself
-			return this;
-		}
-	}
 
 	public void remplirTableConceptIndexant(LinkableElement doc) {
 		// TODO Auto-generated method stub
 		this.doc=doc;
-		((ConceptIndexantTM)conceptsIndexingTable.getModel()).setDonnees(null);
+		((IndexingConceptTableModel)conceptsIndexingTable.getModel()).setDonnees(null);
 		this.validationButton.setText((doc.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation du corpus : "+doc.getName()));
 		this.txtArea_docText.setText(((DocumentPart)doc).getValue());
@@ -585,12 +357,12 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 				donnees[i][0]=(elements.get(i)[0]);
 				donnees[i][1]=(elements.get(i)[1]);
 			}
-			((ConceptIndexantTM)conceptsIndexingTable.getModel()).setDonnees(donnees);
+			((IndexingConceptTableModel)conceptsIndexingTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			((ConceptIndexantTM)conceptsIndexingTable.getModel()).setDonnees(donnees);
+			((IndexingConceptTableModel)conceptsIndexingTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 			
@@ -598,7 +370,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 	
 	public void remplirTableimages(LinkableElement doc) {
 		// TODO Auto-generated method stub
-		((ImagesTM)imagesTable.getModel()).setDonnees(null);
+		((ImagesToDocumentPartTableModel)imagesTable.getModel()).setDonnees(null);
 		
 		this.imagesTable.removeAll();
 		
@@ -610,12 +382,12 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 				donnees[i][0]=(((DocumentPart)doc).getImages().get(i));
 				//donnees[i][1]=(((DocumentPart)doc).getImages().get(i));
 			}
-			((ImagesTM)imagesTable.getModel()).setDonnees(donnees);
+			((ImagesToDocumentPartTableModel)imagesTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][1];
-			((ImagesTM)imagesTable.getModel()).setDonnees(donnees);
+			((ImagesToDocumentPartTableModel)imagesTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 			
@@ -624,7 +396,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 	public void remplirTableConceptPotentiel(LinkableElement doc) {
 		// TODO Auto-generated method stub
 		this.potentialConceptsTable.removeAll();
-		((ConceptPotentielTM)potentialConceptsTable.getModel()).setDonnees(null);
+		((PotentialConceptTableModel)potentialConceptsTable.getModel()).setDonnees(null);
 		//on selectionne les lemme associé au corpus courant : doc
 		ArrayList<LinkableElement> lemmes = new ArrayList<LinkableElement>();
 		ArrayList<Integer> links_categories_lemme = new ArrayList<Integer>(1);
@@ -798,12 +570,12 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 				donnees[i][0]=(elements.get(i)[0]);
 				donnees[i][1]=(elements.get(i)[1]);
 			}
-			((ConceptPotentielTM)potentialConceptsTable.getModel()).setDonnees(donnees);
+			((PotentialConceptTableModel)potentialConceptsTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			((ConceptPotentielTM)potentialConceptsTable.getModel()).setDonnees(donnees);
+			((PotentialConceptTableModel)potentialConceptsTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 	}
@@ -835,12 +607,12 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 				donnees[i][0]=(elements.get(i)[1]);
 				//donnees[i][1]=(elements.get(i)[1]);
 			}
-			((LinkableLemmeTM)termeAssocie.getModel()).setDonnees(donnees);
+			((LemmasToDocumentPartTableModel)termeAssocie.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][1];
-			((LinkableLemmeTM)termeAssocie.getModel()).setDonnees(donnees);
+			((LemmasToDocumentPartTableModel)termeAssocie.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 	}
@@ -875,6 +647,48 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			e.printStackTrace();
 		}
 		table.getColumnModel().getColumn(0).setCellRenderer(custom);
+	}
+
+	@Override
+	public void reflectNavigation(LinkableElement element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void doNavigationKeyPressed(KeyEvent evt) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void changeState(boolean state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reload() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void elementRemoved(LinkableElement element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refreshNavigation(LinkableElement element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void relationChanged(LinkableElement source, LinkableElement target) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

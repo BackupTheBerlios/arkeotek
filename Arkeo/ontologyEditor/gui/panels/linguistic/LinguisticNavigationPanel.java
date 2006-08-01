@@ -7,31 +7,21 @@ package ontologyEditor.gui.panels.linguistic;
 
 import info.clearthought.layout.TableLayout;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.EventListenerList;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import ontologyEditor.ApplicationManager;
@@ -39,12 +29,10 @@ import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.panels.AbstractNavigationPanel;
-import ontologyEditor.gui.tableModel.ConceptLemmeTM;
-import ontologyEditor.gui.tableModel.EditorTableModel;
-import ontologyEditor.gui.tableModel.LemmaParentTM;
-import ontologyEditor.gui.tableModel.LinesTableModel;
-import ontologyEditor.gui.tableModel.LinkableElementTableModel;
-import ontologyEditor.gui.tableModel.LinkableLemmeTM;
+import ontologyEditor.gui.tableModel.DocumentPartsToLemmaTableModel;
+import ontologyEditor.gui.tableModel.LemmaParentTableModel;
+import ontologyEditor.gui.tableModel.LemmasToConceptTableModel;
+import ontologyEditor.gui.tableModel.LemmasToDocumentPartTableModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -98,10 +86,10 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		this.precedent=new ArrayList<LinkableElement>();
 		
 		String[] titreLier={"relation","terme"};
-		LinkableLemmeTM tableLLModel = new LinkableLemmeTM();
+		LemmasToDocumentPartTableModel tableLLModel = new LemmasToDocumentPartTableModel();
 		tableLLModel.setColumnNames(titreLier);
 		this.linkedLemmasTable = new JTable(tableLLModel);
-		this.linkedLemmasTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		//this.linkedLemmasTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		this.linkedLemmasTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		
@@ -110,20 +98,20 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		linkedLemmasScrollPane.setBorder(BorderFactory.createTitledBorder("Lemmes liÈs"));
 
 		String[] titreParent={"relation","terme"};
-		LemmaParentTM tableParentModel = new LemmaParentTM();
+		LemmaParentTableModel tableParentModel = new LemmaParentTableModel();
 		tableParentModel.setColumnNames(titreParent);
 		this.lemmasParentsTable = new JTable(tableParentModel);
-		this.lemmasParentsTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		//this.lemmasParentsTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		this.lemmasParentsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JScrollPane lemmasParentsScrollPane = new JScrollPane();
 		lemmasParentsScrollPane.setViewportView(this.lemmasParentsTable);
 		lemmasParentsScrollPane.setBorder(BorderFactory.createTitledBorder("Lemmes parents liÈs"));
 		
-		ConceptLemmeTM tableConceptModel = new ConceptLemmeTM();
+		LemmasToConceptTableModel tableConceptModel = new LemmasToConceptTableModel();
 		tableConceptModel.setColumnNames(titreParent);
 		this.concept = new JTable(tableConceptModel);
-		this.concept.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		//this.concept.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		this.concept.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JScrollPane conceptScrollPane = new JScrollPane();
@@ -131,7 +119,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		conceptScrollPane.setBorder(BorderFactory.createTitledBorder("Concepts liÈs"));
 		
 		String[] titre={"Relation","Identifiant","AperÁu"};
-		LinesTableModel tableModel = new LinesTableModel();
+		DocumentPartsToLemmaTableModel tableModel = new DocumentPartsToLemmaTableModel();
 		tableModel.setColumnNames(titre);
 		this.document=new JTable();
 		this.document.setModel(tableModel);
@@ -298,30 +286,10 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 				fen.setVisible(true);
 			}
 		});*/
-		((EditorTableModel) (this.linkedLemmasTable.getModel())).setElement(element);
-		((EditorTableModel) (this.lemmasParentsTable.getModel())).setElement(element);
+		//((EditorTableModel) (this.linkedLemmasTable.getModel())).setElement(element);
+		//((EditorTableModel) (this.lemmasParentsTable.getModel())).setElement(element);
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element));
 		this.validationButton.setText((element.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
-	}
-
-	/**
-	 * Update display on components impacted by navigation
-	 * 
-	 * @param element the element to set
-	 */
-	public void reflectNavigation(LinkableElement element)
-	{
-//		empty corpse
-	}
-
-	/**
-	 * Change the state of the panel from pure navigation to edition
-	 * 
-	 * @param state true if the panel is in edition state
-	 */
-	public void changeEditionState(boolean state)
-	{
-		//this.appearancesTable.setDragEnabled(state);
 	}
 
 	/**
@@ -329,273 +297,16 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void refresh()
 	{
-		((ConceptLemmeTM) this.concept.getModel()).setDonnees(null);
-		((LinkableLemmeTM) (this.linkedLemmasTable.getModel())).setDonnees(null);
-		((LemmaParentTM) (this.lemmasParentsTable.getModel())).setDonnees(null);
-		((LinesTableModel) (this.document.getModel())).setDonnees(null);
+		((LemmasToConceptTableModel) this.concept.getModel()).setDonnees(null);
+		((LemmasToDocumentPartTableModel) (this.linkedLemmasTable.getModel())).setDonnees(null);
+		((LemmaParentTableModel) (this.lemmasParentsTable.getModel())).setDonnees(null);
+		((DocumentPartsToLemmaTableModel) (this.document.getModel())).setDonnees(null);
 		this.validationButton.setText("Valider");
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation du lemme : "));
 		this.updateUI();
 	}
 	
-	public void elementRemoved(LinkableElement element)
-	{
-		/*if (((LinesTableModel) this.appearancesTable.getModel()).getElement() == element) 
-		{
-			((EditorTableModel) this.appearancesTable.getModel()).setElement(null);
-			((EditorTableModel) (this.linkedLemmasTable.getModel())).setElement(null);
-			((EditorTableModel) (this.lemmasParentsTable.getModel())).setElement(null);
-			this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation"));
-		}
-		this.validationButton.setText("Valider");*/
-	}
-	
-	/** 
-     * Delete key delete the current element
-	 * @param evt 
-	 * @throws Exception 
-     **/
-    protected void doNavigationKeyPressed(KeyEvent evt) throws Exception {
-		switch(evt.getKeyCode()){
-			case KeyEvent.VK_DELETE : 
-				if(((JTable)evt.getSource()).getRowCount() > 0)
-					((EditorTableModel) ((JTable)evt.getSource()).getModel()).removeElement(((JTable)evt.getSource()).getSelectedRow());
-				evt.consume();
-				break;
-			default : break;
-        }
-    }
 
-	@Override
-	public void changeState(boolean state)
-	{
-		// TODO S'assurer que le changement d'√©tat n'est pas utilis√© dans cette vue. 
-	}
-	
-	/**
-	 * @see ontologyEditor.gui.panels.AbstractNavigationPanel#relationChanged(arkeotek.ontology.LinkableElement, arkeotek.ontology.LinkableElement)
-	 */
-	@Override
-	public void relationChanged(LinkableElement source, LinkableElement target)
-	{
-		/*if (((LinesTableModel)this.appearancesTable.getModel()).getElement() == source
-			|| ((LinesTableModel)this.appearancesTable.getModel()).getElement() == target)
-		{
-			((LinesTableModel)this.appearancesTable.getModel()).fireTableStructureChanged();
-			((LinkableElementTableModel) (this.linkedLemmasTable.getModel())).fireTableStructureChanged();
-			((EditorTableModel) (this.lemmasParentsTable.getModel())).fireTableStructureChanged();
-		}*/
-		
-	}
-
-	public void refreshNavigation(LinkableElement element)
-	{
-		/*if (((LinesTableModel) this.appearancesTable.getModel()).getElement() == element) this.refresh();
-		else 
-		{
-			((LinesTableModel) this.appearancesTable.getModel()).fireTableStructureChanged();
-			((LinkableElementTableModel) (this.linkedLemmasTable.getModel())).fireTableStructureChanged();
-			((EditorTableModel) (this.lemmasParentsTable.getModel())).fireTableStructureChanged();
-		}*/
-	}
-	
-	public void reload()
-	{
-		//((LinesTableModel) this.appearancesTable.getModel()).fireTableStructureChanged();
-		((LinkableElementTableModel) (this.linkedLemmasTable.getModel())).fireTableStructureChanged();
-		((EditorTableModel) (this.lemmasParentsTable.getModel())).fireTableStructureChanged();
-	}
-	
-	private class TableComponentCellRenderer extends JLabel implements TableCellRenderer
-	{
-		
-		/** This method is called each time a cell in a column
-		/* using this renderer needs to be rendered
-		 * @param table the table on that renderer is applied
-		 * @param value value contained in the cell located at (rowIndex, vColIndex)
-		 * @param isSelected true if the row is selected
-		 * @param hasFocus true if cell has focus
-		 * @param rowIndex row index
-		 * @param vColIndex column index
-		 * @return the component rendered
-		 */
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex)
-		{
-			// 'value' is value contained in the cell located at
-			// (rowIndex, vColIndex)
-
-//			 Configure the component with the specified value
-			setText(((LinkableElement) value).getName());
-			setIcon(ImagesManager.getInstance().getDefaultIcon((LinkableElement)value));
-
-//			 Set tool tip if desired
-			if (value instanceof DocumentPart)
-				setToolTipText(((DocumentPart) value).getValue());
-			else
-				setToolTipText(((LinkableElement) value).getName());
-			
-			this.setOpaque(true);
-			setBackground(isSelected ? table.getSelectionBackground() : Color.white);
-			
-
-			// Since the renderer is a component, return itself
-			return this;
-		}
-	}
-
-	
-	private class CheckboxRenderer extends JCheckBox implements TableCellRenderer
-    {
-
-		/** This method is called each time a cell in a column
-		/* using this renderer needs to be rendered
-		 * @param table the table on that renderer is applied
-		 * @param value value contained in the cell located at (rowIndex, vColIndex)
-		 * @param isSelected true if the row is selected
-		 * @param hasFocus true if cell has focus
-		 * @param rowIndex row index
-		 * @param vColIndex column index
-		 * @return the component rendered
-		 */    
-		public Component getTableCellRendererComponent (JTable table,
-                                                            Object value,
-                                                            boolean isSelected,
-                                                            boolean hasFocus,
-                                                            int rowIndex,
-                                                            int vColIndex)
-        {
-			setOpaque(true);
-			if ((Boolean)value == true)
-				setSelected(true);
-			else 
-				setSelected(false);
-			if (table.isEditing())
-			{
-				setBackground (table.getSelectionBackground());
-			}
-			else
-			{
-				if (isSelected)
-				{
-					setBackground (table.getSelectionBackground());
-				}
-	            else
-				{
-					setBackground (Color.white);
-				}
-			}
-			setHorizontalAlignment (SwingConstants.CENTER);
-            return this;
-        }
-    }
-	
-	private class CheckBoxCellEditor extends JCheckBox implements TableCellEditor
-	{   
-		protected ChangeEvent changeEvent = null;
-		
-	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
-	    {
-			if(value instanceof Boolean )
-	        {
-	            this.setSelected( ((Boolean)value).booleanValue() );
-// TODO				((EditorTableModel)table.getModel()).getElement().setState((((EditorTableModel)table.getModel()).getElement().getState(((Relation)((EditorTableModel)table.getModel()).getValueAt(row, 0)), ((LinkableElement)((EditorTableModel)table.getModel()).getValueAt(row, 1))) == LinkableElement.IGNORED)?LinkableElement.DEFAULT:LinkableElement.IGNORED, ((String)((EditorTableModel)table.getModel()).getValueAt(row, 0)), ((LinkableElement)((EditorTableModel)table.getModel()).getValueAt(row, 1)));
-				//DisplayManager.getInstance().reloadPanels();
-	        }
-	        return this;
-	    }
-	 
-	 
-	    public Object getCellEditorValue()
-	    {
-			return new Boolean(this.isSelected());
-	    }
-
-
-		public boolean isCellEditable(EventObject anEvent)
-		{
-			return true;
-		}
-
-
-		public boolean shouldSelectCell(EventObject anEvent)
-		{
-			return true;
-		}
-
-
-		public boolean stopCellEditing()
-		{
-			fireEditingStopped();
-			return true;
-		}
-
-
-		public void cancelCellEditing()
-		{
-			fireEditingCanceled();
-		}
-		
-		/**
-	     * Adds a <code>CellEditorListener</code> to the listener list.
-	     * @param l  the new listener to be added
-	     */
-	    public void addCellEditorListener(CellEditorListener l) {
-			this.listenerList.add(CellEditorListener.class, l);
-	    }
-
-	    /**
-	     * Removes a <code>CellEditorListener</code> from the listener list.
-	     * @param l  the listener to be removed
-	     */
-	    public void removeCellEditorListener(CellEditorListener l) {
-			this.listenerList.remove(CellEditorListener.class, l);
-	    }
-		
-		/**
-	     * Notifies all listeners that have registered interest for
-	     * notification on this event type.  The event instance 
-	     * is created lazily.
-	     *
-	     * @see EventListenerList
-	     */
-	    protected void fireEditingStopped() {
-			// Guaranteed to return a non-null array
-			Object[] listeners = this.listenerList.getListenerList();
-			// Process the listeners last to first, notifying
-			// those that are interested in this event
-			for (int i = listeners.length-2; i>=0; i-=2) {
-			    if (listeners[i]==CellEditorListener.class) {
-				// Lazily create the event:
-				if (this.changeEvent == null)
-				    this.changeEvent = new ChangeEvent(this);
-				((CellEditorListener)listeners[i+1]).editingStopped(changeEvent);
-			    }	       
-			}
-	    }
-
-	    /**
-	     * Notifies all listeners that have registered interest for
-	     * notification on this event type.  The event instance 
-	     * is created lazily.
-	     *
-	     * @see EventListenerList
-	     */
-	    protected void fireEditingCanceled() {
-			// Guaranteed to return a non-null array
-			Object[] listeners = this.listenerList.getListenerList();
-			// Process the listeners last to first, notifying
-			// those that are interested in this event
-			for (int i = listeners.length-2; i>=0; i-=2) {
-			    if (listeners[i]==CellEditorListener.class) {
-				// Lazily create the event:
-				if (this.changeEvent == null)
-				    this.changeEvent = new ChangeEvent(this);
-				((CellEditorListener)listeners[i+1]).editingCanceled(changeEvent);
-			    }	       
-			}
-	    }
-	}
-	
 	// rempli la table des lemmes parent du lemme courant
 	public void remplirTableLemmeParent(LinkableElement lemme)
 	{
@@ -613,12 +324,12 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 				donnees[i][0]=(elements.get(i)[0]);
 				donnees[i][1]=(elements.get(i)[1]);
 			}
-			((LemmaParentTM)lemmasParentsTable.getModel()).setDonnees(donnees);
+			((LemmaParentTableModel)lemmasParentsTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			((LemmaParentTM)lemmasParentsTable.getModel()).setDonnees(donnees);
+			((LemmaParentTableModel)lemmasParentsTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 	}
@@ -651,23 +362,15 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 				donnees[i][0]=(elements.get(i)[0]);
 				donnees[i][1]=(elements.get(i)[1]);
 			}
-			((LinkableLemmeTM)linkedLemmasTable.getModel()).setDonnees(donnees);
+			((LemmasToDocumentPartTableModel)linkedLemmasTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			((LinkableLemmeTM)linkedLemmasTable.getModel()).setDonnees(donnees);
+			((LemmasToDocumentPartTableModel)linkedLemmasTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 		final LinkableElement elem=lemme;
-		/*this.voirDoc.addMouseListener(new MouseAdapter(){
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				DocumentPartToLemme fen = new DocumentPartToLemme(DisplayManager.mainFrame,elem);
-				fen.setVisible(true);
-			}
-		});*/
 	}
 
 	public void remplirTableConcept(LinkableElement lemme) {
@@ -699,12 +402,12 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 				donnees[i][0]=(elements.get(i)[0]);
 				donnees[i][1]=(elements.get(i)[1]);
 			}
-			((ConceptLemmeTM)concept.getModel()).setDonnees(donnees);
+			((LemmasToConceptTableModel)concept.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			((ConceptLemmeTM)concept.getModel()).setDonnees(donnees);
+			((LemmasToConceptTableModel)concept.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 	}
@@ -745,12 +448,12 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 				donnees[i][1]=(elements.get(i)[1]);
 				donnees[i][2]=(elements.get(i)[2]);
 			}
-			((LinesTableModel)document.getModel()).setDonnees(donnees);
+			((DocumentPartsToLemmaTableModel)document.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][3];
-			((LinesTableModel)document.getModel()).setDonnees(donnees);
+			((DocumentPartsToLemmaTableModel)document.getModel()).setDonnees(donnees);
 		}
 		this.document.updateUI();
 	}
@@ -813,5 +516,47 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 
 	public void setSuivant(ArrayList<LinkableElement> suivant) {
 		this.suivant = suivant;
+	}
+
+	@Override
+	public void reflectNavigation(LinkableElement element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void doNavigationKeyPressed(KeyEvent evt) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void changeState(boolean state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reload() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void elementRemoved(LinkableElement element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refreshNavigation(LinkableElement element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void relationChanged(LinkableElement source, LinkableElement target) {
+		// TODO Auto-generated method stub
+		
 	}
 }

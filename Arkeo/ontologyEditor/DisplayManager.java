@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import javax.swing.tree.TreePath;
 
 import ontologyEditor.gui.MainFrame;
-import ontologyEditor.gui.panels.CorpusPanel;
-import ontologyEditor.gui.panels.LinguisticPanel;
-import ontologyEditor.gui.panels.OntologyPanel;
+import ontologyEditor.gui.panels.conceptual.OntologyPanel;
+import ontologyEditor.gui.panels.corpus.CorpusPanel;
+import ontologyEditor.gui.panels.linguistic.LinguisticPanel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -133,13 +133,11 @@ public class DisplayManager
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 			{
 				mainFrame.getPanel(MainFrame.TOP_PANEL).elementRemoved(element, indexes[0]);
-				mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.TOP_PANEL).refreshNavigation(element);
 			}
 			if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof OntologyPanel)
 			{
 				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).elementRemoved(element, indexes[1]);
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).refreshNavigation(element);
 			}
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof CorpusPanel)
@@ -154,23 +152,19 @@ public class DisplayManager
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof LinguisticPanel)
 			{
 				mainFrame.getPanel(MainFrame.TOP_PANEL).elementRemoved(element, indexes[0]);
-				mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.TOP_PANEL).refreshNavigation(element);
 			}
 			else if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 			{
-				mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.TOP_PANEL).refreshNavigation(element);
 			}
 			if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof LinguisticPanel)
 			{
 				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).elementRemoved(element, indexes[1]);
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).refreshNavigation(element);
 			}
 			else if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 			{
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).refreshNavigation(element);
 			}
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof CorpusPanel)
@@ -193,12 +187,10 @@ public class DisplayManager
 //			repercussion sur OntologyPanel.tree, OntologyPanel.navigation et EditionPanel
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 			{
-				mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.TOP_PANEL).relationChanged(source, target);
 			}
 			if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof OntologyPanel)
 			{
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).relationChanged(source, target);
 			}
 		}
@@ -209,12 +201,10 @@ public class DisplayManager
 				//repercussion sur OntologyPanel.tree, OntologyPanel.navigation et EditionPanel
 				if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 				{
-					mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 					mainFrame.getPanel(MainFrame.TOP_PANEL).relationChanged(source, target);
 				}
 				if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof OntologyPanel)
 				{
-					mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 					mainFrame.getPanel(MainFrame.BOTTOM_PANEL).relationChanged(source, target);
 				}
 			}
@@ -223,24 +213,20 @@ public class DisplayManager
 				//repercussion sur tout
 				if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel || mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof LinguisticPanel)
 				{
-					mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 					mainFrame.getPanel(MainFrame.TOP_PANEL).relationChanged(source, target);
 				}
 				if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof OntologyPanel || mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof LinguisticPanel)
 				{
-					mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 					mainFrame.getPanel(MainFrame.BOTTOM_PANEL).relationChanged(source, target);
 				}
 			}
 		}
 		if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof CorpusPanel)
 		{
-			mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 			mainFrame.getPanel(MainFrame.TOP_PANEL).refreshNavigation(target);
 		}
 		if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof CorpusPanel)
 		{
-			mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 			mainFrame.getPanel(MainFrame.BOTTOM_PANEL).refreshNavigation(target);
 		}
 	}
@@ -257,12 +243,10 @@ public class DisplayManager
 			//repercussion sur OntologyPanel.tree, OntologyPanel.navigation et EditionPanel
 			if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 			{
-				mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.TOP_PANEL).relationChanged(source, target);
 			}
 			if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof OntologyPanel)
 			{
-				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 				mainFrame.getPanel(MainFrame.BOTTOM_PANEL).relationChanged(source, target);
 			}
 		}
@@ -273,12 +257,10 @@ public class DisplayManager
 //				repercussion sur OntologyPanel.tree, OntologyPanel.navigation et EditionPanel
 				if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 				{
-					mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 					mainFrame.getPanel(MainFrame.TOP_PANEL).relationChanged(source, target);
 				}
 				if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof OntologyPanel)
 				{
-					mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 					mainFrame.getPanel(MainFrame.BOTTOM_PANEL).relationChanged(source, target);
 				}
 			}
@@ -287,14 +269,12 @@ public class DisplayManager
 				//repercussion sur LinguisticPanel.tree, LinguisticPanel.navigation, OntologyPanel.navigation et EditionPanel
 				if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof LinguisticPanel)
 				{
-					mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 					mainFrame.getPanel(MainFrame.TOP_PANEL).relationChanged(source, target);
 				}
 				else if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof OntologyPanel)
 					mainFrame.getPanel(MainFrame.TOP_PANEL).relationChanged(source, target);
 				if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof LinguisticPanel)
 				{
-					mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 					mainFrame.getPanel(MainFrame.BOTTOM_PANEL).relationChanged(source, target);
 				}
 				else if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof OntologyPanel)
@@ -303,12 +283,10 @@ public class DisplayManager
 		}
 		if (mainFrame.getPanel(MainFrame.TOP_PANEL) instanceof CorpusPanel)
 		{
-			mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
 			mainFrame.getPanel(MainFrame.TOP_PANEL).refreshNavigation(target);
 		}
 		if (mainFrame.getPanel(MainFrame.BOTTOM_PANEL) instanceof CorpusPanel)
 		{
-			mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
 			mainFrame.getPanel(MainFrame.BOTTOM_PANEL).refreshNavigation(target);
 		}		
 	}
@@ -375,46 +353,7 @@ public class DisplayManager
 	{
 		mainFrame.reflectNavigation(element);
 	}
-	
-	/**
-	 * Reload all the GUI
-	 */
-	public void reloadGUI()
-	{
-		this.reloadTrees();
-		this.reloadPanels();
-	}
-	
-	/**
-	 * Reload the panels
-	 */
-	public void reloadPanels()
-	{
-		mainFrame.getPanel(MainFrame.TOP_PANEL).reloadPanel();
-		mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadPanel();
-	}
-	
-	/**
-	 * Reload the trees
-	 */
-	public void reloadTrees()
-	{
-		mainFrame.getPanel(MainFrame.TOP_PANEL).reloadTrees();
-		mainFrame.getPanel(MainFrame.BOTTOM_PANEL).reloadTrees();
-	}
-	
-	/**
-	 * Change the name of an element (not in use actually)
-	 * @param element the element renamed
-	 */
-	public void changeName(LinkableElement element)
-	{
-		int[] indexes = mainFrame.getChildIndexesInTrees(element);
-		this.removeElement(element, indexes);
-		this.addElement(element);
-	}
-	
-	
+
 	/**
 	 * Return elements of specified type selected in tables
 	 * @param categoryKey categoryKey of elements to return

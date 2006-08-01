@@ -7,12 +7,13 @@ package ontologyEditor.gui.panels.linguistic;
 
 import java.awt.event.MouseEvent;
 
+import javax.swing.JTable;
+
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.dialogs.popup.PopupLemmaTable;
 import ontologyEditor.gui.panels.AbstractPanel;
 import ontologyEditor.gui.tableModel.LemmaTableModel;
-import ontologyEditor.gui.tableModel.LinkableElementTable;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 
@@ -33,7 +34,7 @@ public class LinguisticPanel extends AbstractPanel {
 		{
 			if (e.getButton()==MouseEvent.BUTTON1)
 			{
-				LinkableElement lemme=((Lemma)((LinkableElementTable)e.getSource()).getValueAt(((LinkableElementTable)e.getSource()).getSelectedRow(),0));
+				LinkableElement lemme=((Lemma)((JTable)e.getSource()).getValueAt(((JTable)e.getSource()).getSelectedRow(),0));
 				((LinguisticNavigationPanel) this.navigationPanel).remplirTableLemmeParent(lemme);
 				((LinguisticNavigationPanel) this.navigationPanel).remplirTableLemmeLier(lemme);
 				((LinguisticNavigationPanel) this.navigationPanel).remplirTableConcept(lemme);

@@ -44,15 +44,15 @@ import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.tableModel.EditorTableModel;
-import ontologyEditor.gui.tableModel.HighEditorPaneTM;
-import ontologyEditor.gui.tableModel.SecondEditorPaneTM;
+import ontologyEditor.gui.tableModel.HighEditorTableModel;
+import ontologyEditor.gui.tableModel.BottomEditorTableModel;
 import ontologyEditor.gui.tableRenderer.LemmaTableRenderer;
 import ontologyEditor.gui.tableRenderer.LemmeEditionRenderer;
 import ontologyEditor.gui.transfers.ConceptDropTransferHandler;
 import ontologyEditor.gui.transfers.LemmaDropTransferHandler;
 import ontologyEditor.gui.transfers.TransferableConcept;
 import ontologyEditor.gui.transfers.TransferableLemma;
-import ontologyEditor.gui.treeviews.ConceptualTM;
+import ontologyEditor.gui.treeviews.ConceptualTreeModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -91,7 +91,7 @@ public class EditionPanel extends JPanel
 		this.setLayout(new TableLayout(size));
 		
 		String[] titreHaut={"relation","element"};
-		HighEditorPaneTM tableHautModel = new HighEditorPaneTM();
+		HighEditorTableModel tableHautModel = new HighEditorTableModel();
 		tableHautModel.setColumnNames(titreHaut);
 		this.parentsEditionTable = new JTable(tableHautModel);
 		//this.parentsEditionTable.setModel(tableHautModel);
@@ -160,7 +160,7 @@ public class EditionPanel extends JPanel
 		this.rightEditionTable = new JTable();
 		
 		String[] titreBas={"relation","element"};
-		SecondEditorPaneTM tableBasModel = new SecondEditorPaneTM();
+		BottomEditorTableModel tableBasModel = new BottomEditorTableModel();
 		tableBasModel.setColumnNames(titreHaut);
 		
 		this.rightEditionTable.setModel(tableBasModel);
@@ -287,7 +287,7 @@ public class EditionPanel extends JPanel
                 case KeyEvent.VK_DELETE:
 					if(((JTable)evt.getSource()).getRowCount() > 0)
 					{
-						if (((JTable)evt.getSource()).getModel() instanceof HighEditorPaneTM)
+						if (((JTable)evt.getSource()).getModel() instanceof HighEditorTableModel)
 						{
 							LinkableElement element = (LinkableElement)EditionPanel.this.parentsEditionTable.getValueAt(((JTable)evt.getSource()).getSelectedRow(),1);
 							//int[] indexes = DisplayManager.mainFrame.getChildIndexesInTrees(element);
@@ -309,7 +309,7 @@ public class EditionPanel extends JPanel
 											}
 										}
 									}
-									if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel() instanceof ConceptualTM)
+									if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel() instanceof ConceptualTreeModel)
 									{
 										JTree arbreConcept=DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree();
 										arbreConcept.updateUI();
@@ -321,13 +321,13 @@ public class EditionPanel extends JPanel
 											
 											if (noeud.toString().equals(element.toString()))
 											{
-												((ConceptualTM)arbreConcept.getModel()).getRacine().add(noeud);
+												((ConceptualTreeModel)arbreConcept.getModel()).getRacine().add(noeud);
 												//noeudPere.remove(i);
 											}
 										}
 										arbreConcept.updateUI();
 									}
-									if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().getModel() instanceof ConceptualTM)
+									if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().getModel() instanceof ConceptualTreeModel)
 									{
 										JTree arbreConcept=DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree();
 										arbreConcept.updateUI();
@@ -339,7 +339,7 @@ public class EditionPanel extends JPanel
 											
 											if (noeud.toString().equals(element.toString()))
 											{
-												((ConceptualTM)arbreConcept.getModel()).getRacine().add(noeud);
+												((ConceptualTreeModel)arbreConcept.getModel()).getRacine().add(noeud);
 												//noeudPere.remove(i);
 											}
 										}
@@ -370,7 +370,7 @@ public class EditionPanel extends JPanel
 							DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(courant);
 							DisplayManager.mainFrame.mAJ(courant);
 						}
-						else if (((JTable)evt.getSource()).getModel() instanceof SecondEditorPaneTM)
+						else if (((JTable)evt.getSource()).getModel() instanceof BottomEditorTableModel)
 						{
 							LinkableElement element = (LinkableElement)EditionPanel.this.rightEditionTable.getValueAt(((JTable)evt.getSource()).getSelectedRow(),1);
 							//int[] indexes = DisplayManager.mainFrame.getChildIndexesInTrees(element);
@@ -425,13 +425,13 @@ public class EditionPanel extends JPanel
 			{
 				rightEditionTable.removeAll();
 				Object [][] donnees=new Object[0][2];
-				((SecondEditorPaneTM)rightEditionTable.getModel()).setDonnees(donnees);
+				((BottomEditorTableModel)rightEditionTable.getModel()).setDonnees(donnees);
 			}
 			if(parentsEditionTable.getRowCount()!=0)
 			{
 				parentsEditionTable.removeAll();
 				Object [][] donnees=new Object[0][2];
-				((HighEditorPaneTM)parentsEditionTable.getModel()).setDonnees(donnees);
+				((HighEditorTableModel)parentsEditionTable.getModel()).setDonnees(donnees);
 			}
 			this.updateUI();
 			
@@ -497,12 +497,12 @@ public class EditionPanel extends JPanel
 				donnees[i][0]=(elements.get(i)[0]);
 				donnees[i][1]=(elements.get(i)[1]);
 			}
-			((SecondEditorPaneTM)rightEditionTable.getModel()).setDonnees(donnees);
+			((BottomEditorTableModel)rightEditionTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			((SecondEditorPaneTM)rightEditionTable.getModel()).setDonnees(donnees);
+			((BottomEditorTableModel)rightEditionTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 	}
@@ -544,12 +544,12 @@ public class EditionPanel extends JPanel
 				donnees[i][0]=(elements.get(i)[0]);
 				donnees[i][1]=(elements.get(i)[1]);
 			}
-			((HighEditorPaneTM)parentsEditionTable.getModel()).setDonnees(donnees);
+			((HighEditorTableModel)parentsEditionTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			((HighEditorPaneTM)parentsEditionTable.getModel()).setDonnees(donnees);
+			((HighEditorTableModel)parentsEditionTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
 		

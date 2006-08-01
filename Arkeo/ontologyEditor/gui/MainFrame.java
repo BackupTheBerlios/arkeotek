@@ -16,14 +16,14 @@ import javax.swing.JSplitPane;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.gui.panels.AbstractPanel;
-import ontologyEditor.gui.panels.CorpusNavigationPanel;
-import ontologyEditor.gui.panels.CorpusPanel;
-import ontologyEditor.gui.panels.EditionPanel;
-import ontologyEditor.gui.panels.LinguisticNavigationPanel;
-import ontologyEditor.gui.panels.LinguisticPanel;
-import ontologyEditor.gui.panels.OntologyNavigationPanel;
-import ontologyEditor.gui.panels.OntologyPanel;
-import ontologyEditor.gui.tables.LemmaTableModel;
+import ontologyEditor.gui.panels.conceptual.OntologyNavigationPanel;
+import ontologyEditor.gui.panels.conceptual.OntologyPanel;
+import ontologyEditor.gui.panels.corpus.CorpusNavigationPanel;
+import ontologyEditor.gui.panels.corpus.CorpusPanel;
+import ontologyEditor.gui.panels.edition.EditionPanel;
+import ontologyEditor.gui.panels.linguistic.LinguisticNavigationPanel;
+import ontologyEditor.gui.panels.linguistic.LinguisticPanel;
+import ontologyEditor.gui.tableModel.LemmaTableModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -135,29 +135,6 @@ public class MainFrame extends JFrame
 	}
 		
 	/**
-	 * Notify all panels that <code>element</code> has been removed
-	 * @param element the element removed
-	 * @param indexes indexes of element in trees
-	 */
-	public void elementRemoved(LinkableElement element, int[] indexes)
-	{
-		if (element instanceof Concept)
-			this.topPanel.elementRemoved(element, indexes[0]);
-		this.editionPanel.ontologyElementRemoved(element);
-		if (element instanceof Lemma)
-			this.bottomPanel.elementRemoved(element, indexes[1]);
-	}
-	
-	/**
-	 * Reload trees of panels
-	 */
-	public void reloadTrees()
-	{
-		this.topPanel.reloadTrees();
-		this.bottomPanel.reloadTrees();
-	}
-		
-	/**
 	 * @param panel
 	 * @param category_key
 	 */
@@ -264,19 +241,6 @@ public class MainFrame extends JFrame
 	public boolean isActive(int key)
 	{
 		return(isAtBottomPanel(key)||isAtTopPanel(key));
-	}
-	
-	/**
-	 * Return indexes of <code>element</code> in trees
-	 * @param element
-	 * @return indexes of element
-	 */
-	public int[] getChildIndexesInTrees(LinkableElement element)
-	{
-		int[] indices = new int[2];
-		indices[0] = this.topPanel.getChildIndexInTree(element);
-		indices[1] = this.bottomPanel.getChildIndexInTree(element);
-		return indices;
 	}
 	
 	/**

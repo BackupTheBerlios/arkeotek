@@ -26,21 +26,17 @@ import javax.swing.TransferHandler;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.tableModel.LemmaTableModel;
-import ontologyEditor.gui.tableModel.LinkableElementTable;
 import ontologyEditor.gui.tableRenderer.DocumentPartTreeRenderer;
 import ontologyEditor.gui.tableRenderer.LemmaTableRenderer;
 import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
-import ontologyEditor.gui.treeviews.AbstractTM;
 import ontologyEditor.gui.treeviews.AbstractTreeModel;
-import ontologyEditor.gui.treeviews.ConceptualTM;
-import ontologyEditor.gui.treeviews.CorpusTM;
-import ontologyEditor.gui.treeviews.LinkableElementTree;
+import ontologyEditor.gui.treeviews.ConceptualTreeModel;
+import ontologyEditor.gui.treeviews.CorpusTreeModel;
 import arkeotek.ontology.LinkableElement;
 
 /**
@@ -55,14 +51,14 @@ public abstract class AbstractPanel extends JPanel
 	protected AbstractNavigationPanel navigationPanel;
 	protected javax.swing.JSplitPane jSplitPane1;
 	protected JTree tree;
-	protected LinkableElementTable table;
+	protected JTable table;
     // End of variables declaration
 	
 	/**
 	 * @param treeModel 
 	 * @param navigationPanel 
 	 */
-	public AbstractPanel(AbstractTM treeModel,AbstractNavigationPanel navigationPanel)
+	public AbstractPanel(AbstractTreeModel treeModel,AbstractNavigationPanel navigationPanel)
 	{
 		super();
 		Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
@@ -82,7 +78,7 @@ public abstract class AbstractPanel extends JPanel
 		this.navigationPanel.setPreferredSize(new Dimension(screenSize.width, screenSize.height));
 	}
 
-	private void initComponents(AbstractTM treeModel,AbstractNavigationPanel np) {
+	private void initComponents(AbstractTreeModel treeModel,AbstractNavigationPanel np) {
 //		 Create a TableLayout for the panel
 		double size[][] = { 
 				{TableLayout.FILL}, // Columns
@@ -97,32 +93,32 @@ public abstract class AbstractPanel extends JPanel
 		
 		if (ApplicationManager.ontology!=null)
 		{
-			if (treeModel instanceof CorpusTM)
+			if (treeModel instanceof CorpusTreeModel)
 			{
-				((CorpusTM)treeModel).setRacine(new DefaultMutableTreeNode("Corpus"));
-				((CorpusTM)treeModel).remplirArbreDocumentSeq();
+				((CorpusTreeModel)treeModel).setRacine(new DefaultMutableTreeNode("Corpus"));
+				((CorpusTreeModel)treeModel).remplirArbreDocumentSeq();
 			}
-			else if (treeModel instanceof ConceptualTM)
+			else if (treeModel instanceof ConceptualTreeModel)
 			{
-				((ConceptualTM)treeModel).setRacine(new DefaultMutableTreeNode(ApplicationManager.ontology.getName()));
-				((ConceptualTM)treeModel).remplirArbreConcept();
+				((ConceptualTreeModel)treeModel).setRacine(new DefaultMutableTreeNode(ApplicationManager.ontology.getName()));
+				((ConceptualTreeModel)treeModel).remplirArbreConcept();
 			}
 		}
 		else
 		{
-			if (treeModel instanceof CorpusTM)
+			if (treeModel instanceof CorpusTreeModel)
 			{
-				((CorpusTM)treeModel).setRacine(new DefaultMutableTreeNode("Corpus"));
+				((CorpusTreeModel)treeModel).setRacine(new DefaultMutableTreeNode("Corpus"));
 			}
-			else if (treeModel instanceof ConceptualTM)
+			else if (treeModel instanceof ConceptualTreeModel)
 			{
-				((ConceptualTM)treeModel).setRacine(new DefaultMutableTreeNode("Ontologie"));
+				((ConceptualTreeModel)treeModel).setRacine(new DefaultMutableTreeNode("Ontologie"));
 			}
 		}
 		
 		this.tree = new JTree(treeModel);
 		
-		if (this.tree.getModel() instanceof ConceptualTM)
+		if (this.tree.getModel() instanceof ConceptualTreeModel)
 		{
 			this.tree.setTransferHandler(new LinkableElementDragTransferHandler());
 		}
@@ -140,7 +136,7 @@ public abstract class AbstractPanel extends JPanel
 		{
 			public void mouseDragged(MouseEvent e)
 			{
-				if (AbstractPanel.this.tree.getModel() instanceof ConceptualTM)
+				if (AbstractPanel.this.tree.getModel() instanceof ConceptualTreeModel)
 				{
 					if (DisplayManager.editionState)
 					{
@@ -151,7 +147,7 @@ public abstract class AbstractPanel extends JPanel
 				}
 			}
 		});
-		if (this.tree.getModel() instanceof CorpusTM)
+		if (this.tree.getModel() instanceof CorpusTreeModel)
 			this.tree.setCellRenderer(new DocumentPartTreeRenderer());
 		 
 		jScrollPane1.setViewportView(this.tree);		
@@ -181,7 +177,7 @@ public abstract class AbstractPanel extends JPanel
 		String[] titre={"Termes"};
 		LemmaTableModel tableModel = new LemmaTableModel();
 		tableModel.setColumnNames(titre);
-		this.table=new LinkableElementTable();
+		this.table=new JTable();
 		this.table.setDefaultRenderer(Object.class,new LemmaTableRenderer());
 		this.setTable(this.table);
 		this.table.setModel(tableModel);
@@ -229,28 +225,11 @@ public abstract class AbstractPanel extends JPanel
 	
 	public void changeState(boolean state)
 	{
-		//this.tree.setDragEnabled(state);
-		//this.navigationPanel.changeState(state);
+		
 	}
 	
-	public void elementAdded(LinkableElement element)
-	{
-		((AbstractTreeModel) this.tree.getModel()).fireTreeNodesAdded(element);
-	}
 	
 	public abstract void elementRemoved(LinkableElement element, int index);
-	
-	public void reloadTrees()
-	{
-		//ArrayList<TreePath> paths = this.tree.getExpandedPaths();
-		//((AbstractTreeModel) this.tree.getModel()).reloadTree();
-		//this.tree.setExpandedPaths(paths);
-	}
-	
-	public void reloadPanel()
-	{
-		this.navigationPanel.reload();
-	}
 		
 	public void relationChanged(LinkableElement source, LinkableElement target)
 	{
@@ -258,12 +237,6 @@ public abstract class AbstractPanel extends JPanel
 	}
 		
 	protected abstract void performMouseClicked(MouseEvent e);
-	
-	public int getChildIndexInTree(LinkableElement element)
-	{
-		return ((AbstractTreeModel)this.tree.getModel()).getIndexOfChild(((AbstractTreeModel)this.tree.getModel()).getParentNode(element), element);
-		//return 0;
-	}
 	
 	public void refreshNavigation(LinkableElement element)
 	{
@@ -273,91 +246,13 @@ public abstract class AbstractPanel extends JPanel
 	public TreePath[] getSelectedValues()
 	{
 		return this.tree.getSelectionPaths();
-		//return null;
 	}
-	
-	private class TreeCellRenderer extends DefaultTreeCellRenderer
-    {
-        /**
-         * @see javax.swing.tree.DefaultTreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree,
-         *      java.lang.Object, boolean, boolean, boolean, int, boolean)
-         */
-      /*  public Component getTreeCellRendererComponent(JTree jTree, Object value,
-                                                      boolean sel,
-                                                      boolean expanded,
-                                                      boolean leaf, int row,
-                                                      boolean focus)
-        {
-           Component c = null;
 
-            c = super.getTreeCellRendererComponent(jTree, value, sel, expanded,
-                    leaf, row, focus);
-			if (!(value instanceof String))
-			{
-	            try {
-					this.setIcon(ImagesManager.getInstance().getDefaultIcon(
-					       (LinkableElement)value));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if (value instanceof DocumentPart)
-				{
-					String text = this.getText() + " (";
-					if (((LinkableElement)value).getLinks(Concept.KEY) != null)
-					{
-						for (HashMap<LinkableElement, Link> links : ((LinkableElement)value).getLinks(Concept.KEY).values())
-						{
-							for (LinkableElement element : links.keySet())
-							{
-								text += element + ", ";
-							}
-						}
-						text = text.substring(0, text.length() - 2);
-						if (text.length() > ((LinkableElement)value).toString().length())
-							text += ")";
-						this.setText(text);
-					}
-				}
-				if ((value instanceof Lemma || value instanceof DocumentPart) && ((LinkableElement)value).getState() == LinkableElement.DEFAULT)
-				{
-					Font f = this.getFont();
-	                Font f2 = f.deriveFont(Font.BOLD);
-	                this.setFont(f2);
-					this.setForeground(Color.GREEN.darker().darker());
-				}
-				else if (((IIndexable)value).isNew())
-				{
-	                Font f = this.getFont();
-	                Font f2 = f.deriveFont(Font.BOLD);
-	                this.setFont(f2);
-					this.setForeground(Color.RED);
-	            }
-				else
-					this.setForeground(Color.BLACK);
-			}
-//			we change the font if the node is selected
-            if (sel)
-            {
-                Font f = jTree.getFont();
-                Font f2 = f.deriveFont(Font.ITALIC);
-                this.setFont(f2);
-            }
-            else
-            {
-                Font f = jTree.getFont();
-                Font f2 = f.deriveFont(Font.PLAIN);
-                this.setFont(f2);
-            }
-            return c;
-        }*/
-    }
-
-	public LinkableElementTable getTable() {
+	public JTable getTable() {
 		return table;
 	}
 
-	public void setTable(LinkableElementTable table) {
+	public void setTable(JTable table) {
 		this.table = table;
 	}
 
@@ -365,7 +260,7 @@ public abstract class AbstractPanel extends JPanel
 		return tree;
 	}
 
-	public void setTree(LinkableElementTree tree) {
+	public void setTree(JTree tree) {
 		this.tree = tree;
 	}
 

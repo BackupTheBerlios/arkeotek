@@ -17,9 +17,9 @@ import javax.swing.TransferHandler;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.panels.CorpusNavigationPanel;
-import ontologyEditor.gui.tables.ConceptIndexantTM;
-import ontologyEditor.gui.tables.HighEditorPaneTM;
+import ontologyEditor.gui.panels.corpus.CorpusNavigationPanel;
+import ontologyEditor.gui.tableModel.IndexingConceptTableModel;
+import ontologyEditor.gui.tableModel.HighEditorTableModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -76,7 +76,7 @@ public class ConceptDropTransferHandler extends TransferHandler
 				if (relations.size() != 0)
 				{
 					// si la cible c'est les conceptIndexant 
-					if (target.getModel() instanceof ConceptIndexantTM)
+					if (target.getModel() instanceof IndexingConceptTableModel)
 					{
 						//-------------------------->
 						for (LinkableElement rel:relations)
@@ -128,7 +128,7 @@ public class ConceptDropTransferHandler extends TransferHandler
 						}
 					}
 					// si on glisse un concept dans le panneau haut d'edition
-					else if (target.getModel() instanceof HighEditorPaneTM)
+					else if (target.getModel() instanceof HighEditorTableModel)
 					{
 						//-------------------------->
 						LinkableElement le=DisplayManager.mainFrame.getEditionPanel().getCourant();

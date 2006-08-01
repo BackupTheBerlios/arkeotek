@@ -14,7 +14,7 @@ import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.dialogs.popup.PopupDocumentPartTree;
 import ontologyEditor.gui.panels.AbstractPanel;
-import ontologyEditor.gui.treeviews.CorpusTM;
+import ontologyEditor.gui.treeviews.CorpusTreeModel;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.LinkableElement;
 
@@ -29,7 +29,7 @@ public class CorpusPanel extends AbstractPanel {
 	private int vue;
 	
 	public CorpusPanel() {
-		super(new CorpusTM(),new CorpusNavigationPanel());
+		super(new CorpusTreeModel(),new CorpusNavigationPanel());
 		this.vue=0;
     }
     
@@ -117,16 +117,16 @@ public class CorpusPanel extends AbstractPanel {
 		
 		if (vue==0)
 		{
-			((CorpusTM)this.getTree().getModel()).setRacine(new DefaultMutableTreeNode(null));
+			((CorpusTreeModel)this.getTree().getModel()).setRacine(new DefaultMutableTreeNode(null));
 			this.getTree().removeAll();
-			((CorpusTM)this.getTree().getModel()).remplirArbreDocumentSeq();
+			((CorpusTreeModel)this.getTree().getModel()).remplirArbreDocumentSeq();
 			this.getTree().updateUI();
 		}
 		else
 		{
 			this.getTree().removeAll();
-			((CorpusTM)this.getTree().getModel()).setRacine(new DefaultMutableTreeNode(null));
-			((CorpusTM)this.getTree().getModel()).remplirArbreDocumentId();
+			((CorpusTreeModel)this.getTree().getModel()).setRacine(new DefaultMutableTreeNode(null));
+			((CorpusTreeModel)this.getTree().getModel()).remplirArbreDocumentId();
 			this.getTree().updateUI();
 		}
 		if (ApplicationManager.ontology!=null)

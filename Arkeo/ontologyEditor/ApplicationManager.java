@@ -43,15 +43,15 @@ import ontologyEditor.actions.TopPanelChangeAction;
 import ontologyEditor.gui.MainFrame;
 import ontologyEditor.gui.MenuBar;
 import ontologyEditor.gui.dialogs.AboutDialog;
-import ontologyEditor.gui.dialogs.FindLemmaDialog;
-import ontologyEditor.gui.dialogs.OntologyWizard;
+import ontologyEditor.gui.dialogs.SearchLemmaDialog;
+import ontologyEditor.gui.dialogs.NewOntologyDialog;
 import ontologyEditor.gui.dialogs.ProgressBarDialog;
-import ontologyEditor.gui.dialogs.RelationsEditorDialog;
+import ontologyEditor.gui.dialogs.RelationEditionDialog;
 import ontologyEditor.gui.filechoosers.OntologyFileChooser;
 import ontologyEditor.gui.filechoosers.SyntexFileChooser;
 import ontologyEditor.gui.filechoosers.TermontoFileChooser;
-import ontologyEditor.gui.panels.LinguisticPanel;
-import ontologyEditor.gui.tables.LemmaTableModel;
+import ontologyEditor.gui.panels.linguistic.LinguisticPanel;
+import ontologyEditor.gui.tableModel.LemmaTableModel;
 import arkeotek.indexing.generic.GenericIndexer;
 import arkeotek.indexing.scd.SCDIndexer;
 import arkeotek.io.importer.AbstractParser;
@@ -282,7 +282,7 @@ public class ApplicationManager
 					
 				}
 				if (choice != JOptionPane.CANCEL_OPTION) {
-					OntologyWizard wizard = new OntologyWizard();
+					NewOntologyDialog wizard = new NewOntologyDialog();
 					wizard.setVisible(true);
 					if (wizard.validInput()){
 						ontology = null;
@@ -652,7 +652,7 @@ public class ApplicationManager
 					if(DisplayManager.mainFrame.isActive(Lemma.KEY))
 					{
 						// ouverture de la boite de dialogue correspondante
-						FindLemmaDialog lemmaSearchDialog = new FindLemmaDialog();
+						SearchLemmaDialog lemmaSearchDialog = new SearchLemmaDialog();
 						lemmaSearchDialog.setVisible(true);
 						String lcn = lemmaSearchDialog.getContainName();
 						// si la chaine n'est pas null
@@ -744,7 +744,7 @@ public class ApplicationManager
 			case EDITION_RELATIONS :
 				if(ApplicationManager.ontology!=null)
 				{
-					new RelationsEditorDialog();
+					new RelationEditionDialog();
 				}
 				break;
 			case QUIT_APPLICATION : System.exit(0);

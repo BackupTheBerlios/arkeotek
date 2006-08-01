@@ -10,13 +10,11 @@ import info.clearthought.layout.TableLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -35,16 +33,14 @@ import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
 import ontologyEditor.gui.panels.AbstractNavigationPanel;
 import ontologyEditor.gui.panels.linguistic.LinguisticNavigationPanel;
-import ontologyEditor.gui.tableModel.ConceptDefiniTM;
-import ontologyEditor.gui.tableModel.ConceptFilsTM;
-import ontologyEditor.gui.tableModel.ConceptLemmeTM;
+import ontologyEditor.gui.tableModel.ChildConceptTableModel;
+import ontologyEditor.gui.tableModel.DefinedConceptTableModel;
 import ontologyEditor.gui.tableModel.EditorTableModel;
-import ontologyEditor.gui.tableModel.LinkableElementTable;
+import ontologyEditor.gui.tableModel.LemmasToConceptTableModel;
 import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
-import arkeotek.ontology.Link;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Ontology;
 import arkeotek.ontology.Relation;
@@ -83,7 +79,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		this.conceptPere=new JLabel();
 		conceptPere.setFont(new Font("Serif", Font.PLAIN, 16));
 		String[] titreF={"Fils"};
-		ConceptFilsTM tableCFModel = new ConceptFilsTM();
+		ChildConceptTableModel tableCFModel = new ChildConceptTableModel();
 		tableCFModel.setColumnNames(titreF);
 		this.conceptFilsTable = new JTable(null,titreF);
 		this.conceptFilsTable.setModel(tableCFModel);
@@ -118,7 +114,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		});
 		
 		String[] titreL={"Termes Associés"};
-		ConceptLemmeTM tableCLModel = new ConceptLemmeTM();
+		LemmasToConceptTableModel tableCLModel = new LemmasToConceptTableModel();
 		tableCLModel.setColumnNames(titreL);
 		this.lemmeAssocieTable = new JTable(tableCLModel);
 		this.lemmeAssocieTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
@@ -180,7 +176,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		});
 		
 		String[] titreD={"Relation","Concepts Reliés"};
-		ConceptDefiniTM tableCDModel = new ConceptDefiniTM();
+		DefinedConceptTableModel tableCDModel = new DefinedConceptTableModel();
 		tableCDModel.setColumnNames(titreD);
 		this.conceptDefiniTable = new JTable(tableCDModel);
 		this.conceptDefiniTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
@@ -320,10 +316,10 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void refresh()
 	{
-		((ConceptFilsTM)conceptFilsTable.getModel()).setDonnees(null);
+		((ChildConceptTableModel)conceptFilsTable.getModel()).setDonnees(null);
 		this.conceptPere.setText(null);
-		((ConceptLemmeTM)lemmeAssocieTable.getModel()).setDonnees(null);
-		((ConceptDefiniTM)conceptDefiniTable.getModel()).setDonnees(null);
+		((LemmasToConceptTableModel)lemmeAssocieTable.getModel()).setDonnees(null);
+		((DefinedConceptTableModel)conceptDefiniTable.getModel()).setDonnees(null);
 		this.updateUI();
 	}
 
@@ -514,12 +510,12 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			{
 				donnees[i][0]=((LinkableElement)elements.get(i)[1]);
 			}
-			((ConceptFilsTM)conceptFilsTable.getModel()).setDonnees(donnees);
+			((ChildConceptTableModel)conceptFilsTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][1];
-			((ConceptFilsTM)conceptFilsTable.getModel()).setDonnees(donnees);
+			((ChildConceptTableModel)conceptFilsTable.getModel()).setDonnees(donnees);
 		}
 		lemmeAssocieTable.updateUI();
 		conceptFilsTable.updateUI();
@@ -553,12 +549,12 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			{
 				donnees[i][0]=((LinkableElement)elements.get(i)[1]);
 			}
-			((ConceptLemmeTM)lemmeAssocieTable.getModel()).setDonnees(donnees);
+			((LemmasToConceptTableModel)lemmeAssocieTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][1];
-			((ConceptLemmeTM)lemmeAssocieTable.getModel()).setDonnees(donnees);
+			((LemmasToConceptTableModel)lemmeAssocieTable.getModel()).setDonnees(donnees);
 		}
 		
 		this.updateUI();
@@ -607,12 +603,12 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 				donnees[i][0]=((LinkableElement)elements.get(i)[0]);
 				donnees[i][1]=((LinkableElement)elements.get(i)[1]);
 			}
-			((ConceptDefiniTM)conceptDefiniTable.getModel()).setDonnees(donnees);
+			((DefinedConceptTableModel)conceptDefiniTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			((ConceptDefiniTM)conceptDefiniTable.getModel()).setDonnees(donnees);
+			((DefinedConceptTableModel)conceptDefiniTable.getModel()).setDonnees(donnees);
 		}
 		
 		lemmeAssocieTable.updateUI();

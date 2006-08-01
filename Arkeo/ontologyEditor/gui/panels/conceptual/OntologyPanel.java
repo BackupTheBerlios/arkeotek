@@ -13,7 +13,6 @@ import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.dialogs.popup.PopupConceptTree;
 import ontologyEditor.gui.panels.AbstractPanel;
-import ontologyEditor.gui.treeviews.ConceptualTM;
 import ontologyEditor.gui.treeviews.ConceptualTreeModel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
@@ -27,7 +26,7 @@ public class OntologyPanel extends AbstractPanel {
     
     /** Creates new form MainFrame */
     public OntologyPanel() {
-		super(new ConceptualTM(),new OntologyNavigationPanel());
+		super(new ConceptualTreeModel(),new OntologyNavigationPanel());
     }
     
 	protected void performMouseClicked(MouseEvent e) {
@@ -71,25 +70,26 @@ public class OntologyPanel extends AbstractPanel {
 		}
 	}
 	
-	public void elementRemoved(LinkableElement element, int index)
-	{
-		if (element instanceof Concept)
-			((ConceptualTreeModel) this.tree.getModel()).fireTreeNodesRemoved(element, index);
-	}
-
-	public void reflectNavigation(LinkableElement element)
-	{		
-		this.navigationPanel.reflectNavigation(element);
-	}
-	
 	public void refresh() {
 		
 		this.getTree().removeAll();
-		((ConceptualTM)this.getTree().getModel()).remplirArbreConcept();
+		((ConceptualTreeModel)this.getTree().getModel()).remplirArbreConcept();
 		this.getTree().updateUI();
 		if (ApplicationManager.ontology!=null)
 			((OntologyNavigationPanel)this.getNavigationPanel()).refresh();
 		this.updateUI();
+	}
+
+	@Override
+	public void reflectNavigation(LinkableElement element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void elementRemoved(LinkableElement element, int index) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
