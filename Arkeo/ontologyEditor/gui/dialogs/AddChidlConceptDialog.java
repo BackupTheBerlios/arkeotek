@@ -23,7 +23,7 @@ import arkeotek.ontology.Relation;
 
 /**
  * @author sanmartin
- * fenetre relative à l'ajout d'un concept fils à conceptSource
+ * fenetre relative à l'ajout d'un concept fils au concept courant
  */
 public class AddChidlConceptDialog extends JDialog implements ActionListener {
 

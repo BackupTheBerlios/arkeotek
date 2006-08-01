@@ -28,12 +28,14 @@ public class PopupLemmaTable extends JPopupMenu implements ActionListener{
 	
 	public PopupLemmaTable(JTable table) {
 		this.table=table;
+		// si le nombre de lemme selectionné est superieur a 1 alors on affiche la fonction fucionner
 		if (table.getSelectedRowCount()>1)
 		{
 			this.fusion = new JMenuItem ("Fusionner les lemmes") ;
 			this.add (this.fusion) ;
 			this.fusion.addActionListener (this) ;
 		}
+		// sinon on affiche les autres fonctions
 		else
 		{
 			this.recherche = new JMenuItem ("Recherche un lemme du corpus") ;

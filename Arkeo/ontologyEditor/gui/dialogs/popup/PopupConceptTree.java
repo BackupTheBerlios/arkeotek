@@ -59,7 +59,9 @@ public class PopupConceptTree extends JPopupMenu implements ActionListener{
 			if (choice == 0)
 			{
 				try {
+					// on supprime le concept de l'ontology
 					ApplicationManager.ontology.unlinkElement(concept);
+					// on supprime le noeud dans l'arbre
 					DefaultMutableTreeNode courant=((DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(0).getTree().getLastSelectedPathComponent());
 					courant.removeFromParent();
 					DisplayManager.mainFrame.getPanel(panel).getTree().removeSelectionPath(DisplayManager.mainFrame.getPanel(panel).getTree().getSelectionPath());
