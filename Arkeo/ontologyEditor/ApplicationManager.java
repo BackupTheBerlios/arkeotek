@@ -70,6 +70,12 @@ import arkeotek.ontology.Relation;
  * @author Czerny Jean
  * 
  */
+
+/*
+ *  classe main de l'application
+ *  elle gére les requetes de l'utilisateur en pointe vers l'action souhaité
+ *  met en place l'interface
+ */
 public class ApplicationManager
 {
 	
@@ -418,10 +424,9 @@ public class ApplicationManager
 							public void run()
 							{
 								try {
+									// crétaion de l'ontology
 									ApplicationManager.ontology = new Ontology((String)((Object[]) this.getArgument())[0]);
-									//DisplayManager.mainFrame.remplirTableLemme();
-									//DisplayManager.getInstance().remplirArbreDocument();
-									//DisplayManager.getInstance().remplirArbreConcept();
+									// parcours tous les objets de l'ontology et verifie s'ils sont deja sauvé ou pas
 									ApplicationManager.ontology.setSaved();
 									((ProgressBarDialog)((Object[])this.getArgument())[1]).dispose();
 								} catch (DuplicateElementException e) {
@@ -556,9 +561,10 @@ public class ApplicationManager
 				DisplayManager.mainFrame.changeView(MainFrame.BOTTOM_PANEL, DocumentPart.KEY);
 				break;
 			case LEMMAS_FUSION :
-				
+				// selectionne tous les termes selectionnés dans la table des termes
 				ArrayList<LinkableElement> lemmas = DisplayManager.getInstance().getSelectedElementsTable(Lemma.KEY);;
 				Object[] possibilities = lemmas.toArray();
+				// selectionne un terme parmi tous les terme sélectionné
 				Lemma mainLemma = (Lemma)JOptionPane.showInputDialog(
 				                    DisplayManager.mainFrame,
 				                    "Choisissez le lemme à conserver",
@@ -567,13 +573,16 @@ public class ApplicationManager
 				                    null,
 				                    possibilities,
 				                    lemmas.get(0));
-
+				// si le terme est different de null
 				if (mainLemma != null) 
 				{
+					// pour chacun des lemmes selectionné
 					for (LinkableElement lemma : lemmas)
 					{
+						// si le lemme courant est != du terme selectionné
 						if (lemma != mainLemma)
 						{
+							// on supprime l'element courant et tous ces liens
 							HashMap<Integer, HashMap<Relation, HashMap<LinkableElement, Link>>> relations  = lemma.getLinks();
 							for (Integer key : relations.keySet())
 							{
@@ -616,13 +625,17 @@ public class ApplicationManager
 								((LinkableElement)reference[0]).unlink(((Relation)reference[1]), lemma);
 								((LinkableElement)reference[0]).link(((Relation)reference[1]), mainLemma);
 							}
-							//int[] indexes = DisplayManager.mainFrame.getChildIndexesInTrees(lemma);
+							
 							ApplicationManager.ontology.unlink(lemma);
-							DisplayManager.mainFrame.refresh();
-							//DisplayManager.getInstance().removeElement(lemma, indexes);
+							// mise a jour de la table des lemmes
+							if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTable()!=null)
+								DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTable().updateUI();
+							if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable()!=null)
+								DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTable().updateUI();
+							
+							
 						}
 					}
-					//DisplayManager.getInstance().reloadGUI();
 				}
 				break;
 			case SCD_INDEXATION :
@@ -635,18 +648,21 @@ public class ApplicationManager
 			case LEMMA_SEARCH :
 				if (ontology != null)
 				{
-					// We check if the LinguisticPanel is Active
+					// Si la vue lemme est active
 					if(DisplayManager.mainFrame.isActive(Lemma.KEY))
 					{
+						// ouverture de la boite de dialogue correspondante
 						FindLemmaDialog lemmaSearchDialog = new FindLemmaDialog();
 						lemmaSearchDialog.setVisible(true);
 						String lcn = lemmaSearchDialog.getContainName();
+						// si la chaine n'est pas null
 						if ( lcn != null)
 						{
-							// TODO appeler la fonction de recherche qui doit se situer
-							// dans le SearchAction  ...
+							// all_lemma contient tous les lemme de l'ontology
 							ArrayList<LinkableElement> all_lemmas = ApplicationManager.ontology.get(Lemma.KEY);
+							// matching lemma contiendra tous les lemmes correpondant à la recherche
 							ArrayList<LinkableElement> matching_lemmas = new ArrayList<LinkableElement>();
+							// des qu'un lemme de la premiere liste ressemble à la recherche on le rajoute à la seconde liste
 							for(int i=0;i<all_lemmas.size();i++)
 							{
 								if(((Lemma) all_lemmas.get(i)).getName().contains(lcn))
@@ -654,6 +670,9 @@ public class ApplicationManager
 									matching_lemmas.add(all_lemmas.get(i));
 								}
 							}
+							
+							// on rempli la table des lemmes dans la vue lemme on rempli le model de la table avec search_lemma
+							// si le bas est une vue lemme
 							if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL) instanceof LinguisticPanel)
 							{
 								LinguisticPanel panel=(LinguisticPanel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL);
@@ -672,11 +691,9 @@ public class ApplicationManager
 								else
 								{
 									JOptionPane.showMessageDialog(DisplayManager.mainFrame, "Il n'y aucun terme qui correspond à "+lcn);
-									//((LemmaTableModel)panel.getTable().getModel()).setDonnees(donnees);
-									//panel.getTable().updateUI();
 								}
 							}
-							
+							// si le haut est une vue lemme
 							if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL) instanceof LinguisticPanel)
 							{
 								LinguisticPanel panel=(LinguisticPanel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL);
