@@ -3,7 +3,7 @@
  * 
  * Arkeotek Project
  */
-package ontologyEditor.gui.panels;
+package ontologyEditor.gui.panels.corpus;
 
 import info.clearthought.layout.TableLayout;
 
@@ -38,13 +38,15 @@ import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
-import ontologyEditor.gui.tables.ConceptIndexantTM;
-import ontologyEditor.gui.tables.ConceptPotentielTM;
-import ontologyEditor.gui.tables.EditorTableModel;
-import ontologyEditor.gui.tables.ImagesTM;
-import ontologyEditor.gui.tables.LinkableElementTableModel;
-import ontologyEditor.gui.tables.LinkableLemmeTM;
-import ontologyEditor.gui.tables.PotentialConceptsTableModel;
+import ontologyEditor.gui.panels.AbstractNavigationPanel;
+import ontologyEditor.gui.panels.linguistic.LinguisticNavigationPanel;
+import ontologyEditor.gui.tableModel.ConceptIndexantTM;
+import ontologyEditor.gui.tableModel.ConceptPotentielTM;
+import ontologyEditor.gui.tableModel.EditorTableModel;
+import ontologyEditor.gui.tableModel.ImagesTM;
+import ontologyEditor.gui.tableModel.LinkableElementTableModel;
+import ontologyEditor.gui.tableModel.LinkableLemmeTM;
+import ontologyEditor.gui.tableModel.PotentialConceptsTableModel;
 import ontologyEditor.gui.transfers.ConceptDropTransferHandler;
 import ontologyEditor.gui.transfers.ConceptIndexingDragTranferHandler;
 import ontologyEditor.gui.transfers.TransferableConcept;

@@ -3,7 +3,7 @@
  * 
  * Arkeotek Project
  */
-package ontologyEditor.gui.panels;
+package ontologyEditor.gui.panels.corpus;
 
 import java.awt.event.MouseEvent;
 
@@ -12,7 +12,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.dialogs.popup.PopupArbreDocument;
+import ontologyEditor.gui.dialogs.popup.PopupDocumentPartTree;
+import ontologyEditor.gui.panels.AbstractPanel;
 import ontologyEditor.gui.treeviews.CorpusTM;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.LinkableElement;
@@ -58,7 +59,7 @@ public class CorpusPanel extends AbstractPanel {
 							}
 							else if (e.getButton()==MouseEvent.BUTTON3)
 							{
-								PopupArbreDocument popup=new PopupArbreDocument(document);
+								PopupDocumentPartTree popup=new PopupDocumentPartTree(document);
 								e.consume();
 								// afficher le menu contextuel
 								popup.show(this, e.getX(), e.getY());
@@ -86,7 +87,7 @@ public class CorpusPanel extends AbstractPanel {
 							}
 							else if (e.getButton()==MouseEvent.BUTTON3)
 							{
-								PopupArbreDocument popup=new PopupArbreDocument(document);
+								PopupDocumentPartTree popup=new PopupDocumentPartTree(document);
 								e.consume();
 								// afficher le menu contextuel
 								popup.show(this, e.getX(), e.getY());

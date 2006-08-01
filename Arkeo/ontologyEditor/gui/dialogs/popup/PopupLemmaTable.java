@@ -18,7 +18,7 @@ import arkeotek.ontology.LinkableElement;
  * affiche le popup relatif à la table des lemmes
  */
 
-public class PopupTableLemme extends JPopupMenu implements ActionListener{
+public class PopupLemmaTable extends JPopupMenu implements ActionListener{
 
 	private JMenuItem fusion;
 	private JMenuItem recherche;
@@ -26,7 +26,7 @@ public class PopupTableLemme extends JPopupMenu implements ActionListener{
 	private JMenuItem supprimer;
 	private JTable table;
 	
-	public PopupTableLemme(JTable table) {
+	public PopupLemmaTable(JTable table) {
 		this.table=table;
 		if (table.getSelectedRowCount()>1)
 		{

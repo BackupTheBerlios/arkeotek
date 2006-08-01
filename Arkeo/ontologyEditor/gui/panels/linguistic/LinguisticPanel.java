@@ -3,15 +3,16 @@
  * 
  * Arkeotek Project
  */
-package ontologyEditor.gui.panels;
+package ontologyEditor.gui.panels.linguistic;
 
 import java.awt.event.MouseEvent;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.dialogs.popup.PopupTableLemme;
-import ontologyEditor.gui.tables.LemmaTableModel;
-import ontologyEditor.gui.tables.LinkableElementTable;
+import ontologyEditor.gui.dialogs.popup.PopupLemmaTable;
+import ontologyEditor.gui.panels.AbstractPanel;
+import ontologyEditor.gui.tableModel.LemmaTableModel;
+import ontologyEditor.gui.tableModel.LinkableElementTable;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 
@@ -42,7 +43,7 @@ public class LinguisticPanel extends AbstractPanel {
 			}
 			else if (e.getButton()==MouseEvent.BUTTON3)
 			{
-				PopupTableLemme popup=new PopupTableLemme(this.getTable());
+				PopupLemmaTable popup=new PopupLemmaTable(this.getTable());
 				e.consume();
 				// afficher le menu contextuel
 				popup.show(this, e.getX(), e.getY());

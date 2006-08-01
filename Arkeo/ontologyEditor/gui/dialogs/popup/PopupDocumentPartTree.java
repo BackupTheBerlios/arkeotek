@@ -29,14 +29,14 @@ import arkeotek.ontology.Relation;
  * affiche le popup relatif à l'arbre des documents
  */
 
-public class PopupArbreDocument extends JPopupMenu implements ActionListener{
+public class PopupDocumentPartTree extends JPopupMenu implements ActionListener{
 
 	private JMenuItem id;
 	private JMenuItem seq;
 	private JMenuItem indexer;
 	private LinkableElement document;
 	
-	public PopupArbreDocument(LinkableElement document) {
+	public PopupDocumentPartTree(LinkableElement document) {
 		this.document=document;
 		
 		this.id = new JMenuItem ("Vue Identifiant") ;

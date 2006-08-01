@@ -3,7 +3,7 @@
  * 
  * Arkeotek Project
  */
-package ontologyEditor.gui.panels;
+package ontologyEditor.gui.panels.edition;
 
 import javax.swing.Icon;
 import javax.swing.JTextField;

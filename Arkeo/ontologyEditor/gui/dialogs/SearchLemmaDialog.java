@@ -28,7 +28,7 @@ import ontologyEditor.DisplayManager;
  * @author Nouhen Hubert
  *
  */
-public class FindLemmaDialog extends JDialog  implements ActionListener, PropertyChangeListener
+public class SearchLemmaDialog extends JDialog  implements ActionListener, PropertyChangeListener
 {
 	private JFrame frame;
 	   
@@ -46,7 +46,7 @@ public class FindLemmaDialog extends JDialog  implements ActionListener, Propert
 	private JButton cancel_button = new JButton(CANCEL_CAPTION);
 
 
-	public FindLemmaDialog()
+	public SearchLemmaDialog()
 	{
 		this(DisplayManager.mainFrame);
 	}
@@ -54,7 +54,7 @@ public class FindLemmaDialog extends JDialog  implements ActionListener, Propert
  	/**
 	 * @param frame The <code>JFrame</code> holding this <code>JPanel</code>. 
 	 */
-	private FindLemmaDialog(JFrame frame)
+	private SearchLemmaDialog(JFrame frame)
 	{
         super(frame, "Recherche d'un Lemme", true);
         this.frame = frame;
@@ -88,7 +88,7 @@ public class FindLemmaDialog extends JDialog  implements ActionListener, Propert
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				FindLemmaDialog.this.validateInput();
+				SearchLemmaDialog.this.validateInput();
 			}
 		});
 		this.add(this.search_button, "3, 3, 3, 3");
@@ -103,7 +103,7 @@ public class FindLemmaDialog extends JDialog  implements ActionListener, Propert
 					@Override
 					public void mouseClicked(MouseEvent e)
 					{
-						FindLemmaDialog.this.cancelInput();
+						SearchLemmaDialog.this.cancelInput();
 					}
 				});
 		this.add(this.cancel_button, "1, 3, 1, 3");

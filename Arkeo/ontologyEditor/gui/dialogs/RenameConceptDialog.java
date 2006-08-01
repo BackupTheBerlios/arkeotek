@@ -20,7 +20,7 @@ import arkeotek.ontology.LinkableElement;
  * @author sanmartin
  * renomme le nom d'un concept
  */
-public class FenetreRenommerConcept extends JDialog implements ActionListener {
+public class RenameConceptDialog extends JDialog implements ActionListener {
 
 	private JFrame frame;
 	   
@@ -38,7 +38,7 @@ public class FenetreRenommerConcept extends JDialog implements ActionListener {
 	private JButton cancel_button = new JButton(CANCEL_CAPTION);
 
 
-	public FenetreRenommerConcept(LinkableElement concept)
+	public RenameConceptDialog(LinkableElement concept)
 	{
 		this(DisplayManager.mainFrame,concept);
 	}
@@ -46,7 +46,7 @@ public class FenetreRenommerConcept extends JDialog implements ActionListener {
  	/**
 	 * @param frame The <code>JFrame</code> holding this <code>JPanel</code>. 
 	 */
-	private FenetreRenommerConcept(JFrame frame,LinkableElement concept)
+	private RenameConceptDialog(JFrame frame,LinkableElement concept)
 	{
         super(frame, "Renommer le concept", true);
         this.frame = frame;
@@ -80,7 +80,7 @@ public class FenetreRenommerConcept extends JDialog implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				FenetreRenommerConcept.this.validateInput();
+				RenameConceptDialog.this.validateInput();
 			}
 		});
 		this.add(this.search_button, "1, 3, 1, 3");
@@ -95,7 +95,7 @@ public class FenetreRenommerConcept extends JDialog implements ActionListener {
 					@Override
 					public void mouseClicked(MouseEvent e)
 					{
-						FenetreRenommerConcept.this.cancelInput();
+						RenameConceptDialog.this.cancelInput();
 					}
 				});
 		this.add(this.cancel_button, "3, 3, 3, 3");

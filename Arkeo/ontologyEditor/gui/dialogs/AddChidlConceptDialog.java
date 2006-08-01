@@ -25,7 +25,7 @@ import arkeotek.ontology.Relation;
  * @author sanmartin
  * fenetre relative à l'ajout d'un concept fils à conceptSource
  */
-public class FenetreAjouterConceptFils extends JDialog implements ActionListener {
+public class AddChidlConceptDialog extends JDialog implements ActionListener {
 
 	private JFrame frame;
 	   
@@ -44,7 +44,7 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 	private int panel;
 
 
-	public FenetreAjouterConceptFils(LinkableElement concept, int panel)
+	public AddChidlConceptDialog(LinkableElement concept, int panel)
 	{
 		this(DisplayManager.mainFrame,concept,panel);
 	}
@@ -52,7 +52,7 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
  	/**
 	 * @param frame The <code>JFrame</code> holding this <code>JPanel</code>. 
 	 */
-	private FenetreAjouterConceptFils(JFrame frame,LinkableElement concept,int panel)
+	private AddChidlConceptDialog(JFrame frame,LinkableElement concept,int panel)
 	{
         super(frame, "Ajouter un fils au concept", true);
         this.panel=panel;
@@ -88,7 +88,7 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 			public void mouseClicked(MouseEvent e)
 			{
 				// quand on clique sur Ajouter
-				FenetreAjouterConceptFils.this.validateInput();
+				AddChidlConceptDialog.this.validateInput();
 			}
 		});
 		this.add(this.search_button, "1, 3, 1, 3");
@@ -103,7 +103,7 @@ public class FenetreAjouterConceptFils extends JDialog implements ActionListener
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				FenetreAjouterConceptFils.this.cancelInput();
+				AddChidlConceptDialog.this.cancelInput();
 			}
 		});
 		this.add(this.cancel_button, "3, 3, 3, 3");

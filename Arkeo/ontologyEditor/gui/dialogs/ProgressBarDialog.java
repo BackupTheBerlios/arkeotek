@@ -16,7 +16,7 @@ import javax.swing.JProgressBar;
  * @author Czerny Jean
  *
  */
-public class FenetreBarreProgression extends JDialog
+public class ProgressBarDialog extends JDialog
 {
 
 	Thread thread;
@@ -27,7 +27,7 @@ public class FenetreBarreProgression extends JDialog
 	 * @param modal
 	 * @throws HeadlessException
 	 */
-	public FenetreBarreProgression(Frame owner, String title, boolean modal) throws HeadlessException
+	public ProgressBarDialog(Frame owner, String title, boolean modal) throws HeadlessException
 	{
 		super(owner, title, modal);
 		JProgressBar progressBar = new JProgressBar();
@@ -44,7 +44,7 @@ public class FenetreBarreProgression extends JDialog
 		this.thread = new Thread()
 		{public void run()
 		{
-			FenetreBarreProgression.this.setVisible(true);
+			ProgressBarDialog.this.setVisible(true);
 		}
 		}
 		;

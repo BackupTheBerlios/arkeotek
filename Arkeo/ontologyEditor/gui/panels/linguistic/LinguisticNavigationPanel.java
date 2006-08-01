@@ -3,7 +3,7 @@
  * 
  * Arkeotek Project
  */
-package ontologyEditor.gui.panels;
+package ontologyEditor.gui.panels.linguistic;
 
 import info.clearthought.layout.TableLayout;
 
@@ -38,13 +38,13 @@ import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
-import ontologyEditor.gui.dialogs.DocumentPartToLemme;
-import ontologyEditor.gui.tables.ConceptLemmeTM;
-import ontologyEditor.gui.tables.EditorTableModel;
-import ontologyEditor.gui.tables.LemmaParentTM;
-import ontologyEditor.gui.tables.LinesTableModel;
-import ontologyEditor.gui.tables.LinkableElementTableModel;
-import ontologyEditor.gui.tables.LinkableLemmeTM;
+import ontologyEditor.gui.panels.AbstractNavigationPanel;
+import ontologyEditor.gui.tableModel.ConceptLemmeTM;
+import ontologyEditor.gui.tableModel.EditorTableModel;
+import ontologyEditor.gui.tableModel.LemmaParentTM;
+import ontologyEditor.gui.tableModel.LinesTableModel;
+import ontologyEditor.gui.tableModel.LinkableElementTableModel;
+import ontologyEditor.gui.tableModel.LinkableLemmeTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -60,7 +60,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 {
 	//private JTable appearancesTable;
 	
-	private JButton voirDoc;
+	//private JButton voirDoc;
 	
 	private JTable linkedLemmasTable;
 	
@@ -249,7 +249,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		
 		
 		
-		this.voirDoc = new JButton("Documents associés");
+		//this.voirDoc = new JButton("Documents associés");
 		/*if (ApplicationManager.ontology!=null)
 		{
 			final LinkableElement elem=;
@@ -290,14 +290,14 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 	{
 		//((EditorTableModel) (this.appearancesTable.getModel())).setElement(element);
 		final LinkableElement elem=element;
-		this.voirDoc.addMouseListener(new MouseAdapter(){
+		/*this.voirDoc.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				DocumentPartToLemme fen = new DocumentPartToLemme(DisplayManager.mainFrame,elem);
 				fen.setVisible(true);
 			}
-		});
+		});*/
 		((EditorTableModel) (this.linkedLemmasTable.getModel())).setElement(element);
 		((EditorTableModel) (this.lemmasParentsTable.getModel())).setElement(element);
 		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element));
@@ -660,14 +660,14 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		}
 		this.updateUI();
 		final LinkableElement elem=lemme;
-		this.voirDoc.addMouseListener(new MouseAdapter(){
+		/*this.voirDoc.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				DocumentPartToLemme fen = new DocumentPartToLemme(DisplayManager.mainFrame,elem);
 				fen.setVisible(true);
 			}
-		});
+		});*/
 	}
 
 	public void remplirTableConcept(LinkableElement lemme) {

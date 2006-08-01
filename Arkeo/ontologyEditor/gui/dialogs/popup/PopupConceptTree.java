@@ -10,8 +10,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.dialogs.FenetreAjouterConceptFils;
-import ontologyEditor.gui.dialogs.FenetreRenommerConcept;
+import ontologyEditor.gui.dialogs.AddChidlConceptDialog;
+import ontologyEditor.gui.dialogs.RenameConceptDialog;
 import arkeotek.ontology.LinkableElement;
 
 /**
@@ -19,7 +19,7 @@ import arkeotek.ontology.LinkableElement;
  * permet d'afficher le popup lié à l'arbre des concepts
  */
 
-public class PopupArbreConcept extends JPopupMenu implements ActionListener{
+public class PopupConceptTree extends JPopupMenu implements ActionListener{
 
 	private JMenuItem ajouter;
 	private JMenuItem supprimer;
@@ -27,7 +27,7 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 	private LinkableElement concept;
 	private int panel;
 	
-	public PopupArbreConcept(LinkableElement concept, int panel) {
+	public PopupConceptTree(LinkableElement concept, int panel) {
 		this.concept=concept;
 		this.panel=panel;
 		this.renommer = new JMenuItem ("Renommer le concept") ;
@@ -48,7 +48,7 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 		// si on renomme ouverture d'une fenetre
 		if (source == this.renommer)
 		{
-			FenetreRenommerConcept fsc=new FenetreRenommerConcept(this.concept);
+			RenameConceptDialog fsc=new RenameConceptDialog(this.concept);
 			fsc.show();
 		}
 		//sinon on supprime un concept 
@@ -73,7 +73,7 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 		// si on ajoute un concept
 		else if (source== this.ajouter)
 		{
-			FenetreAjouterConceptFils fsc=new FenetreAjouterConceptFils(this.concept,panel);
+			AddChidlConceptDialog fsc=new AddChidlConceptDialog(this.concept,panel);
 			fsc.show();
 		}
 	}

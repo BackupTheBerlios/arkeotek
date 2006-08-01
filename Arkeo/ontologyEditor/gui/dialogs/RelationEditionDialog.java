@@ -32,7 +32,7 @@ import ontologyEditor.gui.tableModel.RelationsEditorTableModel;
  * @author Czerny Jean
  *
  */
-public class FenetreEditionRelation extends JDialog  implements ItemListener
+public class RelationEditionDialog extends JDialog  implements ItemListener
 {
 	private JFrame frame;
 	private JScrollPane borderedPane;
@@ -49,12 +49,12 @@ public class FenetreEditionRelation extends JDialog  implements ItemListener
 	
 	private int currentList = 0;
 	
-	public FenetreEditionRelation()
+	public RelationEditionDialog()
 	{
 		this(DisplayManager.mainFrame);
 	}
 
-	private FenetreEditionRelation(JFrame frame)
+	private RelationEditionDialog(JFrame frame)
 	{
         super(frame, ApplicationManager.getApplicationManager().getTraduction("relationseditor"), true);
         this.frame = frame;
@@ -103,7 +103,7 @@ public class FenetreEditionRelation extends JDialog  implements ItemListener
 		{
 			public void mouseClicked(MouseEvent e)
 			{
-				FenetreEditionRelation.this.validateInput();
+				RelationEditionDialog.this.validateInput();
 			}
 		});
 
@@ -127,7 +127,7 @@ public class FenetreEditionRelation extends JDialog  implements ItemListener
 		{
 			public void mouseClicked(MouseEvent e)
 			{
-				FenetreEditionRelation.this.addInput();
+				RelationEditionDialog.this.addInput();
 			}
 		});
 		
@@ -137,7 +137,7 @@ public class FenetreEditionRelation extends JDialog  implements ItemListener
 		{
 			public void mouseClicked(MouseEvent e)
 			{
-				FenetreEditionRelation.this.delInput();
+				RelationEditionDialog.this.delInput();
 			}
 		});
 		

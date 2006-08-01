@@ -31,10 +31,10 @@ import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
-import ontologyEditor.gui.renderer.DocumentPartTreeRenderer;
-import ontologyEditor.gui.renderer.LemmaTableRenderer;
-import ontologyEditor.gui.tables.LemmaTableModel;
-import ontologyEditor.gui.tables.LinkableElementTable;
+import ontologyEditor.gui.tableModel.LemmaTableModel;
+import ontologyEditor.gui.tableModel.LinkableElementTable;
+import ontologyEditor.gui.tableRenderer.DocumentPartTreeRenderer;
+import ontologyEditor.gui.tableRenderer.LemmaTableRenderer;
 import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
 import ontologyEditor.gui.treeviews.AbstractTM;
 import ontologyEditor.gui.treeviews.AbstractTreeModel;

@@ -42,7 +42,7 @@ import arkeotek.io.db.Service;
  * @author Czerny Jean
  *
  */
-public class FenetreNouvelleOntologie extends JDialog  implements ActionListener, PropertyChangeListener
+public class NewOntologyDialog extends JDialog  implements ActionListener, PropertyChangeListener
 {
 	private JFrame frame;
 	   
@@ -73,7 +73,7 @@ public class FenetreNouvelleOntologie extends JDialog  implements ActionListener
 	/**
 	 * 
 	 */
-	public FenetreNouvelleOntologie()
+	public NewOntologyDialog()
 	{
 		this(DisplayManager.mainFrame);
 	}
@@ -81,7 +81,7 @@ public class FenetreNouvelleOntologie extends JDialog  implements ActionListener
  	/**
 	 * @param frame The <code>JFrame</code> holding this <code>JPanel</code>. 
 	 */
-	private FenetreNouvelleOntologie(JFrame frame)
+	private NewOntologyDialog(JFrame frame)
 	{
         super(frame, "Cr\u00e9ation d'une ontologie", true);
         this.frame = frame;
@@ -149,7 +149,7 @@ public class FenetreNouvelleOntologie extends JDialog  implements ActionListener
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				FenetreNouvelleOntologie.this.validateInput();
+				NewOntologyDialog.this.validateInput();
 			}
 		});
 		this.add(this.validate_button, "3, 16, 3, 13");
@@ -161,7 +161,7 @@ public class FenetreNouvelleOntologie extends JDialog  implements ActionListener
 					@Override
 					public void mouseClicked(MouseEvent e)
 					{
-						FenetreNouvelleOntologie.this.cancelInput();
+						NewOntologyDialog.this.cancelInput();
 					}
 				});
 		this.add(this.cancel_button, "1, 16, 1, 13");
