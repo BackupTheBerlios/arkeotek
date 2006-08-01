@@ -20,6 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -30,15 +31,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.TransferHandler;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
+import ontologyEditor.gui.renderer.LemmaTableRenderer;
+import ontologyEditor.gui.renderer.LemmeEditionRenderer;
 import ontologyEditor.gui.tables.EditorTableModel;
 import ontologyEditor.gui.tables.HighEditorPaneTM;
 import ontologyEditor.gui.tables.SecondEditorPaneTM;
@@ -46,6 +52,7 @@ import ontologyEditor.gui.transfers.ConceptDropTransferHandler;
 import ontologyEditor.gui.transfers.LemmaDropTransferHandler;
 import ontologyEditor.gui.transfers.TransferableConcept;
 import ontologyEditor.gui.transfers.TransferableLemma;
+import ontologyEditor.gui.treeviews.ConceptualTM;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -157,8 +164,8 @@ public class EditionPanel extends JPanel
 		tableBasModel.setColumnNames(titreHaut);
 		
 		this.rightEditionTable.setModel(tableBasModel);
-		this.rightEditionTable.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
-		this.rightEditionTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
+		this.rightEditionTable.setDefaultRenderer(Object.class, new LemmeEditionRenderer());
+		//this.rightEditionTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		this.rightEditionTable.setTransferHandler(new LemmaDropTransferHandler());
 		this.rightEditionTable.addKeyListener(new KeyAdapter() {
 	        public void keyPressed(KeyEvent evt) {
@@ -285,7 +292,78 @@ public class EditionPanel extends JPanel
 							LinkableElement element = (LinkableElement)EditionPanel.this.parentsEditionTable.getValueAt(((JTable)evt.getSource()).getSelectedRow(),1);
 							//int[] indexes = DisplayManager.mainFrame.getChildIndexesInTrees(element);
 							try {
-								ApplicationManager.ontology.unlinkElement(element);
+								// quand on appuie sur le bouton supprimer on retire le lien entre les deux concepts puis on met a jour l'arbre
+								// cad on retire le noeud fils et on le place sous le noeud racine
+								
+								if (courant instanceof Concept)
+								{
+									ArrayList<Object[]>parents=ApplicationManager.ontology.getParentsOf(element,Concept.KEY);
+									for (Object[] parent:parents)
+									{
+										for (int i=0;i<parent.length;i++)
+										{
+											if (parent[i].toString().equals(this.courant.toString()))
+											{
+												element.unlink((Relation)parent[0],(LinkableElement)parent[1]);
+												((LinkableElement)parent[1]).unlink((Relation)parent[0],element);
+											}
+										}
+									}
+									if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel() instanceof ConceptualTM)
+									{
+										JTree arbreConcept=DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree();
+										arbreConcept.updateUI();
+										DefaultMutableTreeNode noeudPere=(DefaultMutableTreeNode)arbreConcept.getLastSelectedPathComponent();
+										Enumeration child=noeudPere.children();
+										for (int i=0;i<noeudPere.getChildCount();i++)
+										{
+											DefaultMutableTreeNode noeud=(DefaultMutableTreeNode)child.nextElement();
+											
+											if (noeud.toString().equals(element.toString()))
+											{
+												((ConceptualTM)arbreConcept.getModel()).getRacine().add(noeud);
+												//noeudPere.remove(i);
+											}
+										}
+										arbreConcept.updateUI();
+									}
+									if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().getModel() instanceof ConceptualTM)
+									{
+										JTree arbreConcept=DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree();
+										arbreConcept.updateUI();
+										DefaultMutableTreeNode noeudPere=(DefaultMutableTreeNode)arbreConcept.getLastSelectedPathComponent();
+										Enumeration child=noeudPere.children();
+										for (int i=0;i<noeudPere.getChildCount();i++)
+										{
+											DefaultMutableTreeNode noeud=(DefaultMutableTreeNode)child.nextElement();
+											
+											if (noeud.toString().equals(element.toString()))
+											{
+												((ConceptualTM)arbreConcept.getModel()).getRacine().add(noeud);
+												//noeudPere.remove(i);
+											}
+										}
+										arbreConcept.updateUI();
+									}
+								}
+								else if ((courant instanceof Lemma) || (courant instanceof DocumentPart))
+								{
+									ArrayList<Object[]>parents=ApplicationManager.ontology.getElementsThatReference(element);
+									for (Object[] parent:parents)
+									{
+										for (int i=0;i<parent.length;i++)
+										{
+											System.out.println(parent[0]+"     "+parent[1]);
+											if (parent[i].toString().equals(this.courant.toString()))
+											{
+												element.unlink((Relation)parent[1],courant);
+												courant.unlink((Relation)parent[1],element);
+											}
+										}
+									}
+								}
+								
+								
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
@@ -297,7 +375,20 @@ public class EditionPanel extends JPanel
 							LinkableElement element = (LinkableElement)EditionPanel.this.rightEditionTable.getValueAt(((JTable)evt.getSource()).getSelectedRow(),1);
 							//int[] indexes = DisplayManager.mainFrame.getChildIndexesInTrees(element);
 							try {
-								ApplicationManager.ontology.unlinkElement(element);
+
+							ArrayList<Object[]>parents=ApplicationManager.ontology.getElementsThatReference(element);
+							for (Object[] parent:parents)
+							{
+								for (int i=0;i<parent.length;i++)
+								{
+									if (parent[i].toString().equals(this.courant.toString()))
+									{
+										element.unlink((Relation)parent[1],courant);
+										courant.unlink((Relation)parent[1],element);
+									}
+								}
+							}
+								
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
@@ -334,14 +425,12 @@ public class EditionPanel extends JPanel
 			{
 				rightEditionTable.removeAll();
 				Object [][] donnees=new Object[0][2];
-				//System.out.println(parentsEditionTable.getModel().getClass());
 				((SecondEditorPaneTM)rightEditionTable.getModel()).setDonnees(donnees);
 			}
 			if(parentsEditionTable.getRowCount()!=0)
 			{
 				parentsEditionTable.removeAll();
 				Object [][] donnees=new Object[0][2];
-				//System.out.println(parentsEditionTable.getModel().getClass());
 				((HighEditorPaneTM)parentsEditionTable.getModel()).setDonnees(donnees);
 			}
 			this.updateUI();
@@ -408,13 +497,11 @@ public class EditionPanel extends JPanel
 				donnees[i][0]=(elements.get(i)[0]);
 				donnees[i][1]=(elements.get(i)[1]);
 			}
-			//System.out.println(parentsEditionTable.getModel().getClass());
 			((SecondEditorPaneTM)rightEditionTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			//System.out.println(parentsEditionTable.getModel().getClass());
 			((SecondEditorPaneTM)rightEditionTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
@@ -436,7 +523,10 @@ public class EditionPanel extends JPanel
 					for (LinkableElement linkedElem : tmp)
 					{
 						link = new Object[2];
-						link[0] = key;
+						if (element instanceof Concept)
+							link[0] = "est "+key+" par";
+						else
+							link[0]=key;
 						link[1] = linkedElem;
 						elements.add(link);
 					}
@@ -454,13 +544,11 @@ public class EditionPanel extends JPanel
 				donnees[i][0]=(elements.get(i)[0]);
 				donnees[i][1]=(elements.get(i)[1]);
 			}
-			//System.out.println(parentsEditionTable.getModel().getClass());
 			((HighEditorPaneTM)parentsEditionTable.getModel()).setDonnees(donnees);
 		}
 		else
 		{
 			Object [][] donnees=new Object[0][2];
-			//System.out.println(parentsEditionTable.getModel().getClass());
 			((HighEditorPaneTM)parentsEditionTable.getModel()).setDonnees(donnees);
 		}
 		this.updateUI();
@@ -600,21 +688,6 @@ public class EditionPanel extends JPanel
 		//custom.setHorizontalAlignment(JLabel.CENTER);
 		try {
 			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_CONCEPT_ICON));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		table.getColumnModel().getColumn(1).setCellRenderer(custom);
-	}
-	
-	private void rendererTableLemme(JTable table) {     
-		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
-		//DefaultTableCellRenderer custom2 = new DefaultTableCellRenderer();
-		//custom2.setHorizontalAlignment(JLabel.CENTER);
-		//custom.setHorizontalAlignment(JLabel.CENTER);
-		try {
-			custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_LEMMA_ICON));
-			//custom.setIcon(ImagesManager.getInstance().getIcon(Constants.DEFAULT_DOCUMENTPART_ICON));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

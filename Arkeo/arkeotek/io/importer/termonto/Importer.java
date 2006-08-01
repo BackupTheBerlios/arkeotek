@@ -209,7 +209,6 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 				{
 					if (temp_doc!=null)
 					{
-						System.out.println(temp_doc + " " + temp_lemma);
 						Relation temp_rel;
 						int position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(Relation.DEFAULT_LEMMA_DOCUMENTPART_RELATION,Relation.RELATION_TERME_DOCUMENT));
 						temp_rel = (Relation) this.owner.get(Relation.KEY).get(position);
@@ -465,6 +464,5 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 		Ontology owner = new Ontology("sdfkl");
 		Importer termonto = new Importer(owner, "D:\\Travail\\Stages\\Arkeotek\\Termonto\\");
 		termonto.performImport();
-		System.out.println("END");
 	}
 }

@@ -46,15 +46,12 @@ public class LinguisticTreeModel extends AbstractTreeModel
 	 */
 	public Object getChild(Object parent, int index)
 	{
-		//System.out.println("lemmes! "+ApplicationManager.ontology.get(Lemma.KEY));
 		Object elem = null;
 		if (parent instanceof String) {
 			if (this.letters_index.get(parent) == null)
 				this.getSortedElements((String) parent);
-			//System.out.println("getChild "+index+" "+parent+" "+this.letters_index.get(parent)[0]+" "+this.letters_index.get(parent)[1]);
 			if (!parent.equals("..."))
 				return this.getRoot().get(this.getModelCategory()).get(index + this.letters_index.get(parent)[0].intValue());
-			//System.out.println("parent is "+parent);
 			return this.getRoot().get(this.getModelCategory()).get(index);
 		}
 		else if (((LinkableElement) parent).getCategoryKey() == this.getModelCategory())
@@ -339,17 +336,13 @@ public class LinguisticTreeModel extends AbstractTreeModel
 		ArrayList<String> keys = new ArrayList<String>();
 		keys.addAll(this.letters_index.keySet());
 		Collections.sort(keys);
-		//System.out.println(keys);
 		for (int elemIndex = keys.indexOf(elem); elemIndex < keys.size(); elemIndex++)
 		{
-			//System.out.println("indice before "+elemIndex+" "+this.letters_index.get(keys.get(elemIndex))[0]+" "+this.letters_index.get(keys.get(elemIndex))[1]);
 			this.letters_index.get(keys.get(elemIndex))[0]+=increment;
 			if (increment < 0 || elemIndex != keys.indexOf(elem))
 				this.letters_index.get(keys.get(elemIndex))[1]+=increment;
-			//System.out.println("indice after "+elemIndex+" "+this.letters_index.get(keys.get(elemIndex))[0]+" "+this.letters_index.get(keys.get(elemIndex))[1]);
-		}
+			}
 		this.letters_index.get(keys.get(keys.indexOf(elem)))[0]-=increment;
-		//System.out.println("lemmes! "+ApplicationManager.ontology.get(Lemma.KEY));
 	}
 	
 }

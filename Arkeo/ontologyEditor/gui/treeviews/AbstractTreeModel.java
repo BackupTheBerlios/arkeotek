@@ -153,30 +153,24 @@ public abstract class AbstractTreeModel implements TreeModel
 	 * @param childIndices 
 	 * @param children 
 	 */
-	protected void fireTreeStructureChanged(Object source, Object[] path, 
-            int[] childIndices, 
-            Object[] children) 
+	protected void fireTreeStructureChanged(Object source, Object[] path,int[] childIndices, Object[] children) 
 	{
-		System.out.println("fireTreeStructureChanged");
-		/*if (getChildCount(path[path.length-1]) > 0)
-		{*/
-			// Guaranteed to return a non-null array
-			Object[] listeners = this.listenerList.getListenerList();
-			TreeModelEvent e = null;
-			// Process the listeners last to first, notifying
-			// those that are interested in this event
-			for (int i = listeners.length-2; i>=0; i-=2) 
+		// Guaranteed to return a non-null array
+		Object[] listeners = this.listenerList.getListenerList();
+		TreeModelEvent e = null;
+		// Process the listeners last to first, notifying
+		// those that are interested in this event
+		for (int i = listeners.length-2; i>=0; i-=2) 
+		{
+			if (listeners[i]==TreeModelListener.class) 
 			{
-				if (listeners[i]==TreeModelListener.class) 
-				{
-					// Lazily create the event:
-					if (e == null)
-					e = new TreeModelEvent(source, path, 
-					               childIndices, children);
-					((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
-				}          
-			}
-		//}
+				// Lazily create the event:
+				if (e == null)
+				e = new TreeModelEvent(source, path, 
+				               childIndices, children);
+				((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
+			}          
+		}
 	}
 	
 	/**
@@ -215,7 +209,6 @@ public abstract class AbstractTreeModel implements TreeModel
 	 */
 	public void fireTreeNodesAdded(LinkableElement element)
     {
-		System.out.println("fireTreeStructureAdded");
         Object[] listeners = this.listenerList.getListenerList();
         TreeModelEvent treeModelEvent = null;
 

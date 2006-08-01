@@ -71,79 +71,6 @@ public class Service implements IService
 		if (this.owner == null) this.owner = owner;
 	}
 
-	/**
-	 * Saves the IIndexable element specified in <code>object</code> from the database.
-	 * @param object The <code>LinkableElement</code> to be saved. 
-	 * @throws Exception 
-	 * @see arkeotek.io.IService#save(arkeotek.ontology.LinkableElement)
-	 */
-	// jamais utilisé
-	/*
-	public void save(LinkableElement object) throws Exception
-	{
-		System.out.println("deja sauvé");
-		Transaction transaction;
-		transaction = new Transaction(this, !Transaction.AUTOCOMMIT);
-		DTO dto = new DTO(transaction, object);
-
-		if (object instanceof Concept)
-		{
-			if (object.getId() == LinkableElement.NEW_ELEMENT_ID)
-			{
-				// creation in database
-				IOPerformer.createConcept(dto);
-			}
-			else
-			{
-				// update in database
-				IOPerformer.updateConcept(dto);
-			}
-		}
-		else if (object instanceof Lemma)
-		{
-			if (object.getId() == LinkableElement.NEW_ELEMENT_ID)
-			{
-				// creation in database
-				IOPerformer.createTerm(dto);
-			}
-			else
-			{
-				// update in database
-				IOPerformer.updateTerm(dto);
-			}
-		}
-		else if (object instanceof DocumentPart)
-		{
-			if (object.getId() == LinkableElement.NEW_ELEMENT_ID)
-			{
-				// creation in database
-				IOPerformer.createDocElem(dto);
-			}
-			else
-			{
-				// update in database
-				IOPerformer.updateDocElem(dto);
-			}
-		}
-		else if (object instanceof Relation)
-		{
-				if (object.getId() == LinkableElement.NEW_ELEMENT_ID)
-				{
-					// creation in database
-					IOPerformer.createRelation(dto);
-				}
-				else
-				{
-					// update in database
-					IOPerformer.updateRelation(dto);
-				}
-		}
-			// links with ontology
-			saveLinks(dto);
-			transaction.commit();
-			object.setSaved();
-	}
-	*/
 	
 	private void saveLinks(DTO dto) throws SQLException
 	{
@@ -217,7 +144,6 @@ public class Service implements IService
 			
 			for (LinkableElement object : list)
 			{
-				System.out.println(object.getName());
 				dto = new DTO(transaction, object);
 				if (object instanceof Concept)
 				{

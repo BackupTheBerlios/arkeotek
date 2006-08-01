@@ -607,7 +607,6 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		elements=ApplicationManager.ontology.getLemmasParents(lemme);
 		if (elements.size()!=0)
 		{
-			System.out.println(elements.size());
 			Object [][] donnees=new Object[elements.size()][2];
 			for (int i=0;i<elements.size();i++)
 			{
@@ -735,7 +734,6 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 	public void remplirTableDocumentParent(LinkableElement lemme)
 	{
 		document.removeAll();
-		//System.out.println("model : "+((LinesTableModel)document.getModel()).getDonnees());
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		elements=getElementsFromLinkableElement(lemme);
 		if (elements.size()!=0)

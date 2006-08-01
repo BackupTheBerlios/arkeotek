@@ -62,6 +62,7 @@ public class PopupArbreConcept extends JPopupMenu implements ActionListener{
 					ApplicationManager.ontology.unlinkElement(concept);
 					DefaultMutableTreeNode courant=((DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(0).getTree().getLastSelectedPathComponent());
 					courant.removeFromParent();
+					DisplayManager.mainFrame.getPanel(panel).getTree().removeSelectionPath(DisplayManager.mainFrame.getPanel(panel).getTree().getSelectionPath());
 					DisplayManager.mainFrame.getPanel(panel).getTree().updateUI();
 					
 				} catch (Exception e1) {

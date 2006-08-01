@@ -168,7 +168,6 @@ public class CorpusTM extends AbstractTM {
 				racine.add(courant);
 			}
 		}
-		//System.out.println(DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel());
 		if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree()!=null)
 		{
 			if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel() instanceof CorpusTM)

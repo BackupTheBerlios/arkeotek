@@ -157,7 +157,6 @@ public class RelationsEditorTableModel extends EditorTableModel
 			{
 				// on change l'id de la Relation
 				( (Relation) this.relations.get(rowIndex)).setToDel();
-				System.out.println(( (Relation) this.relations.get(rowIndex)).getId());
 				this.relations.remove(rowIndex);
 			}
 		}

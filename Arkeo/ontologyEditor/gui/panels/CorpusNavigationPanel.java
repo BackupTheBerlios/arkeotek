@@ -292,7 +292,6 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 				}
 			}
 		});
-		
 		this.add(this.validationButton, "5, 7, 1, 1");
 		
 		String[] TitreI={"Image"};
@@ -704,8 +703,6 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 							{
 								for (int j=0;j<conceptIndexant.size();j++)
 								{
-									System.out.println("courant : "+elements.get(i)[1]);
-									System.out.println("indexant : "+conceptIndexant.get(j).toString());
 									if (elements.get(i)[1].equals(conceptIndexant.get(j).toString()))
 									{
 										deja=true;
@@ -759,7 +756,6 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 								boolean present=false;
 								for (int n=0;n<elements.size();n++)
 								{
-									//System.out.println("temp : "+temp+" ----------> element : "+elements.get(n)[1]);
 									if (elements.get(n)[1].toString().equals(temp.toString()))
 									{
 										present=true;
@@ -780,7 +776,6 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		}
 		for (int i=0;i<conceptIndexant.size();i++)
 		{
-			//System.out.println("concept "+i+" : "+elements.get(i)[1]);
 			for (int j=0;j<elements.size();j++)
 			{
 				if (conceptIndexant.get(i).equals(elements.get(j)[1]))
@@ -865,7 +860,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		table.getColumnModel().getColumn(0).setCellRenderer(custom);
+		table.getColumnModel().getColumn(1).setCellRenderer(custom);
 	}
 	
 	private void rendererTableLemme(JTable table) {     

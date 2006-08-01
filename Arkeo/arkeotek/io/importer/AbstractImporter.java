@@ -47,7 +47,6 @@ public abstract class AbstractImporter
 		this.preTreat();
 		if (this.parsers != null && !this.parsers.isEmpty() ) {
 			for (int i = 0; i < this.parsers.size(); i++) {
-				System.out.println(parsers.get(i).toString());
 				String value = "";
 				String[] line = new String[this.parsers.get(i).columns];
 				int token, word = 0, j = 0;
@@ -61,11 +60,9 @@ public abstract class AbstractImporter
 				this.transitionTreatment(i);
 				// We skip the columns' headers line
 				while ((token = tokenizer.nextToken()) != StreamTokenizer.TT_EOL) { /* Just skipping */ }
-				System.out.println("5");
 				while ((token = tokenizer.nextToken()) != StreamTokenizer.TT_EOF) {
 					if (this.parsers.get(i).usedColumns.get(this.parsers.get(i).current_col++) != null && token == StreamTokenizer.TT_WORD) {
 						value = tokenizer.sval;
-						System.out.println(value);
 						line[word++] = value;
 						this.parsers.get(i).treat(value);
 					}
@@ -81,7 +78,6 @@ public abstract class AbstractImporter
 						this.innerTreatment(i, j++);
 					}
 				}
-				System.out.println("6");
 			}
 		}
 		this.postTreat();

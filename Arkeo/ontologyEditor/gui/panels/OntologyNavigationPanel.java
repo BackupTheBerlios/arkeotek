@@ -586,7 +586,6 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 					{
 						for (LinkableElement elem : concept.getLinks(Concept.KEY, key))
 						{
-							System.out.println(concept+" "+key+" "+elem);
 							if (!key.getName().equals("généralise"))
 							{
 								Object[] couple = {key, elem};

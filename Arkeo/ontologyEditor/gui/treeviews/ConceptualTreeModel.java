@@ -109,7 +109,6 @@ public class ConceptualTreeModel extends AbstractTreeModel
 	@Override
 	public int getChildCount(Object parent)
 	{
-		System.out.println("****************************************** "+treeSize);
 		if (((LinkableElement) parent).getCategoryKey() == this.getModelCategory() || parent instanceof Ontology)
 			//return treeSize;
 			return getElementsFromIndexable((LinkableElement) parent).size();

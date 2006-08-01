@@ -629,7 +629,6 @@ public class ApplicationManager
 				new SCDIndexer(ontology, DisplayManager.getInstance().getSelectedElements(DocumentPart.KEY).get(0)).index();
 				break;
 			case GENERIC_INDEXATION :
-				System.out.println(DisplayManager.getInstance());//getSelectedElements(DocumentPart.KEY).get(0));
 				new GenericIndexer(ontology, DisplayManager.getInstance().getSelectedElements(DocumentPart.KEY).get(0)).index();
 				break;
 				
@@ -699,14 +698,6 @@ public class ApplicationManager
 									panel.getTable().updateUI();
 								}
 							}
-							
-							
-							/*
-							// affichage pour verif
-							for(int i=0;i<matching_lemmas.size();i++)
-							{
-								System.out.println(matching_lemmas.get(i));
-							}*/
 						}
 					}
 					else

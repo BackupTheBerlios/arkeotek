@@ -75,7 +75,6 @@ public class IOPerformer
 			
 			ps.setString(1, ((LinkableElement) dto.getElement()).getName());
 			ps.setInt(2, ((LinkableElement) dto.getElement()).getState());
-			//System.out.println(ps);
 			ps.executeUpdate();
 			if (ps instanceof com.mysql.jdbc.PreparedStatement)
 				((LinkableElement) dto.getElement()).setId((int)((com.mysql.jdbc.PreparedStatement)ps).getLastInsertID());
@@ -165,7 +164,6 @@ public class IOPerformer
 		try
 		{
 			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
-			System.out.println(req.toString());
 			ps.setInt(1, ((LinkableElement) dto.getElement()).getId());
 			ps.executeUpdate();
 		} catch (SQLException e)
@@ -196,7 +194,6 @@ public class IOPerformer
 			ps.setString(1, ((LinkableElement) dto.getElement()).getName());
 			ps.setInt(2, ((LinkableElement) dto.getElement()).getState());
 			ps.setInt(3, ((Relation) dto.getElement()).getType());
-			//System.out.println(ps);
 			ps.executeUpdate();
 			if (ps instanceof com.mysql.jdbc.PreparedStatement)
 				((LinkableElement) dto.getElement()).setId((int)((com.mysql.jdbc.PreparedStatement)ps).getLastInsertID());
@@ -446,16 +443,13 @@ public class IOPerformer
 		req.append("insert into T_DocumentElement (id, value, text, state) values (NULL, ?, ?, ?) ");
 		try
 		{
-			//System.out.println(((LinkableElement) dto.getElement()).getId());
 			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
 			ps.setString(1, ((DocumentPart) dto.getElement()).getName());
 			ps.setString(2, ((DocumentPart) dto.getElement()).getValue());
 			ps.setInt(3, ((LinkableElement) dto.getElement()).getState());
-			//System.out.println(ps);
 			ps.executeUpdate();
 			if (ps instanceof com.mysql.jdbc.PreparedStatement)
 				((LinkableElement) dto.getElement()).setId((int)((com.mysql.jdbc.PreparedStatement)ps).getLastInsertID());
-			System.out.println(((LinkableElement) dto.getElement()).getId());
 		} catch (SQLException e)
 		{
 			throw e;
@@ -707,7 +701,6 @@ public class IOPerformer
 			ps = dto.getTransaction().getConnexion().prepareStatement(req.toString());
 			ps.setString(1, ((LinkableElement) dto.getElement()).getName());
 			ps.setInt(2, ((LinkableElement) dto.getElement()).getState());
-			//System.out.println(ps);
 			ps.executeUpdate();
 			if (ps instanceof com.mysql.jdbc.PreparedStatement)
 				((LinkableElement) dto.getElement()).setId((int)((com.mysql.jdbc.PreparedStatement)ps).getLastInsertID());
@@ -975,7 +968,6 @@ public class IOPerformer
 				for (LinkableElement source : sources)
 				{
 					String ordreSQL = "INSERT INTO " + table + " VALUES (" + source.getId() + "," + target.getId() + "," + relation.getId() + "," + links.get(relation).get(source).getState() + "," + links.get(relation).get(source).getWeighting() + ")";
-					System.out.println(ordreSQL);
 					etatSimple = transaction.getConnexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
 					etatSimple.executeUpdate(ordreSQL);
 				}
@@ -983,16 +975,7 @@ public class IOPerformer
 		}
 		catch (SQLException e)
 		{
-			System.out.println(e.getErrorCode());
-			System.out.println(e.getMessage());
-			System.out.println(e.getStackTrace());
-			System.out.println(e.getSQLState());
-			System.out.println(e.getLocalizedMessage());
-			/*if(e.getErrorCode() == 1)
-			{
-					System.out.println("Bordel à cul !!!!!!");
-			}*/
-			//throw e;
+			throw e;
 		}
 		//finally
 		//{
@@ -1020,19 +1003,13 @@ public class IOPerformer
 				for (LinkableElement target : sources)
 				{
 					String ordreSQL = "INSERT INTO " + table + " VALUES (" + source.getId() + "," + target.getId() + "," + relation.getId() + "," + links.get(relation).get(target).getState() + "," + links.get(relation).get(target).getWeighting() + ")";
-					System.out.println(ordreSQL);
 					etatSimple = transaction.getConnexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
 					etatSimple.executeUpdate(ordreSQL);
 				}
 			}
 		} catch (SQLException e)
 		{
-			System.out.println(e.getErrorCode());
-			System.out.println(e.getMessage());
-			System.out.println(e.getStackTrace());
-			System.out.println(e.getSQLState());
-			System.out.println(e.getLocalizedMessage());
-			// throw e;
+			 throw e;
 		}
 		//finally
 		//{
@@ -1069,8 +1046,6 @@ public class IOPerformer
 	    for (LinkableElement source : sources)
 	    {
 	     rs.moveToInsertRow();
-	     System.out.println("source"+source.getId());
-	     System.out.println("target"+target.getId());
 	     rs.updateInt("idSource", source.getId());
 	     rs.updateInt("idTarget", target.getId());
 	     rs.updateInt("idRelation", relation.getId());
@@ -1132,259 +1107,8 @@ public class IOPerformer
 	  {
 	   transaction.clean(rs, null);
 	  }
-	 }
-	/**
-	 * Retrieves all the relations between concepts from base and stores them in a HashMap. 
-	 * @param transaction The transaction to use for this retrieval. 
-	 * @return The list of elements under the form idSource-idTarget-relation. 
-	 * @throws SQLException 
-	 */
-/*	public static ArrayList<ArrayList<Object>> retrieveConceptConceptRelations(Transaction transaction) throws SQLException
-	{
-		System.out.println("retrieveConceptConceptRelations");
-		StringBuffer req = new StringBuffer();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		ArrayList<ArrayList<Object>> relations = new ArrayList<ArrayList<Object>>();
-		
-		req.append("select * from L_Concept2Concept");
-
-		System.out.println(req);
-		try
-		{
-			ps = transaction.getConnexion().prepareStatement(req.toString());
-			rs = ps.executeQuery();
-				
-			ArrayList<Object> relation = null;
-			while (rs.next())
-			{
-				relation = new ArrayList<Object>(4);
-				relation.add(rs.getInt("idSource"));
-				relation.add(rs.getInt("idTarget"));
-				relation.add(rs.getInt("idRelation"));
-				relation.add(rs.getInt("state"));
-				relations.add(relation);
-			}
-		} catch (SQLException e)
-		{
-			throw e;
-		} finally
-		{
-			transaction.clean(null, ps);
-		}
-		return relations;
-	}
-*/	
-	/**
-	 * Retrieves all the relations between terms and concepts from base and stores them in a HashMap. 
-	 * @param transaction The transaction to use for this retrieval. 
-	 * @return The list of elements under the form idSource-idTarget-relation. 
-	 * @throws SQLException 
-	 */
-/*	public static ArrayList<ArrayList<Object>> retrieveTermConceptRelations(Transaction transaction) throws SQLException
-	{
-		System.out.println("retrieveTermConceptRelations");
-		StringBuffer req = new StringBuffer();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		ArrayList<ArrayList<Object>> relations = new ArrayList<ArrayList<Object>>();
-		
-		req.append("select * from L_Term2Concept");
-
-		System.out.println(req);
-		try
-		{
-			ps = transaction.getConnexion().prepareStatement(req.toString());
-			rs = ps.executeQuery();
-				
-			ArrayList<Object> relation = null;
-			while (rs.next())
-			{
-				relation = new ArrayList<Object>(4);
-				relation.add(rs.getInt("idSource"));
-				relation.add(rs.getInt("idTarget"));
-				relation.add(rs.getInt("idRelation"));
-				relation.add(rs.getInt("state"));
-				relations.add(relation);
-			}
-		} catch (SQLException e)
-		{
-			throw e;
-		} finally
-		{
-			transaction.clean(null, ps);
-		}
-		return relations;
-	}
-*/	
-	/**
-	 * Retrieves all the relations between concepts and document parts from base and stores them in a HashMap. 
-	 * @param transaction The transaction to use for this retrieval. 
-	 * @return The list of elements under the form idSource-idTarget-relation. 
-	 * @throws SQLException 
-	 */
-/*	public static ArrayList<ArrayList<Object>> retrieveConceptDocElemRelations(Transaction transaction) throws SQLException
-	{
-		System.out.println("retrieveConceptDocElemRelations");
-		StringBuffer req = new StringBuffer();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		ArrayList<ArrayList<Object>> relations = new ArrayList<ArrayList<Object>>();
-		
-		req.append("select * from L_Concept2DocumentElement");
-
-		System.out.println(req);
-		try
-		{
-			ps = transaction.getConnexion().prepareStatement(req.toString());
-			rs = ps.executeQuery();
-				
-			ArrayList<Object> relation = null;
-			while (rs.next())
-			{
-				relation = new ArrayList<Object>(4);
-				relation.add(rs.getInt("idSource"));
-				relation.add(rs.getInt("idTarget"));
-				relation.add(rs.getInt("idRelation"));
-				relation.add(rs.getInt("state"));
-				relations.add(relation);
-			}
-		} catch (SQLException e)
-		{
-			throw e;
-		} finally
-		{
-			transaction.clean(null, ps);
-		}
-		return relations;
-	}
-*/	
-	/**
-	 * Retrieves all the relations between terms and document parts from base and stores them in a HashMap. 
-	 * @param transaction The transaction to use for this retrieval. 
-	 * @return The list of elements under the form idSource-idTarget-relation. 
-	 * @throws SQLException 
-	 */
-/*	public static ArrayList<ArrayList<Object>> retrieveTermDocElemRelations(Transaction transaction) throws SQLException
-	{
-		System.out.println("retrieveTermDocElemRelations");
-		StringBuffer req = new StringBuffer();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		ArrayList<ArrayList<Object>> relations = new ArrayList<ArrayList<Object>>();
-		
-		req.append("select * from L_Term2DocumentElement");
-
-		System.out.println(req);
-		try
-		{
-			ps = transaction.getConnexion().prepareStatement(req.toString());
-			rs = ps.executeQuery();
-				
-			ArrayList<Object> relation = null;
-			while (rs.next())
-			{
-				relation = new ArrayList<Object>(4);
-				relation.add(rs.getInt("idSource"));
-				relation.add(rs.getInt("idTarget"));
-				relation.add(rs.getString("idRelation"));
-				relation.add(rs.getInt("state"));
-				relations.add(relation);
-			}
-		} catch (SQLException e)
-		{
-			throw e;
-		} finally
-		{
-			transaction.clean(null, ps);
-		}
-		return relations;
-	}
-*/
-	/**
-	 * Retrieves all the relations between terms from base and stores them in a HashMap. 
-	 * @param transaction The transaction to use for this retrieval. 
-	 * @return The list of elements under the form idSource-idTarget-relation. 
-	 * @throws SQLException 
-	 */
-/*	public static ArrayList<ArrayList<Object>> retrieveTermTermRelations(Transaction transaction) throws SQLException
-	{
-		System.out.println("retrieveTermDocElemRelations");
-		StringBuffer req = new StringBuffer();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		ArrayList<ArrayList<Object>> relations = new ArrayList<ArrayList<Object>>();
-		
-		req.append("select * from L_Term2Term");
-
-		System.out.println(req);
-		try
-		{
-			ps = transaction.getConnexion().prepareStatement(req.toString());
-			rs = ps.executeQuery();
-				
-			ArrayList<Object> relation = null;
-			while (rs.next())
-			{
-				relation = new ArrayList<Object>(4);
-				relation.add(rs.getInt("idSource"));
-				relation.add(rs.getInt("idTarget"));
-				relation.add(rs.getInt("idRelation"));
-				relation.add(rs.getInt("state"));
-				relations.add(relation);
-			}
-		} catch (SQLException e)
-		{
-			throw e;
-		} finally
-		{
-			transaction.clean(null, ps);
-		}
-		return relations;
-	}
-*/
-	/**
-	 * Retrieves all the relations between terms and document parts from base and stores them in a HashMap. 
-	 * @param transaction The transaction to use for this retrieval. 
-	 * @return The list of elements under the form idSource-idTarget-relation. 
-	 * @throws SQLException 
-	 */
-/*	public static ArrayList<ArrayList<Object>> retrieveDocElemDocElemRelations(Transaction transaction) throws SQLException
-	{
-		System.out.println("retrieveDocElemDocElemRelations");
-		StringBuffer req = new StringBuffer();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		ArrayList<ArrayList<Object>> relations = new ArrayList<ArrayList<Object>>();
-		
-		req.append("select * from L_DocumentElement2DocumentElement");
-
-		System.out.println(req);
-		try
-		{
-			ps = transaction.getConnexion().prepareStatement(req.toString());
-			rs = ps.executeQuery();
-				
-			ArrayList<Object> relation = null;
-			while (rs.next())
-			{
-				relation = new ArrayList<Object>(4);
-				relation.add(rs.getInt("idSource"));
-				relation.add(rs.getInt("idTarget"));
-				relation.add(rs.getInt("idRelation"));
-				relation.add(rs.getInt("state"));
-				relations.add(relation);
-			}
-		} catch (SQLException e)
-		{
-			throw e;
-		} finally
-		{
-			transaction.clean(null, ps);
-		}
-		return relations;
-	}
-*/	
+    }
+	 
 	/**
 	 * TODO Delete. 
 	 * @param transaction 

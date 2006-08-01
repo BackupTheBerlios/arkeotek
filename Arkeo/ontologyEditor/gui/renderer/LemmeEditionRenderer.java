@@ -14,24 +14,27 @@ import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
 
 import ontologyEditor.ApplicationManager;
-import ontologyEditor.Constants;
-import ontologyEditor.ImagesManager;
 
-public class LemmaTableRenderer extends DefaultTableCellRenderer  {
+public class LemmeEditionRenderer extends DefaultTableCellRenderer  {
 	
 	
 	public Component getTableCellRendererComponent (JTable table, Object value, boolean isSelected,
 	        boolean hasFocus, int row, int column) {
 	    
 	    Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-	    if (ApplicationManager.ontology.getLemmeValider().contains(value))
+	    if (value instanceof Lemma)
 	    {
-	    	c.setForeground(new Color(0,102,0));
+    		c.setForeground(new Color(0,102,0));
+	    }
+	    else if (value instanceof DocumentPart)
+	    {
+	    	c.setForeground(new Color(102,51,0));
 	    }
 	    else
 	    {
 	    	c.setForeground(Color.BLACK);
 	    }
+	    
 	    return c;
 	  } 
 
