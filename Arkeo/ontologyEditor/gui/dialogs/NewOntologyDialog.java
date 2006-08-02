@@ -32,6 +32,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import arkeotek.io.EncryptedProperties;
@@ -60,8 +61,8 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
 	private JPasswordField txt_user_password;
 	private JPasswordField txt_user_confirm;
    
-	private static final String VALIDATE_CAPTION = "Valider";
-	private static final String CANCEL_CAPTION = "Annuler";
+	private static final String VALIDATE_CAPTION = ApplicationManager.getApplicationManager().getTraduction("validate");
+	private static final String CANCEL_CAPTION = ApplicationManager.getApplicationManager().getTraduction("cancel");
 
 	private Object value;
 
@@ -83,7 +84,7 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
 	 */
 	private NewOntologyDialog(JFrame frame)
 	{
-        super(frame, "Cr\u00e9ation d'une ontologie", true);
+        super(frame, ApplicationManager.getApplicationManager().getTraduction("ontologycreation"), true);
         this.frame = frame;
 		double border = 10;
 		double separator = 5 + 2 * border;
@@ -97,7 +98,7 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
 		//this.setLocationRelativeTo(null);
 		
         // Create the components. 
-		this.lbl_ontology_name = new JLabel("Nom de l'ontologie : "); 
+		this.lbl_ontology_name = new JLabel(ApplicationManager.getApplicationManager().getTraduction("nameoftheontology")); 
         this.add(this.lbl_ontology_name, "1, 1, 1, 1");
 		
 		this.txt_ontology_name = new JTextField("");
@@ -109,11 +110,11 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
 		this.add(this.lbl_storage_type, "1, 4, 1, 3");
 
 		this.cmb_storage_type = new JComboBox();
-		this.cmb_storage_type.addItem(new StorageCell("(Choisissez un type de stockage pour vos donn\u00e9es)", ""));
-		this.cmb_storage_type.addItem(new StorageCell("Base de donn\u00e9es MySQL", Service.class.getCanonicalName()));
+		this.cmb_storage_type.addItem(new StorageCell(ApplicationManager.getApplicationManager().getTraduction("stockagetye"), ""));
+		this.cmb_storage_type.addItem(new StorageCell(ApplicationManager.getApplicationManager().getTraduction("dbmysql"), Service.class.getCanonicalName()));
 		this.add(this.cmb_storage_type, "3, 4, 3, 3");
 		
-		this.lbl_storage_repository = new JLabel("Emplacement : ");
+		this.lbl_storage_repository = new JLabel(ApplicationManager.getApplicationManager().getTraduction("address"));
 		this.add(this.lbl_storage_repository, "1, 6, 1, 5");
 		
 		this.txt_storage_repository = new JTextField("jdbc:mysql://");
@@ -121,19 +122,19 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
 		
 		this.add(new JSeparator(), "1, 8, 3, 6");
 		
-		this.lbl_user_login = new JLabel("Nom d'utilisateur : ");
+		this.lbl_user_login = new JLabel(ApplicationManager.getApplicationManager().getTraduction("username"));
 		this.add(this.lbl_user_login, "1, 9, 1, 7");
 
 		this.txt_user_login = new JTextField("");
 		this.add(this.txt_user_login, "3, 9, 3, 7");
 		
-		this.lbl_user_password = new JLabel("Mot de passe : ");
+		this.lbl_user_password = new JLabel(ApplicationManager.getApplicationManager().getTraduction("pwd"));
 		this.add(this.lbl_user_password, "1, 11, 1, 9");
 
 		this.txt_user_password = new JPasswordField("");
 		this.add(this.txt_user_password, "3, 11, 3, 9");
 		
-		this.lbl_user_confirm = new JLabel("Confirmez : ");
+		this.lbl_user_confirm = new JLabel(ApplicationManager.getApplicationManager().getTraduction("retype"));
 		this.add(this.lbl_user_confirm, "1, 13, 1, 11");
 
 		this.txt_user_confirm = new JPasswordField("");
@@ -211,11 +212,11 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
             if (VALIDATE_CAPTION.equals(temp_value)) {
 				String err_msg = "";
 				if (this.txt_ontology_name.getText().equals(""))
-					err_msg += "Le nom de l'ontologie ne doit pas \u00eatre vide. \n";
+					err_msg += ApplicationManager.getApplicationManager().getTraduction("emptyontologyname");
 				if (!com.sun.org.apache.xerces.internal.util.URI.isConformantSchemeName(this.txt_storage_repository.getText()))
-					err_msg += "L'emplacement doit \u00eatre une URI (chemin d'acc\u00e8s ou URL). \n";
+					err_msg += ApplicationManager.getApplicationManager().getTraduction("badaddress");
 				if (!err_msg.equals(""))
-					err_msg = "Des erreurs de saisies ont \u00e9t\u00e9 rep\u00e9r\u00e9es : \n";
+					err_msg = ApplicationManager.getApplicationManager().getTraduction("inputerror");
 				else {
 					// TODO Coder l'enregistrement de l'ontologie.
 					this.setVisible(false);
@@ -230,9 +231,9 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
 	{
 		String err_msg = "";
 		if (this.txt_ontology_name.getText().equals(""))
-			err_msg += "\t- Nom de l'ontologie non spécifié. \n";
+			err_msg += ApplicationManager.getApplicationManager().getTraduction("ontologynamenotspecified");
 		if (this.txt_storage_repository.getText().equals(""))
-			err_msg += "\t- Emplacement du dépôt non spécifié. \n";
+			err_msg += ApplicationManager.getApplicationManager().getTraduction("depotaddress");
 		
 		/*if (this.txt_storage_repository.getText().equals("")) {
 			if (this.cmb_storage_type.getSelectedItem() == null)
@@ -241,14 +242,14 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
 //		if (!com.sun.org.apache.xerces.internal.util.URI.isWellFormedAddress(this.txt_storage_repository.getText()))
 //			err_msg += "\t- L'emplacement doit Ãªtre une URI (chemin d'accÃ¨s ou URL). \n";
 		if (!String.valueOf(this.txt_user_confirm.getPassword()).equals(String.valueOf(this.txt_user_password.getPassword()))) {
-			err_msg += "\t- Le mot de passe est erroné. \n";
+			err_msg += ApplicationManager.getApplicationManager().getTraduction("pwdnotmatch");
 			this.txt_user_password.setText("");
 			this.txt_user_confirm.setText("");
 		}
 		if (!err_msg.equals("")) {
-			err_msg = "Des erreurs de saisies ont \u00e9t\u00e9 rep\u00e9r\u00e9es : \n" + err_msg;
-			Object[] options = {"OK"};
-			JOptionPane.showOptionDialog(this, err_msg, "Erreur de saisie", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+			err_msg = ApplicationManager.getApplicationManager().getTraduction("inputerror") + err_msg;
+			Object[] options = {"Ok"};
+			JOptionPane.showOptionDialog(this, err_msg, ApplicationManager.getApplicationManager().getTraduction("inputerror2"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 		}
 		else {
 			try {
@@ -262,38 +263,38 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
 				this.valid = true;
 				this.setVisible(false);	
 			} catch (InvalidKeyException e) {
-				Object[] options = {"OK"};
-				JOptionPane.showOptionDialog(this, "Une erreur interne est survenue lors du cryptage du mot de passe : clef invalide. ", "Erreur de sauvegarde", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+				Object[] options = {"Ok"};
+				JOptionPane.showOptionDialog(this, ApplicationManager.getApplicationManager().getTraduction("pwdencodingerror") + ApplicationManager.getApplicationManager().getTraduction("invalidkey") + ". ", ApplicationManager.getApplicationManager().getTraduction("savingerror"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 				e.printStackTrace();
 			} catch (NoSuchAlgorithmException e) {
-				Object[] options = {"OK"};
-				JOptionPane.showOptionDialog(this, "Une erreur interne est survenue lors du cryptage du mot de passe : algorithme invalide. ", "Erreur de sauvegarde", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+				Object[] options = {"Ok"};
+				JOptionPane.showOptionDialog(this, ApplicationManager.getApplicationManager().getTraduction("pwdencodingerror") + ApplicationManager.getApplicationManager().getTraduction("invalidalgorithm") + ". ", ApplicationManager.getApplicationManager().getTraduction("savingerror"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 				e.printStackTrace();
 			} catch (NoSuchPaddingException e) {
-				Object[] options = {"OK"};
-				JOptionPane.showOptionDialog(this, "Une erreur interne est survenue lors du cryptage du mot de passe : padding inexistant. ", "Erreur de sauvegarde", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+				Object[] options = {"Ok"};
+				JOptionPane.showOptionDialog(this, ApplicationManager.getApplicationManager().getTraduction("pwdencodingerror") + ApplicationManager.getApplicationManager().getTraduction("nonexistentpadding") + ". ", ApplicationManager.getApplicationManager().getTraduction("savingerror"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 				e.printStackTrace();
 			} catch (IllegalBlockSizeException e) {
-				Object[] options = {"OK"};
-				JOptionPane.showOptionDialog(this, "Une erreur interne est survenue lors du cryptage du mot de passe : taille des blocs invalide. ", "Erreur de sauvegarde", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+				Object[] options = {"Ok"};
+				JOptionPane.showOptionDialog(this, ApplicationManager.getApplicationManager().getTraduction("pwdencodingerror") + ApplicationManager.getApplicationManager().getTraduction("invalidsize") + ". ", ApplicationManager.getApplicationManager().getTraduction("savingerror"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 				e.printStackTrace();
 			} catch (BadPaddingException e) {
-				Object[] options = {"OK"};
-				JOptionPane.showOptionDialog(this, "Une erreur interne est survenue lors du cryptage du mot de passe : padding invalide. ", "Erreur de sauvegarde", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+				Object[] options = {"Ok"};
+				JOptionPane.showOptionDialog(this, ApplicationManager.getApplicationManager().getTraduction("pwdencodingerror") + ApplicationManager.getApplicationManager().getTraduction("invalidpadding") + ". ", ApplicationManager.getApplicationManager().getTraduction("savingerror"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 				e.printStackTrace();
 			} catch (IOException e) {
-				Object[] options = {"OK"};
-				JOptionPane.showOptionDialog(this, "Une erreur interne est survenue lors de la crÃ©ation du fichier ./" + Constants.DEFAULT_ONTOLOGIES_PATH  + this.txt_ontology_name.getText() + ".properties", "Erreur de sauvegarde", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+				Object[] options = {"Ok"};
+				JOptionPane.showOptionDialog(this, ApplicationManager.getApplicationManager().getTraduction("filecreationerror") + " ./" + Constants.DEFAULT_ONTOLOGIES_PATH  + this.txt_ontology_name.getText() + ".properties", ApplicationManager.getApplicationManager().getTraduction("savingerror"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 				e.printStackTrace();
 			} catch (InvalidKeySpecException e)
 			{
-				Object[] options = {"OK"};
-				JOptionPane.showOptionDialog(this, "Une erreur interne est survenue lors du cryptage du mot de passe : spÃ©cification de clef invalide. ", "Erreur de sauvegarde", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+				Object[] options = {"Ok"};
+				JOptionPane.showOptionDialog(this, ApplicationManager.getApplicationManager().getTraduction("pwdencodingerror") + ApplicationManager.getApplicationManager().getTraduction("invalidspecificationkey") + ". ", ApplicationManager.getApplicationManager().getTraduction("savingerror"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 				e.printStackTrace();
 			} catch (InvalidAlgorithmParameterException e)
 			{
-				Object[] options = {"OK"};
-				JOptionPane.showOptionDialog(this, "Une erreur interne est survenue lors du cryptage du mot de passe : algorithme invalide. ", "Erreur de sauvegarde", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+				Object[] options = {"Ok"};
+				JOptionPane.showOptionDialog(this, ApplicationManager.getApplicationManager().getTraduction("pwdencodingerror") + ApplicationManager.getApplicationManager().getTraduction("invalidalgorithm") + ". ", ApplicationManager.getApplicationManager().getTraduction("savingerror"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 				e.printStackTrace();
 			}
 		}

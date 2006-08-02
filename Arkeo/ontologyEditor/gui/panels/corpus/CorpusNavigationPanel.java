@@ -81,23 +81,23 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 				{ border, TableLayout.FILL, border, TableLayout.FILL,border, TableLayout.FILL,border,TableLayout.FILL, border } // Rows 
 			};
 		this.setLayout(new TableLayout(sizeNavPanel));
-		this.setBorder(BorderFactory.createTitledBorder("Détail du document "));
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("detail")));
 
 		this.txtArea_docText = new JTextArea("");
 		this.txtArea_docText.setLineWrap(true);
 		this.txtArea_docText.setEditable(false);
 		JScrollPane areaSP = new JScrollPane(this.txtArea_docText);
-		areaSP.setBorder(BorderFactory.createTitledBorder("Séquences"));
+		areaSP.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("seq")));
 		this.add(areaSP, "1, 1, 1, 1");
 		
 		this.txtArea_docComm = new JTextArea("");
 		this.txtArea_docComm.setLineWrap(true);
 		this.txtArea_docComm.setEditable(false);
 		JScrollPane areaC = new JScrollPane(this.txtArea_docComm);
-		areaC.setBorder(BorderFactory.createTitledBorder("Commentaires"));
+		areaC.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("com")));
 		this.add(areaC, "1, 3, 1, 1");
 		
-		String[] Titre={"relation","element"};
+		String[] Titre={ApplicationManager.getApplicationManager().getTraduction("relation"),ApplicationManager.getApplicationManager().getTraduction("element")};
 		IndexingConceptTableModel tableCIModel = new IndexingConceptTableModel();
 		tableCIModel.setColumnNames(Titre);
 		this.conceptsIndexingTable = new JTable(tableCIModel);
@@ -161,12 +161,12 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		    }
 			
 		}));
-		jsp.setBorder(BorderFactory.createTitledBorder("Concepts indexant"));
+		jsp.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("conceptsindexing")));
 		this.add(jsp, "3, 1, 1, 3");
 		
 		
 		// table des lemmes associé
-		String[] TitreL={"element"};
+		String[] TitreL={ApplicationManager.getApplicationManager().getTraduction("element")};
 		LemmasToDocumentPartTableModel tableLemmeModel = new LemmasToDocumentPartTableModel();
 		tableLemmeModel.setColumnNames(TitreL);
 		this.termeAssocie = new JTable(tableLemmeModel);
@@ -175,7 +175,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.termeAssocie.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.termeAssocie.setDefaultRenderer(String.class, new DefaultTableCellRenderer());
 		JScrollPane jsp2 = new JScrollPane(this.termeAssocie);
-		jsp2.setBorder(BorderFactory.createTitledBorder("termes liés au document"));
+		jsp2.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("termsrelateddocument")));
 		this.add(jsp2, "5, 1, 1, 5");
 		this.termeAssocie.addMouseListener(new MouseAdapter()
 		{
@@ -250,10 +250,10 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			}
 		});
 		JScrollPane jspPotential = new JScrollPane(this.potentialConceptsTable);
-		jspPotential.setBorder(BorderFactory.createTitledBorder("Concepts potentiels"));
+		jspPotential.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("potentialconcepts")));
 		this.add(jspPotential, "3, 5, 1, 7");
 		
-		this.validationButton = new JButton("Valider");
+		this.validationButton = new JButton(ApplicationManager.getApplicationManager().getTraduction("validate"));
 		this.validationButton.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -282,7 +282,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		});
 		this.add(this.validationButton, "5, 7, 1, 1");
 		
-		String[] TitreI={"Image"};
+		String[] TitreI={ApplicationManager.getApplicationManager().getTraduction("image")};
 		ImagesToDocumentPartTableModel tableIModel = new ImagesToDocumentPartTableModel();
 		tableIModel.setColumnNames(TitreI);
 		this.imagesTable = new JTable(tableIModel);
@@ -291,7 +291,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		//TableColumn column2I = imagesTable.getColumnModel().getColumn(1);
 		//column2I.setPreferredWidth(150);
 		JScrollPane jspI = new JScrollPane(this.imagesTable);
-		jspI.setBorder(BorderFactory.createTitledBorder("Images liés au document"));
+		jspI.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("imageToDoc")));
 		this.add(jspI, "1, 5, 1, 7");
 		this.imagesTable.addMouseListener(new MouseAdapter()
 		{
@@ -327,8 +327,8 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		// TODO Auto-generated method stub
 		this.doc=doc;
 		((IndexingConceptTableModel)conceptsIndexingTable.getModel()).setDonnees(null);
-		this.validationButton.setText((doc.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
-		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation du corpus : "+doc.getName()));
+		this.validationButton.setText((doc.getState() == LinkableElement.VALIDATED)?ApplicationManager.getApplicationManager().getTraduction("unvalidate"):ApplicationManager.getApplicationManager().getTraduction("validate"));
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("corpusnavpanel")+" "+doc.getName()));
 		this.txtArea_docText.setText(((DocumentPart)doc).getValue());
 		if (((DocumentPart)doc).getCommentaire()!=null)
 			this.txtArea_docComm.setText(((DocumentPart)doc).getCommentaire().getValue());

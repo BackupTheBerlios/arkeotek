@@ -84,15 +84,15 @@ public class RelationEditionDialog extends JDialog  implements ItemListener
 
 		
 		borderedPane = new JScrollPane();
-		borderedPane.setBorder(BorderFactory.createTitledBorder("Relations"));
+		borderedPane.setBorder(BorderFactory.createTitledBorder("relations"));
 		borderedPane.setViewportView(listes[currentList]);
 		this.add(borderedPane, "1, 3, 3, 8");
 		
-        typeComboBox.addItem("Concept - Concept");
-        typeComboBox.addItem("Concept - Document");
-        typeComboBox.addItem("Terme - Concept");
-        typeComboBox.addItem("Terme - Document");
-        typeComboBox.addItem("Terme - Terme");
+        typeComboBox.addItem(ApplicationManager.getApplicationManager().getTraduction("conceptconcept"));
+        typeComboBox.addItem(ApplicationManager.getApplicationManager().getTraduction("conceptdocument"));
+        typeComboBox.addItem(ApplicationManager.getApplicationManager().getTraduction("termeconcept"));
+        typeComboBox.addItem(ApplicationManager.getApplicationManager().getTraduction("termedocument"));
+        typeComboBox.addItem(ApplicationManager.getApplicationManager().getTraduction("termeterme"));
 
         typeComboBox.addItemListener(this);
         this.add(typeComboBox,"1, 1, 2, 1");

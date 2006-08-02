@@ -114,7 +114,7 @@ public class LemmaDropTransferHandler extends TransferHandler
 					{
 					
 						Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
-								"Veuillez entrer le nom de la relation:", "Cr\u00e9ation d'un lien", JOptionPane.INFORMATION_MESSAGE, null,
+								ApplicationManager.getApplicationManager().getTraduction("enternamerelation"), ApplicationManager.getApplicationManager().getTraduction("linkcreation") + " : ", JOptionPane.INFORMATION_MESSAGE, null,
 								relations_terme.toArray(), relations_terme.toArray()[0]);
 						if (relation != null)
 						{
@@ -148,11 +148,11 @@ public class LemmaDropTransferHandler extends TransferHandler
 					}
 					else
 					{
-						JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Aucune relation possible entre ces deux types d'objet");
+						JOptionPane.showMessageDialog(DisplayManager.mainFrame,ApplicationManager.getApplicationManager().getTraduction("nopossiblerelationobject"));
 					}
 				}
 				else
-					JOptionPane.showMessageDialog(DisplayManager.mainFrame, "Aucune relation n'est cr\u00e9\u00e9e, veuillez en cr\u00e9er une avant", "Information", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(DisplayManager.mainFrame, ApplicationManager.getApplicationManager().getTraduction("createrelationbefore"), ApplicationManager.getApplicationManager().getTraduction("information"), JOptionPane.INFORMATION_MESSAGE);
 	            return true;
 			}
         }

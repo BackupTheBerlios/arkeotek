@@ -90,7 +90,7 @@ public class EditionPanel extends JPanel
 				{ border, 16, border, 0.05, border, 0.05, border, TableLayout.FILL, border, 0.1, border, TableLayout.FILL, border } }; // Rows
 		this.setLayout(new TableLayout(size));
 		
-		String[] titreHaut={"relation","element"};
+		String[] titreHaut={ApplicationManager.getApplicationManager().getTraduction("relation"),ApplicationManager.getApplicationManager().getTraduction("element")};
 		HighEditorTableModel tableHautModel = new HighEditorTableModel();
 		tableHautModel.setColumnNames(titreHaut);
 		this.parentsEditionTable = new JTable(tableHautModel);
@@ -109,7 +109,7 @@ public class EditionPanel extends JPanel
 					}
 	        }
 	    });
-		this.editionButton = new JToggleButton("Modifier");
+		this.editionButton = new JToggleButton(ApplicationManager.getApplicationManager().getTraduction("modify"));
 		this.editionButton.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
@@ -128,15 +128,15 @@ public class EditionPanel extends JPanel
 				handler.exportAsDrag(EditionPanel.this.getParentsEditionTable(), e, TransferHandler.COPY);
 			}
 		});
-		this.deleteButton = new JButton("Supprimer");
+		this.deleteButton = new JButton(ApplicationManager.getApplicationManager().getTraduction("remove"));
 		this.deleteButton.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
 			{
 				if (EditionPanel.this.deleteButton.isEnabled())
 				{
-					Object[] options = {"Oui", "Non"};
-					int choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, "Vous \u00eates sur le point de supprimer d\u00e9finitivement l'\u00e9l\u00e9ment. D\u00e9sirez-vous continuer?", "Avertissement", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+					Object[] options = {ApplicationManager.getApplicationManager().getTraduction("yes"), ApplicationManager.getApplicationManager().getTraduction("no")};
+					int choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, ApplicationManager.getApplicationManager().getTraduction("deletingelementconfirm"), ApplicationManager.getApplicationManager().getTraduction("warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 					if (choice == 0)
 					{
 						LinkableElement element = EditionPanel.this.elementField.getElement();
@@ -159,7 +159,7 @@ public class EditionPanel extends JPanel
 		this.elementField.setEditable(false);
 		this.rightEditionTable = new JTable();
 		
-		String[] titreBas={"relation","element"};
+		String[] titreBas={ApplicationManager.getApplicationManager().getTraduction("relation"),ApplicationManager.getApplicationManager().getTraduction("element")};
 		BottomEditorTableModel tableBasModel = new BottomEditorTableModel();
 		tableBasModel.setColumnNames(titreHaut);
 		
@@ -273,7 +273,7 @@ public class EditionPanel extends JPanel
 		this.add(this.deleteButton, "4, 5, 4, 5");
 		this.add(parentsEditionScrollPane, "1, 7, 5, 7");
 		this.add(rightEditionScrollPane, "1, 11, 5, 11");
-		this.setBorder(BorderFactory.createTitledBorder("Panneau d'\u00e9dition"));
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("editionpanel")));
 
 	}
 	
@@ -524,7 +524,7 @@ public class EditionPanel extends JPanel
 					{
 						link = new Object[2];
 						if (element instanceof Concept)
-							link[0] = "est "+key+" par";
+							link[0] = ApplicationManager.getApplicationManager().getTraduction("is")+" "+key+" "+ApplicationManager.getApplicationManager().getTraduction("by");
 						else
 							link[0]=key;
 						link[1] = linkedElem;

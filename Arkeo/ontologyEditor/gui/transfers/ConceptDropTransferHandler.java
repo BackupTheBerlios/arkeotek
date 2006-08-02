@@ -88,10 +88,11 @@ public class ConceptDropTransferHandler extends TransferHandler
 						}
 						//<-------------------------
 						Object[] rels=conceptToConcept.toArray();
+
 						if (rels.length!=0)
 						{
 							Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
-									"Veuillez entrer le nom de la relation:", "Création d'un lien", JOptionPane.INFORMATION_MESSAGE, null,
+									ApplicationManager.getApplicationManager().getTraduction("enternamerelation") + " : ", ApplicationManager.getApplicationManager().getTraduction("creationlink"), JOptionPane.INFORMATION_MESSAGE, null,
 									rels, rels[0]);
 							if (relation !=null)
 							{
@@ -167,7 +168,7 @@ public class ConceptDropTransferHandler extends TransferHandler
 						if (rels.length!=0)
 						{
 							Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
-									"Veuillez entrer le nom de la relation:", "Création d'un lien", JOptionPane.INFORMATION_MESSAGE, null,
+									ApplicationManager.getApplicationManager().getTraduction("enternamerelation") + " : ", ApplicationManager.getApplicationManager().getTraduction("creationlink"), JOptionPane.INFORMATION_MESSAGE, null,
 									rels, rels[0]);
 							if (relation !=null)
 							{
@@ -183,7 +184,7 @@ public class ConceptDropTransferHandler extends TransferHandler
 						}
 						else
 						{
-							JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Aucune relation possible entre ces deux types d'objet");
+							JOptionPane.showMessageDialog(DisplayManager.mainFrame,ApplicationManager.getApplicationManager().getTraduction("nopossiblerelationobject"));
 						}
 					}
 				}

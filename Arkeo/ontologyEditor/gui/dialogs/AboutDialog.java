@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
 
@@ -30,12 +31,7 @@ public class AboutDialog extends JDialog
 {
 	public static final String DEFAULT_IMAGEICON = "lance.jpg";
 	
-	private JFrame frame;
-	private String auteurs = "Pierre Bernadou, Jean Czerny, Sanmartin Julien, Hubert Nouhen";
-	private String version = "1.0";
-	private String apropos = "Arkeotek, l'éditeur d'ontologie";
-	private String date = "5 Juin 2006";
-	private JButton ok = new JButton("Fermer");
+	private JButton ok = new JButton(ApplicationManager.getApplicationManager().getTraduction("close"));
 
 	public AboutDialog()
 	{
@@ -47,8 +43,7 @@ public class AboutDialog extends JDialog
 	 */
 	private AboutDialog(JFrame frame)
 	{
-        super(frame, "A Propos D'Arkeotek !", true);
-        this.frame = frame;
+        super(frame, ApplicationManager.getApplicationManager().getTraduction("abouttitle"), true);
         BorderLayout borderLayoutPrincipal = new BorderLayout();
         this.setLayout(borderLayoutPrincipal);
 

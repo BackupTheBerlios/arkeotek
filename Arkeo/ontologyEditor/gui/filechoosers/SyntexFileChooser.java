@@ -15,6 +15,7 @@ import java.util.Properties;
 
 import javax.swing.JFileChooser;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 
 /**
@@ -71,7 +72,7 @@ public class SyntexFileChooser extends JFileChooser
 	public SyntexFileChooser()
 	{
 		super(LAST_USED_DIRECTORY);
-		this.setDialogTitle("Import des sorties Syntex");
+		this.setDialogTitle(ApplicationManager.getApplicationManager().getTraduction("importationsyntextitle"));
 		this.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		this.setMultiSelectionEnabled(false);
 	}

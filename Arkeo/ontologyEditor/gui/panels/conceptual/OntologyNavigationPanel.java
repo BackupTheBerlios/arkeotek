@@ -79,12 +79,12 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		this.setLayout(new TableLayout(size));
 		
 		// affichage du pere
-		this.labelPere=new JLabel("Concept Père : ");
+		this.labelPere=new JLabel(ApplicationManager.getApplicationManager().getTraduction("conceptfather"));
 		this.conceptPere=new JLabel();
 		conceptPere.setFont(new Font("Serif", Font.PLAIN, 16));
 		
 		// table représentant les concepts fils
-		String[] titreF={"Fils"};
+		String[] titreF={ApplicationManager.getApplicationManager().getTraduction("child")};
 		// création du model de la table
 		ChildConceptTableModel tableCFModel = new ChildConceptTableModel();
 		// ajout du titre
@@ -116,7 +116,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			}
 		});
 		
-		String[] titreL={"Termes Associés"};
+		String[] titreL={ApplicationManager.getApplicationManager().getTraduction("assiociatedterm")};
 		LemmasToConceptTableModel tableCLModel = new LemmasToConceptTableModel();
 		tableCLModel.setColumnNames(titreL);
 		this.lemmeAssocieTable = new JTable(tableCLModel);
@@ -178,7 +178,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 			}
 		});
 		
-		String[] titreD={"Relation","Concepts Reliés"};
+		String[] titreD={ApplicationManager.getApplicationManager().getTraduction("relation"),ApplicationManager.getApplicationManager().getTraduction("connectedconcepts")};
 		DefinedConceptTableModel tableCDModel = new DefinedConceptTableModel();
 		tableCDModel.setColumnNames(titreD);
 		this.conceptDefiniTable = new JTable(tableCDModel);
@@ -202,13 +202,13 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		// on associe a chaque table un JScrollPane avec un titre
 		JScrollPane filsScrollPane = new JScrollPane();
 		filsScrollPane.setViewportView(this.conceptFilsTable);
-		filsScrollPane.setBorder(BorderFactory.createTitledBorder("Fils"));
+		filsScrollPane.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("child")));
 		JScrollPane lemmeScrollPane = new JScrollPane();
 		lemmeScrollPane.setViewportView(this.lemmeAssocieTable);
-		lemmeScrollPane.setBorder(BorderFactory.createTitledBorder("Termes associés"));
+		lemmeScrollPane.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("associatedterms")));
 		JScrollPane definiScrollPane = new JScrollPane();
 		definiScrollPane.setViewportView(this.conceptDefiniTable);
-		definiScrollPane.setBorder(BorderFactory.createTitledBorder("Concepts définis"));
+		definiScrollPane.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("definiteconcepts")));
 		
 		//mise en place des renderer
 		this.rendererTableConcept(this.conceptDefiniTable);
@@ -227,7 +227,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		this.add(filsScrollPane, "1, 3, 1, 1");
 		this.add(lemmeScrollPane, "3, 3, 1, 1");
 		this.add(definiScrollPane, "5, 3, 1, 1");
-		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation"));
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("navigationpanel")));
 
 	}
 
@@ -239,7 +239,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void rollFirstPanel(LinkableElement element)
 	{
-		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element));
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("navigationpanel")+" "+element));
 		showParents(element);
 	}
 
@@ -251,7 +251,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void rollSecondPanel(LinkableElement element)
 	{
-		OntologyNavigationPanel.this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element));
+		OntologyNavigationPanel.this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("navigationpanel")+" "+element));
 	}
 
 	public void showParents(LinkableElement element)
@@ -343,7 +343,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		// TODO Auto-generated method stub
 		this.currentElement=concept;
 		conceptFilsTable.removeAll();
-		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation : "+concept));
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("navigationpanel")+" "+concept));
 		//String[] titreF={"Fils"};
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		if (concept != null)

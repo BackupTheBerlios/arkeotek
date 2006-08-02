@@ -32,8 +32,8 @@ public class AddChidlConceptDialog extends JDialog implements ActionListener {
 	private JLabel lbl_contain;
 	private JTextField txt_contain;
    
-	private static final String SEARCH_CAPTION = "Ajouter";
-	private static final String CANCEL_CAPTION = "Annuler";
+	private static final String SEARCH_CAPTION = ApplicationManager.getApplicationManager().getTraduction("add");
+	private static final String CANCEL_CAPTION = ApplicationManager.getApplicationManager().getTraduction("cancel");
 
 	// concept pere
 	private LinkableElement conceptSource;
@@ -54,7 +54,7 @@ public class AddChidlConceptDialog extends JDialog implements ActionListener {
 	 */
 	private AddChidlConceptDialog(JFrame frame,LinkableElement concept,int panel)
 	{
-        super(frame, "Ajouter un fils au concept", true);
+        super(frame, ApplicationManager.getApplicationManager().getTraduction("addachildtoconcept"), true);
         this.panel=panel;
         this.frame = frame;
         this.conceptSource=concept;
@@ -71,7 +71,7 @@ public class AddChidlConceptDialog extends JDialog implements ActionListener {
 		//this.setLocationRelativeTo(null);
 		
         // Create the components. 
-		this.lbl_contain = new JLabel("Nom du concept :");
+		this.lbl_contain = new JLabel(ApplicationManager.getApplicationManager().getTraduction("nameoftheconcept"));
         this.add(this.lbl_contain, "1, 1, 1, 1");
 		
 		this.txt_contain = new JTextField("");
@@ -118,7 +118,7 @@ public class AddChidlConceptDialog extends JDialog implements ActionListener {
 		String err_msg = "";
 		if (this.txt_contain.getText().equals(""))
 		{
-			err_msg += "\t- Nom du concept non spécifié. \n";
+			err_msg += ApplicationManager.getApplicationManager().getTraduction("nameoftheconceptnotspecified");
 			this.dispose();
 		}
 		else

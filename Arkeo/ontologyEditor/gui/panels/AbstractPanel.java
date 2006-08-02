@@ -95,7 +95,7 @@ public abstract class AbstractPanel extends JPanel
 		{
 			if (treeModel instanceof CorpusTreeModel)
 			{
-				((CorpusTreeModel)treeModel).setRacine(new DefaultMutableTreeNode("Corpus"));
+				((CorpusTreeModel)treeModel).setRacine(new DefaultMutableTreeNode(ApplicationManager.getApplicationManager().getTraduction("corpus")));
 				((CorpusTreeModel)treeModel).remplirArbreDocumentSeq();
 			}
 			else if (treeModel instanceof ConceptualTreeModel)
@@ -108,11 +108,11 @@ public abstract class AbstractPanel extends JPanel
 		{
 			if (treeModel instanceof CorpusTreeModel)
 			{
-				((CorpusTreeModel)treeModel).setRacine(new DefaultMutableTreeNode("Corpus"));
+				((CorpusTreeModel)treeModel).setRacine(new DefaultMutableTreeNode(ApplicationManager.getApplicationManager().getTraduction("corpus")));
 			}
 			else if (treeModel instanceof ConceptualTreeModel)
 			{
-				((ConceptualTreeModel)treeModel).setRacine(new DefaultMutableTreeNode("Ontologie"));
+				((ConceptualTreeModel)treeModel).setRacine(new DefaultMutableTreeNode(ApplicationManager.getApplicationManager().getTraduction("ontology")));
 			}
 		}
 		
@@ -174,7 +174,7 @@ public abstract class AbstractPanel extends JPanel
 
 		this.jSplitPane1 = new JSplitPane();
 		this.treeViewPanel = new javax.swing.JPanel();
-		String[] titre={"Termes"};
+		String[] titre={ApplicationManager.getApplicationManager().getTraduction("terms")};
 		LemmaTableModel tableModel = new LemmaTableModel();
 		tableModel.setColumnNames(titre);
 		this.table=new JTable();
@@ -204,7 +204,7 @@ public abstract class AbstractPanel extends JPanel
 		});
 		JScrollPane jScrollPane1 = new JScrollPane();
 		jScrollPane1.setViewportView(this.table);
-		jScrollPane1.setBorder(BorderFactory.createTitledBorder("Termes du corpus"));
+		jScrollPane1.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("corpusterms")));
 		this.treeViewPanel.setLayout(new BoxLayout(this.treeViewPanel, BoxLayout.X_AXIS));
 		this.treeViewPanel.add(jScrollPane1);
 		this.navigationPanel = np;

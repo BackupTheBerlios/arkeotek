@@ -7,6 +7,7 @@ package ontologyEditor.gui.filechoosers;
 
 import javax.swing.JFileChooser;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 
 /**
@@ -23,7 +24,7 @@ public class OntologyFileChooser extends JFileChooser
 	public OntologyFileChooser()
 	{
 		super(Constants.DEFAULT_ONTOLOGIES_PATH);
-		this.setDialogTitle("Ouverture d'une ontologie");
+		this.setDialogTitle(ApplicationManager.getApplicationManager().getTraduction("openingontology"));
 		this.setFileFilter(new OntologyFileFilter());
 		this.setMultiSelectionEnabled(false);
 	}

@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import arkeotek.ontology.LinkableElement;
 
@@ -27,8 +28,8 @@ public class RenameConceptDialog extends JDialog implements ActionListener {
 	private JLabel lbl_contain;
 	private JTextField txt_contain;
    
-	private static final String SEARCH_CAPTION = "Renommer";
-	private static final String CANCEL_CAPTION = "Annuler";
+	private static final String SEARCH_CAPTION = ApplicationManager.getApplicationManager().getTraduction("rename");
+	private static final String CANCEL_CAPTION = ApplicationManager.getApplicationManager().getTraduction("cancel");
 
 	private LinkableElement conceptSource;
 
@@ -48,7 +49,7 @@ public class RenameConceptDialog extends JDialog implements ActionListener {
 	 */
 	private RenameConceptDialog(JFrame frame,LinkableElement concept)
 	{
-        super(frame, "Renommer le concept", true);
+        super(frame, ApplicationManager.getApplicationManager().getTraduction("renametheconcept"), true);
         this.frame = frame;
         this.conceptSource=concept;
 		double border = 10;
@@ -64,7 +65,7 @@ public class RenameConceptDialog extends JDialog implements ActionListener {
 		//this.setLocationRelativeTo(null);
 		
         // Create the components. 
-		this.lbl_contain = new JLabel("Nom du fils :");
+		this.lbl_contain = new JLabel(ApplicationManager.getApplicationManager().getTraduction("childname"));
         this.add(this.lbl_contain, "1, 1, 1, 1");
 		
 		this.txt_contain = new JTextField(conceptSource.toString());
@@ -110,7 +111,7 @@ public class RenameConceptDialog extends JDialog implements ActionListener {
 		String err_msg = "";
 		if (this.txt_contain.getText().equals(""))
 		{
-			err_msg += "\t- Nom du concept non spécifié. \n";
+			err_msg += ApplicationManager.getApplicationManager().getTraduction("nameoftheconceptnotspecified");
 			this.dispose();
 		}
 		else

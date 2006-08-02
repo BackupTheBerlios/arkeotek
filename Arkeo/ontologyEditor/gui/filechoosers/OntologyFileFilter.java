@@ -16,7 +16,7 @@ import javax.swing.filechooser.FileFilter;
  */
 public class OntologyFileFilter extends FileFilter
 {
-	public static String FILTER_DESCRIPTOR = "Filtre de fichiers de propriÃ©tÃ©s d'ontologies";
+	public static String FILTER_DESCRIPTOR = "Filtre de fichiers de propriétés d'ontologies";
 	
 	/**
 	 * 

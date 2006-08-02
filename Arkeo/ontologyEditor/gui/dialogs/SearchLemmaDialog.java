@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 
 /**
@@ -28,6 +29,8 @@ import ontologyEditor.DisplayManager;
  * @author Nouhen Hubert
  *
  */
+
+
 public class SearchLemmaDialog extends JDialog  implements ActionListener, PropertyChangeListener
 {
 	private JFrame frame;
@@ -35,8 +38,8 @@ public class SearchLemmaDialog extends JDialog  implements ActionListener, Prope
 	private JLabel lbl_contain;
 	private JTextField txt_contain;
    
-	private static final String SEARCH_CAPTION = "Rechercher";
-	private static final String CANCEL_CAPTION = "Annuler";
+	private static final String SEARCH_CAPTION = ApplicationManager.getApplicationManager().getTraduction("search");
+	private static final String CANCEL_CAPTION = ApplicationManager.getApplicationManager().getTraduction("cancel");
 
 	private Object value;
 
@@ -56,7 +59,7 @@ public class SearchLemmaDialog extends JDialog  implements ActionListener, Prope
 	 */
 	private SearchLemmaDialog(JFrame frame)
 	{
-        super(frame, "Recherche d'un Lemme", true);
+        super(frame, ApplicationManager.getApplicationManager().getTraduction("lemmasearch"), true);
         this.frame = frame;
         
 		double border = 10;
@@ -72,7 +75,7 @@ public class SearchLemmaDialog extends JDialog  implements ActionListener, Prope
 		//this.setLocationRelativeTo(null);
 		
         // Create the components. 
-		this.lbl_contain = new JLabel("Le lemme contient la chaine : ");
+		this.lbl_contain = new JLabel(ApplicationManager.getApplicationManager().getTraduction("thelemmacontainthestring"));
         this.add(this.lbl_contain, "1, 1, 1, 1");
 		
 		this.txt_contain = new JTextField("");
@@ -144,8 +147,8 @@ public class SearchLemmaDialog extends JDialog  implements ActionListener, Prope
             if (SEARCH_CAPTION.equals(temp_value))
             {
 				String err_msg = "";
-				if (this.txt_contain.getText().equals("")) err_msg += "Le nom de l'ontologie ne doit pas \u00eatre vide. \n";
-				if (!err_msg.equals("")) err_msg += "Des erreurs de saisies ont \u00e9t\u00e9 rep\u00e9r\u00e9es : \n";
+				if (this.txt_contain.getText().equals("")) err_msg += ApplicationManager.getApplicationManager().getTraduction("emptyontologyname");
+				if (!err_msg.equals("")) err_msg += ApplicationManager.getApplicationManager().getTraduction("inputerror");
 				else
 				{
 					//this.setVisible(false);
@@ -165,7 +168,7 @@ public class SearchLemmaDialog extends JDialog  implements ActionListener, Prope
 		String err_msg = "";
 		if (this.txt_contain.getText().equals(""))
 		{
-			err_msg += "\t- Nom de l'ontologie non sp\u00e9cifi\u00e9. \n";
+			err_msg += ApplicationManager.getApplicationManager().getTraduction("ontologynamenotspecified");
 			this.dispose();
 		}
 		else

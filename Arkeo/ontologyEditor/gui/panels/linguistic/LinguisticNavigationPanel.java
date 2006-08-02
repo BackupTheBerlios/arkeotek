@@ -85,7 +85,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		this.suivant=new ArrayList<LinkableElement>();
 		this.precedent=new ArrayList<LinkableElement>();
 		
-		String[] titreLier={"relation","terme"};
+		String[] titreLier={ApplicationManager.getApplicationManager().getTraduction("relation"),ApplicationManager.getApplicationManager().getTraduction("element")};
 		LemmasToDocumentPartTableModel tableLLModel = new LemmasToDocumentPartTableModel();
 		tableLLModel.setColumnNames(titreLier);
 		this.linkedLemmasTable = new JTable(tableLLModel);
@@ -95,9 +95,9 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		
 		JScrollPane linkedLemmasScrollPane = new JScrollPane();
 		linkedLemmasScrollPane.setViewportView(this.linkedLemmasTable);
-		linkedLemmasScrollPane.setBorder(BorderFactory.createTitledBorder("Lemmes liés"));
+		linkedLemmasScrollPane.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("dependentlemmas")));
 
-		String[] titreParent={"relation","terme"};
+		String[] titreParent={ApplicationManager.getApplicationManager().getTraduction("relation"),ApplicationManager.getApplicationManager().getTraduction("element")};
 		LemmaParentTableModel tableParentModel = new LemmaParentTableModel();
 		tableParentModel.setColumnNames(titreParent);
 		this.lemmasParentsTable = new JTable(tableParentModel);
@@ -106,7 +106,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		
 		JScrollPane lemmasParentsScrollPane = new JScrollPane();
 		lemmasParentsScrollPane.setViewportView(this.lemmasParentsTable);
-		lemmasParentsScrollPane.setBorder(BorderFactory.createTitledBorder("Lemmes parents liés"));
+		lemmasParentsScrollPane.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("dependentparentslemmas")));
 		
 		LemmasToConceptTableModel tableConceptModel = new LemmasToConceptTableModel();
 		tableConceptModel.setColumnNames(titreParent);
@@ -116,9 +116,9 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		
 		JScrollPane conceptScrollPane = new JScrollPane();
 		conceptScrollPane.setViewportView(this.concept);
-		conceptScrollPane.setBorder(BorderFactory.createTitledBorder("Concepts liés"));
+		conceptScrollPane.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("dependentconcepts")));
 		
-		String[] titre={"Relation","Identifiant","Aperçu"};
+		String[] titre={ApplicationManager.getApplicationManager().getTraduction("relation"),ApplicationManager.getApplicationManager().getTraduction("id"),ApplicationManager.getApplicationManager().getTraduction("seq")};
 		DocumentPartsToLemmaTableModel tableModel = new DocumentPartsToLemmaTableModel();
 		tableModel.setColumnNames(titre);
 		this.document=new JTable();
@@ -148,9 +148,9 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		
 		JScrollPane documentScrollPane = new JScrollPane();
 		documentScrollPane.setViewportView(this.document);
-		documentScrollPane.setBorder(BorderFactory.createTitledBorder("Documents liés"));
+		documentScrollPane.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("dependentdocuments")));
 		
-		this.validationButton = new JButton("Valider");
+		this.validationButton = new JButton(ApplicationManager.getApplicationManager().getTraduction("validate"));
 		this.validationButton.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -178,7 +178,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 			}
 		});
 		
-		this.precedentButton = new JButton("Retour");
+		this.precedentButton = new JButton(ApplicationManager.getApplicationManager().getTraduction("retour"));
 		this.precedentButton.setIcon(new ImageIcon(Constants.DEFAULT_ICONS_PATH+"previous.gif"));
 		/*if (precedent.size()!=0)
 		{
@@ -206,7 +206,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 			}
 		});
 		
-		this.suivantButton = new JButton("Suivant");
+		this.suivantButton = new JButton(ApplicationManager.getApplicationManager().getTraduction("suivant"));
 		this.suivantButton.setIcon(new ImageIcon(Constants.DEFAULT_ICONS_PATH+"next.gif"));
 		this.suivantButton.setHorizontalTextPosition(SwingConstants.LEFT);
 		
@@ -266,7 +266,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		this.add(this.validationButton, "3, 5, 1, 1");
 		this.add(this.suivantButton, "5, 5, 1, 1");
 		this.add(this.precedentButton, "1, 5, 1, 1");
-		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation"));
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("navigationpanel")));
 }
 
 	/**
@@ -288,8 +288,8 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		});*/
 		//((EditorTableModel) (this.linkedLemmasTable.getModel())).setElement(element);
 		//((EditorTableModel) (this.lemmasParentsTable.getModel())).setElement(element);
-		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation: "+element));
-		this.validationButton.setText((element.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("navigationpanel")+" "+element));
+		this.validationButton.setText((element.getState() == LinkableElement.VALIDATED)?ApplicationManager.getApplicationManager().getTraduction("unvalidate"):ApplicationManager.getApplicationManager().getTraduction("validate"));
 	}
 
 	/**
@@ -301,8 +301,8 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		((LemmasToDocumentPartTableModel) (this.linkedLemmasTable.getModel())).setDonnees(null);
 		((LemmaParentTableModel) (this.lemmasParentsTable.getModel())).setDonnees(null);
 		((DocumentPartsToLemmaTableModel) (this.document.getModel())).setDonnees(null);
-		this.validationButton.setText("Valider");
-		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation du lemme : "));
+		this.validationButton.setText(ApplicationManager.getApplicationManager().getTraduction("validate"));
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("lemmanavpanel")+" : "));
 		this.updateUI();
 	}
 	
@@ -311,8 +311,8 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 	public void remplirTableLemmeParent(LinkableElement lemme)
 	{
 		this.currentElement=lemme;
-		this.validationButton.setText((lemme.getState() == LinkableElement.VALIDATED)?"Invalider":"Valider");
-		this.setBorder(BorderFactory.createTitledBorder("Panneau de navigation du lemme : "+lemme.getName()));
+		this.validationButton.setText((lemme.getState() == LinkableElement.VALIDATED)?ApplicationManager.getApplicationManager().getTraduction("unvalidate"):ApplicationManager.getApplicationManager().getTraduction("validate"));
+		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("lemmanavpanel")+" : "+lemme.getName()));
 		lemmasParentsTable.removeAll();
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		elements=ApplicationManager.ontology.getLemmasParents(lemme);
