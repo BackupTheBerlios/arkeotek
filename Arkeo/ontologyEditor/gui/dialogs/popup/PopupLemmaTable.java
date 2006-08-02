@@ -31,24 +31,24 @@ public class PopupLemmaTable extends JPopupMenu implements ActionListener{
 		// si le nombre de lemme selectionné est superieur a 1 alors on affiche la fonction fucionner
 		if (table.getSelectedRowCount()>1)
 		{
-			this.fusion = new JMenuItem ("Fusionner les lemmes") ;
+			this.fusion = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("mergelemmas")) ;
 			this.add (this.fusion) ;
 			this.fusion.addActionListener (this) ;
 		}
 		// sinon on affiche les autres fonctions
 		else
 		{
-			this.recherche = new JMenuItem ("Recherche un lemme du corpus") ;
+			this.recherche = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("seeklemmacorpus")) ;
 			this.add (this.recherche) ;
 			this.recherche.addActionListener (this) ; 
 			
 			this.addSeparator();
 			
-			this.supprimer = new JMenuItem ("Supprimer le terme") ;
+			this.supprimer = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("removetheterm")) ;
 			this.add (this.supprimer) ;
 			this.supprimer.addActionListener (this) ;  
 			
-			this.ajouter = new JMenuItem ("Ajouter un terme") ;
+			this.ajouter = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("addaterm")) ;
 			this.add (this.ajouter) ;
 			this.ajouter.addActionListener (this) ; 
 		}
@@ -74,8 +74,8 @@ public class PopupLemmaTable extends JPopupMenu implements ActionListener{
 		// supprimer un lemme
 		else if (source == this.supprimer)
 		{
-			Object[] options = {"Oui", "Non"};
-			int choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, "Vous êtes sur le point de supprimer définitivement le concept. Désirez-vous continuer?", "Avertissement", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+			Object[] options = {ApplicationManager.getApplicationManager().getTraduction("yes"), ApplicationManager.getApplicationManager().getTraduction("no")};
+			int choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, ApplicationManager.getApplicationManager().getTraduction("deletingelementconfirm"), ApplicationManager.getApplicationManager().getTraduction("warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 			if (choice == 0)
 			{
 				try {

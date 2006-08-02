@@ -17,6 +17,7 @@ newterm=Nouveau terme
 newrelation=Nouvelle relation
 breed=Enrichir...
 mergeterms=Fusionner les termes
+mergelemmas=Fusionner les lemmes
 indexdocumentgeneric=Indexer le document (g\u00e9n\u00e9rique)
 editionrelations=Edition des relations
 relationstype=Changer le type des relations
@@ -42,9 +43,159 @@ aboutarkeotek=A propos d\u0027Arkeotek
 
 ###########################################
 
+# general
+
+yes=Oui
+no=Non
+close=Fermer
+rename=Renommer
+cancel=Annuler
+validate=Valider
+unvalidate=Invalider
+date=5 Juin 2006
+relation=Relation
+id=identifiant
+fastview=Aperçu
+listeddocuments=Documents recens\u00e9s
+add=Ajouter
+addachildtoconcept=Ajouter un fils au concept
+nameoftheconcept=Nom du concept :
+nameoftheconceptnotspecified=\t- Nom du concept non sp\u00e9cifi\u00e9. \n
+renametheconcept=Renommer le concept
+removetheconcept=Supprimer le concept
+removetheterm=Supprimer le terme
+addchildconcept=Ajouter un concept fils
+addaterm=Ajouter un terme
+childname=Nom du fils :
+lemmasearch=Recherche d'un Lemme
+thelemmacontainthestring=Le lemme contient la chaine : 
+ontologycreation=Cr\u00e9ation d'une ontologie
+nameoftheontology=Nom de l'ontologie : 
+stockagetype=(Choisissez un type de stockage pour vos donn\u00e9es)
+dbmysql=Base de donn\u00e9es MySQL
+address=Emplacement : 
+username=Nom d'utilisateur : 
+pwd=Mot de passe : 
+retype=Confirmez :
+child=Fils 
+
+deletingconceptconfirm=Vous \u00eates sur le point de supprimer d\u00e9finitivement le concept. D\u00e9sirez-vous continuer?
+deletingelementconfirm=Vous \u00eates sur le point de supprimer d\u00e9finitivement l'\u00e9l\u00e9ment. D\u00e9sirez-vous continuer?
+warning=Avertissement
+
+idview=Vue identifiant
+seqview=Vue s\u00e9quence
+index=Indexer le document
+
+seeklemmacorpus=Recherche un lemme du corpus
+relations=Relations
+openingontology=Ouverture d'une ontologie
+importationsyntextitle=Import des sorties Syntex
+importtermontocsv=Import des sorties Termonto au format csv
+loading=Chargement en cours
+###########################################
+
 # Relations Editor Dialog
 relationseditor=Editeur de relations
 cancelbutton=Annuler
 okbutton=Ok
 addbutton=Ajouter
 delbutton=Supprimer
+
+###########################################
+
+# About Dialog
+abouttitle=A Propos D'Arkeotek !
+aboutarkeo=Arkeotek, l'\u00e9diteur d'ontologie
+
+###########################################
+
+documentsassociatedattheterm=Documents associ\u00e9s au terme 
+
+
+###########################################
+
+# Error messages
+emptyontologyname=Le nom de l'ontologie ne doit pas \u00eatre vide. \n
+inputerror=Des erreurs de saisies ont \u00e9t\u00e9 rep\u00e9r\u00e9es : \n
+ontologynamenotspecified=\t- Nom de l'ontologie non sp\u00e9cifi\u00e9. \n
+badaddress=L'emplacement doit \u00eatre une URI (chemin d'acc\u00e8s ou URL). \n
+depotaddress=\t- Emplacement du d\u00e9p\u00f4t non sp\u00e9cifi\u00e9. \n
+pwdnotmatch=\t- Le mot de passe est erron\u00e9. \n
+inputerror2=Erreur de saisie
+
+savingerror=Erreur de sauvegarde
+pwdencodingerror=Une erreur interne est survenue lors du cryptage du mot de passe : 
+invalidkey=clef invalide
+invalidalgorithm=algorithme invalide
+nonexistentpadding=padding inexistent
+invalidsize=taille des blocs invalide
+invalidpadding=padding invalide
+invalidspecificationkey=sp\u00e9cification de clef invalide
+filecreationerror=Une erreur interne est survenue lors de la cr\u00e9ation du fichier
+
+
+
+###########################################
+
+# Relations
+conceptconcept=Concept \u00e0 Concept
+conceptdocument=Concept \u00e0 Document
+termeconcept=Terme \u00e0 Concept
+termedocument=Terme \u00e0 Document
+termeterme=Terme \u00e0 Terme
+
+
+###
+corpus=Corpus
+ontology=Ontologie
+term=Terme
+terms=Termes
+assiociatedterm=Termes Associés
+corpusterms=Termes du corpus
+documentdetail=D\u00e9tail du document 
+quickview=Aper\u00e7u
+element=El\u00e9ment
+elements=El\u00e9ments
+conceptsindexing=Concepts indexant
+termsrelateddocument=Termes liés au document
+potentialconcepts=Concepts potentiels
+corpusnavpanel=Panneau de navigation du corpus : 
+lemmanavpanel=Panneau de navigation du lemme
+annotate=annote
+include=englobe
+modify=Modifier
+remove=Supprimer
+editionpanel=Panneau d'\u00e9dition
+dependentlemmas=Lemmes liés
+dependentparentslemmas=Lemmes parents liés
+dependentconcepts=Concepts liés
+dependentdocuments=Documents liés
+associateddocuments=Documents associés
+navigationpanel=Panneau de Navigation
+conceptfather=Concept Père
+associatedterms=Termes Associés
+connectedconcepts=Concepts Reliés
+child=Child
+definiteconcepts=Concepts définis
+origin=Origine
+pleaseopenontology=Veuillez ouvrir une ontologie
+noontologycharged=Pas d'ontologie chargée
+impossibleoperation=Op\u00e9ration impossible
+namerelationalreadyused=Nom de relation d\u00e9j\u00e8 utilis\u00e9
+namealreadyused=Nom d\u00e9j\u00e8 utilis\u00e9
+enternamerelation=Veuillez entrer le nom de la relation
+creationlink=Cr\u00e9ation d'un lien
+nopossiblerelationobject=Aucune relation possible entre ces deux types d'objet
+createrelationbefore=No relation is created, please create a relation before
+termsassociatedcorpus=Termes associés au corpus
+detail=Détail du document
+com=Commentaires
+seq=Séquences
+image=Images
+imageToDoc=Images liés au document
+is=est
+by=par
+retour=Retour
+suivant=Suivant
+

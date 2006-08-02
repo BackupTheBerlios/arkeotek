@@ -30,15 +30,15 @@ public class PopupConceptTree extends JPopupMenu implements ActionListener{
 	public PopupConceptTree(LinkableElement concept, int panel) {
 		this.concept=concept;
 		this.panel=panel;
-		this.renommer = new JMenuItem ("Renommer le concept") ;
+		this.renommer = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("renametheconcept")) ;
 		this.add (this.renommer) ;
 		this.renommer.addActionListener (this) ;               
 		
-		this.supprimer = new JMenuItem ("Supprimer le concept") ;
+		this.supprimer = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("removetheconcept")) ;
 		this.add (this.supprimer) ;
 		this.supprimer.addActionListener (this) ;  
 		
-		this.ajouter = new JMenuItem ("Ajouter un concept fils") ;
+		this.ajouter = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("addchildconcept")) ;
 		this.add (this.ajouter) ;
 		this.ajouter.addActionListener (this) ;  
 	}
@@ -54,8 +54,8 @@ public class PopupConceptTree extends JPopupMenu implements ActionListener{
 		//sinon on supprime un concept 
 		else if (source == this.supprimer)
 		{
-			Object[] options = {"Oui", "Non"};
-			int choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, "Vous êtes sur le point de supprimer définitivement le concept. Désirez-vous continuer?", "Avertissement", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+			Object[] options = {ApplicationManager.getApplicationManager().getTraduction("yes"), ApplicationManager.getApplicationManager().getTraduction("no")};
+			int choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, ApplicationManager.getApplicationManager().getTraduction("deletingconceptconfirm"), ApplicationManager.getApplicationManager().getTraduction("warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 			if (choice == 0)
 			{
 				try {

@@ -39,15 +39,15 @@ public class PopupDocumentPartTree extends JPopupMenu implements ActionListener{
 	public PopupDocumentPartTree(LinkableElement document) {
 		this.document=document;
 		
-		this.id = new JMenuItem ("Vue Identifiant") ;
+		this.id = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("idview")) ;
 		this.add (this.id) ;
 		this.id.addActionListener (this) ;               
 		
-		this.seq = new JMenuItem ("Vue Séquence") ;
+		this.seq = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("seqview")) ;
 		this.add (this.seq) ;
 		this.seq.addActionListener (this) ; 
 		
-		this.indexer = new JMenuItem ("Indexer le document") ;
+		this.indexer = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("index")) ;
 		this.add (this.indexer) ;
 		this.indexer.addActionListener (this) ;
 		 

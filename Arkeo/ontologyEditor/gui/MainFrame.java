@@ -77,7 +77,7 @@ public class MainFrame extends JFrame
      */
     private void initComponents() {
 		this.loadingPanel = new JPanel();
-		this.loadingPanel.add(new JLabel("Chargement en cours"));
+		this.loadingPanel.add(new JLabel(ApplicationManager.getApplicationManager().getTraduction("loading")));
 		
 		this.menuBar = new MenuBar();
 		this.jSplitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);

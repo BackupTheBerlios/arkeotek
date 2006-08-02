@@ -16,7 +16,8 @@ newconcept=New concept
 newterm=New term
 newrelation=New relation
 breed=Breed...
-mergeterms=Merge terms
+mergeterms=Merge the terms
+mergelemmas=Merge the lemmas
 indexdocumentgeneric=Index the document (generic)
 editionrelations=Relations edition
 relationstype=Change type of relations
@@ -42,9 +43,156 @@ aboutarkeotek=About Ark\u00e9otek
 
 ###########################################
 
+# general
+
+yes=Yes
+no=No
+close=Close
+rename=Rename
+cancel=Annuler
+validate=Validate
+unvalidate=Unvalidate
+date=June 5th 2006
+relation=Relation
+id=identifiant
+fastview=fastview
+listeddocuments=Listed Documents
+add=Add
+addachildtoconcept=Add a child to concept
+nameoftheconcept=Name of the concept :
+nameoftheconceptnotspecified=\t- Name of the concept not specified. \n
+renametheconcept=Rename the concept
+removetheconcept=Remove the concept
+removetheterm=Remove the term
+addchildconcept=Add a child concept
+addaterm=Add a term
+childname=child's name :
+lemmasearch=Lemma search
+thelemmacontainthestring=The lemma contain the string
+ontologycreation=Creation of an ontologie
+nameoftheontology=Name of the ontology : 
+stockagetye=(Choose a stockage method for your datas)
+dbmysql=MySQL Database
+address=Address : 
+username=Nom d'utilisateur : 
+pwd=Password : 
+retype=Retype : 
+child=Child
+
+deletingconceptconfirm=You are about to remove the concept definitively. Do you wish to continue ?
+deletingelementconfirm=You are about to remove the element definitively. Do you wish to continue ?
+warning=Warning
+
+idview=Id view
+seqview=Sequence view
+index=Indexing the document
+
+seeklemmacorpus=Seek a lemma of the corpus
+relations=Relations
+openingontology=Opening of an ontology
+importationsyntextitle=Importation of the Syntex exits
+importtermontocsv=Importation of the Termonto exits (format csv)
+loading=Loading in progress
+###########################################
+
 # Relations Editor Dialog
 relationseditor=Relations editor
 cancelbutton=Cancel
 okbutton=Ok
 addbutton=Add
 delbutton=Delete
+
+###########################################
+
+# About Dialog
+abouttitle=About Arkeotek !
+aboutarkeo=Arkeotek, the ontology editor
+
+###########################################
+
+documentsassociatedattheterm=documentsassociatedattheterm
+
+###########################################
+
+# Error messages
+emptyontologyname=The name of the ontology must not be empty. \n
+inputerror=Some input errors have been found : \n
+ontologynamenotspecified=\t- Name of the ontology not specified. \n
+badaddress=The address must be an access path (URL or URI). \n
+depotaddress=\t - The address of the repository is not specified. \n
+pwdnotmatch=\t- Password doesn't match. \n
+inputerror2=Input error
+
+savingerror=Saving error
+pwdencodingerror=An internal error occurred during the encoding of the password : 
+invalidkey=invalid key
+invalidalgorithm=invalid algorithm
+nonexistentpadding=non-existent padding
+invalidsize=Invalid blocks' size
+invalidpadding=invalid padding
+invalidspecificationkey=invalid specification of key
+filecreationerror=An internal error occurred during the creation of the file
+
+
+###########################################
+
+# Relations
+conceptconcept=Concept to Concept
+conceptdocument=Concept to Document
+termeconcept=Terme to Concept
+termedocument=Terme to Document
+termeterme=Terme to Terme
+
+
+###
+corpus=Corpus
+ontology=Ontology
+term=Term
+terms=Terms
+assiociatedterm=Associated terms
+corpusterms=Terms of the corpus
+documentdetail=Detail of the document 
+quickview=Quick view
+element=Element
+elements=Elements
+conceptsindexing=Concepts indexing 
+termsrelateddocument=Terms related to the document
+potentialconcepts=Potential concepts
+corpusnavpanel=Panel of navigation of the corpus : 
+lemmanavpanel=Panel of navigation of the lemma
+annotate=annotate
+include=englobe
+modify=Modify
+remove=Remove
+editionpanel=Edition Panel
+dependentlemmas=Dependent lemmas
+dependentparentslemmas=Dependent parents lemmas
+dependentconcepts=Dependent concepts
+dependentdocuments=Documents liés
+associateddocuments=Associated documents
+navigationpanel=Navigation Panel
+conceptfather=Concept Father
+associatedterms=Associated terms
+connectedconcepts=Connected Concepts
+child=Child
+definiteconcepts=Definite concepts
+origin=Origin
+pleaseopenontology=Please open an ontology
+noontologycharged=No ontology charged
+impossibleoperation=Impossible operation
+namerelationalreadyused=Name of relation already used
+namealreadyused=Name already used
+enternamerelation=Please enter the name of the relation
+creationlink=Creation of a link
+nopossiblerelationobject=No possible relation between these two types of object
+createrelationbefore=Aucune relation n'est cr\u00e9\u00e9e, veuillez en cr\u00e9er une avant
+termsassociatedcorpus=Terms associated with the corpus
+detail=Detail of document
+com=Comments
+seq=Sequences
+image=Images
+imageToDoc=Images connected to document part
+is=is
+by=by
+retour=Back
+suivant=Next
