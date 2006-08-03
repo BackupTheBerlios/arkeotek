@@ -13,8 +13,14 @@ import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 
+/*
+ * Julien Sanmartin
+ * Classe représenttant le model de l'arbre des concepts
+ */
+
 public class ConceptualTreeModel extends AbstractTreeModel {
 
+	// retourne la racine de l'arbre
 	private DefaultMutableTreeNode racine;
 	
 	public ConceptualTreeModel() {
@@ -74,6 +80,7 @@ public class ConceptualTreeModel extends AbstractTreeModel {
 		this.racine = racine;
 	}
 	
+	// fonction qui construit l'arbre des concepts 
 	public void remplirArbreConcept() {
 		this.setRacine(new DefaultMutableTreeNode(ApplicationManager.ontology.toString()));
 		// concepts= liste de tout les concepts

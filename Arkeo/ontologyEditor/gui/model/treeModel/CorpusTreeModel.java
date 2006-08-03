@@ -13,7 +13,13 @@ import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 
+/*
+ * Julien Sanmartin
+ * Classe représenttant le model de l'arbre des documents
+ */
+
 public class CorpusTreeModel extends AbstractTreeModel {
+	// racine de l'arbre
 	private DefaultMutableTreeNode racine;
 	
 	public CorpusTreeModel() {
@@ -73,6 +79,7 @@ public class CorpusTreeModel extends AbstractTreeModel {
 		this.racine = racine;
 	}
 	
+	//focntion permettant de construire l'arbre des documents sous la forme de sequence
 	public void remplirArbreDocumentSeq() {
 		// on creer la racine
 		this.setRacine(new DefaultMutableTreeNode("Corpus"));
@@ -150,6 +157,8 @@ public class CorpusTreeModel extends AbstractTreeModel {
 		}
 	}
 	
+	
+//	focntion permettant de construire l'arbre des documents sous la forme de identifiant
 	public void remplirArbreDocumentId() {
 		// concepts= liste de tout les concepts
 		this.setRacine(new DefaultMutableTreeNode("Corpus"));
