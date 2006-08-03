@@ -2,6 +2,11 @@ package ontologyEditor.gui.model.tableModel;
 
 import javax.swing.table.AbstractTableModel;
 
+/*
+ *  Julien Snamartin
+ *  Classe représentant le model pour la table LemmasToDocumentPart
+ */
+
 public class LemmasToDocumentPartTableModel extends AbstractTableModel {
 
 	private String[] columnNames;

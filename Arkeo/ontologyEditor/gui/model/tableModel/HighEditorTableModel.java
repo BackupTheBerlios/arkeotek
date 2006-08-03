@@ -2,6 +2,11 @@ package ontologyEditor.gui.model.tableModel;
 
 import javax.swing.table.AbstractTableModel;
 
+/*
+ *  Julien Snamartin
+ *  Classe représentant le model pour la table HighEditor
+ */
+
 public class HighEditorTableModel extends AbstractTableModel {
 
 	private String[] columnNames;

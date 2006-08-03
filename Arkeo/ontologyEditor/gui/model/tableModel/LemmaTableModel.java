@@ -9,6 +9,11 @@ import ontologyEditor.DisplayManager;
 import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 
+/*
+ *  Julien Snamartin
+ *  Classe représentant le model pour la table LemmaTableModel
+ */
+
 public class LemmaTableModel extends AbstractTableModel {
 
 	

@@ -2,6 +2,11 @@ package ontologyEditor.gui.model.tableModel;
 
 import javax.swing.table.AbstractTableModel;
 
+/*
+ *  Julien Snamartin
+ *  Classe représentant le model pour la table PotentialConcept
+ */
+
 public class PotentialConceptTableModel extends AbstractTableModel {
 	private String[] columnNames;
 	private Object[][] donnees;
