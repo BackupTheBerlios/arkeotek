@@ -17,13 +17,20 @@ import javax.swing.tree.TreePath;
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 
+/*
+ * Julien Sanmartin
+ * Claase permmettant de parametrer l'affichage des noeuds dans l'arbre des documents
+ */
+
 public class DocumentPartTreeRenderer extends DefaultTreeCellRenderer  {
 	
-	
+	//cette fonction est appelée à chaque raffraichissement de l'interface
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus){ 
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+        // si l'ontology et la value est différente de null
         if (value!=null && ApplicationManager.ontology!=null)
         {
+        	// recherche du document dans la liste des docValider de la classe Ontology 
         	boolean trouver=false;
         	for (int i=0;i<ApplicationManager.ontology.getDocValider().size();i++)
         	{
@@ -33,13 +40,15 @@ public class DocumentPartTreeRenderer extends DefaultTreeCellRenderer  {
         			break;
         		}
         	}
-        	
+        	// si value est trouvé
 	        if (trouver)
 		    {
+	        	// affichage du noeud en magenta
 		    	this.setForeground(Color.MAGENTA);
 		    }
 		    else
 		    {
+		    	// affichage du noeud en noir
 		    	this.setForeground(Color.BLACK);
 		    }
 	        //tree.expandPath(tree.getSelectionPath());
