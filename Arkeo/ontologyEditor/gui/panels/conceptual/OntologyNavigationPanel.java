@@ -46,8 +46,7 @@ import arkeotek.ontology.Ontology;
 import arkeotek.ontology.Relation;
 
 /**
- * @author Bernadou Pierre
- * @author Czerny Jean
+ * 
  * @author Sanmartin
  * 
  * classe relative au panneau de navigation de l'ontologie. Associé à un concept
@@ -339,12 +338,12 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		this.updateUI();
 	}
 
+	// focntion permettant de remplir la table des concept fils par rapport au concept courant
 	public void remplirTableFils(LinkableElement concept) {
 		// TODO Auto-generated method stub
 		this.currentElement=concept;
 		conceptFilsTable.removeAll();
 		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("navigationpanel")+" "+concept));
-		//String[] titreF={"Fils"};
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		if (concept != null)
 		{
@@ -398,6 +397,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		
 	}
 
+	// focntion permettant de remplir la table des lemmes par rapport au concept courant
 	public void remplirTableLemme(LinkableElement concept) {
 		// TODO Auto-generated method stub
 		lemmeAssocieTable.removeAll();
@@ -433,6 +433,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		this.updateUI();
 	}
 
+	// fonction permettant de remplir la table des concepts définit par rapport au concept courant
 	public void remplirTableDefini(LinkableElement concept) {
 		// TODO Auto-generated method stub
 		conceptDefiniTable.removeAll();
@@ -481,6 +482,8 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		
 	}
 	
+	
+	// permet d'afficher les images associé au concepts
 	private void rendererTableConcept(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
 		//custom.setHorizontalAlignment(JLabel.CENTER);
@@ -493,6 +496,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		table.getColumnModel().getColumn(0).setCellRenderer(custom);
 	}
 	
+	// permet d'afficher les images associé au lemme
 	private void rendererTableLemme(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
 		//custom.setHorizontalAlignment(JLabel.CENTER);

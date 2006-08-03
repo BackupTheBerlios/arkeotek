@@ -51,8 +51,8 @@ import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 
 /**
- * @author Bernadou Pierre
- * @author Czerny Jean
+ * Julien sanmartin
+ * Classe permettant d'afficher le panneau de navigation d'un document 
  */
 public class CorpusNavigationPanel extends AbstractNavigationPanel
 {
@@ -61,11 +61,9 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 	private JTable imagesTable;
 	private JTable conceptsIndexingTable;
 	private JTable potentialConceptsTable;
-	//private SonDetailPanel pnl_SonDetail;
 	private JTable termeAssocie;
-	
 	private JButton validationButton;
-	
+	// element courant selectionner
 	private LinkableElement doc;
 
 	/**
@@ -237,8 +235,16 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		{
 			public void mouseClicked(MouseEvent e)
 			{
-				LinkableElement selected = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0));
-				reflectNavigation(selected);
+				String value=(String)((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0);
+				LinkableElement selected; 
+				for (int i=0;i<ApplicationManager.ontology.get(Concept.KEY).size();i++)
+				{
+					if (ApplicationManager.ontology.get(Concept.KEY).get(i).toString().equals(value))
+					{
+						selected=ApplicationManager.ontology.get(Concept.KEY).get(i);
+						reflectNavigation(selected);
+					}
+				}
 			}
 		});
 		this.potentialConceptsTable.addMouseMotionListener(new MouseMotionAdapter()
@@ -286,10 +292,6 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		ImagesToDocumentPartTableModel tableIModel = new ImagesToDocumentPartTableModel();
 		tableIModel.setColumnNames(TitreI);
 		this.imagesTable = new JTable(tableIModel);
-		//TableColumn column1I = imagesTable.getColumnModel().getColumn(0);
-		//column1I.setPreferredWidth(75);
-		//TableColumn column2I = imagesTable.getColumnModel().getColumn(1);
-		//column2I.setPreferredWidth(150);
 		JScrollPane jspI = new JScrollPane(this.imagesTable);
 		jspI.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("imageToDoc")));
 		this.add(jspI, "1, 5, 1, 7");
@@ -298,7 +300,6 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0));
-				//termeAssocie.setToolTipText(currentElement.getLinks(element).get(0).getName()+" "+currentElement.getName());
 				imagesTable.setToolTipText(element.getName());
 			}
 		});
@@ -322,7 +323,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.updateUI();
 	}
 		
-
+	// focntion permettant de remplir la table des concept indexant par raport a un document
 	public void remplirTableConceptIndexant(LinkableElement doc) {
 		// TODO Auto-generated method stub
 		this.doc=doc;
@@ -368,6 +369,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			
 	}
 	
+//	 focntion permettant de remplir la table des images indexant par raport a un document
 	public void remplirTableimages(LinkableElement doc) {
 		// TODO Auto-generated method stub
 		((ImagesToDocumentPartTableModel)imagesTable.getModel()).setDonnees(null);
@@ -393,6 +395,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			
 	}
 
+//	 focntion permettant de remplir la table des concept potentiels par raport a un document
 	public void remplirTableConceptPotentiel(LinkableElement doc) {
 		// TODO Auto-generated method stub
 		this.potentialConceptsTable.removeAll();
@@ -580,6 +583,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.updateUI();
 	}
 
+//	 focntion permettant de remplir la table des lemme lié par raport a un document
 	public void remplirTableLemmeLier(LinkableElement doc) {
 		// TODO Auto-generated method stub
 		this.termeAssocie.removeAll();
@@ -605,7 +609,6 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 			for (int i=0;i<elements.size();i++)
 			{
 				donnees[i][0]=(elements.get(i)[1]);
-				//donnees[i][1]=(elements.get(i)[1]);
 			}
 			((LemmasToDocumentPartTableModel)termeAssocie.getModel()).setDonnees(donnees);
 		}
@@ -625,6 +628,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.doc = doc;
 	}
 	
+	// affichage des icone correspondant au concept
 	private void rendererTableConcept(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
 		//custom.setHorizontalAlignment(JLabel.CENTER);
@@ -637,6 +641,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		table.getColumnModel().getColumn(1).setCellRenderer(custom);
 	}
 	
+	// affichage des icone correspondant au lemme
 	private void rendererTableLemme(JTable table) {     
 		DefaultTableCellRenderer custom = new DefaultTableCellRenderer();
 		//custom.setHorizontalAlignment(JLabel.CENTER);

@@ -19,10 +19,10 @@ import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.LinkableElement;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
- *
+ * Julien Sanmartin
+ * Classe permattant d'afficher l'arbre des concepts
  */
+
 public class CorpusPanel extends AbstractPanel {
     /** Creates new form MainFrame */
     
@@ -33,6 +33,7 @@ public class CorpusPanel extends AbstractPanel {
 		this.vue=0;
     }
     
+	 // des qu'on clique sur un concepts dans l'arbre
 	protected void performMouseClicked(MouseEvent e) {
 		if (ApplicationManager.ontology!=null)
 		{

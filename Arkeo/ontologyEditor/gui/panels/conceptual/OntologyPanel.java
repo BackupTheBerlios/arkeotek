@@ -18,9 +18,8 @@ import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
- *
+ * Julien Sanmartin
+ * Classe permattant d'afficher l'arbre des concepts
  */
 public class OntologyPanel extends AbstractPanel {
     
@@ -29,6 +28,7 @@ public class OntologyPanel extends AbstractPanel {
 		super(new ConceptualTreeModel(),new OntologyNavigationPanel());
     }
     
+    // des qu'on clique sur un concepts dans l'arbre
 	protected void performMouseClicked(MouseEvent e) {
 		if (ApplicationManager.ontology!=null)
 		{
