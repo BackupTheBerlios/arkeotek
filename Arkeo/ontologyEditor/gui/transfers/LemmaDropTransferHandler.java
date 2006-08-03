@@ -25,9 +25,8 @@ import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
- *
+ * Julien Snamartin
+ * Classe permettant de drop un lemme
  */
 public class LemmaDropTransferHandler extends TransferHandler
 {
@@ -58,19 +57,23 @@ public class LemmaDropTransferHandler extends TransferHandler
 	}
 
 	/**
-	 * @see javax.swing.TransferHandler#importData(javax.swing.JComponent, java.awt.datatransfer.Transferable)
+	 *fonction appelé lors du transfert d'un lemme
 	 */
 	public boolean importData(JComponent c, Transferable t)
     {
         try
         {
-			JTable target = (JTable) c;
+        	// table cible du drop
+        	JTable target = (JTable) c;
             if (t != null)
 			{
+            	// recupere l'element drag and droppé
 				LinkableElement element = (LinkableElement) t.getTransferData(this.exportedLinkableElement);
+				//liste des relation de l'ontology
 				ArrayList<LinkableElement> relations = ApplicationManager.ontology.get(Relation.KEY);
 				if (relations.size() != 0)
 				{
+					// sauvegarde des relation possible pour les lemmes
 					ArrayList<LinkableElement> relations_terme=new ArrayList<LinkableElement>();
 			
 					if (DisplayManager.mainFrame.getEditionPanel().getCourant() instanceof Concept)

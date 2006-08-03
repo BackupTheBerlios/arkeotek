@@ -13,8 +13,8 @@ import java.io.IOException;
 import arkeotek.ontology.LinkableElement;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
+ * Julien Sanmartin
+ * Classe metier pour le transfert d'un concept
  *
  */
 public class TransferableConcept implements Transferable

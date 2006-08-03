@@ -27,9 +27,8 @@ import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
- *
+ * Julien Sanmartin
+ * Classe appelé lors du tranfert d'un objet de type Concept
  */
 public class ConceptDropTransferHandler extends TransferHandler
 {
@@ -60,37 +59,44 @@ public class ConceptDropTransferHandler extends TransferHandler
 	}
 
 	/**
-	 * @see javax.swing.TransferHandler#importData(javax.swing.JComponent, java.awt.datatransfer.Transferable)
+	 * fonction appelé lors du transfert d'un concept
 	 */
 	public boolean importData(JComponent c, Transferable t)
     {
         try
         {
+        	// table cible du drop
 			JTable target = (JTable) c;
             if (t != null)
 			{
+            	// recupere l'element drag and droppé
             	LinkableElement element = (LinkableElement) t.getTransferData(this.exportedLinkableElement);
-				ArrayList<LinkableElement> relations = ApplicationManager.ontology.get(Relation.KEY);
-				ArrayList<LinkableElement> conceptToConcept=new ArrayList<LinkableElement>();
+				// liste des relation de l'ontology
+            	ArrayList<LinkableElement> relations = ApplicationManager.ontology.get(Relation.KEY);
+				// sauvegarde des relation possible entre concept et docueùnt
+            	ArrayList<LinkableElement> conceptToConcept=new ArrayList<LinkableElement>();
 				
 				if (relations.size() != 0)
 				{
-					// si la cible c'est les conceptIndexant 
+					// si le model de la table cible est une instance de conceptIndexant de la vue document
 					if (target.getModel() instanceof IndexingConceptTableModel)
 					{
-						//-------------------------->
+						// pour chaque relation
 						for (LinkableElement rel:relations)
 						{
+							// la relation est du type Concept à Document
 							if (((Relation)rel).getType()==Relation.RELATION_CONCEPT_DOCUMENT)
 							{
+								// on ajoute la relation dans la conceptToconcept
 								conceptToConcept.add(rel);
 							}
 						}
-						//<-------------------------
+						// on tranforme l'arrayList en Object []
 						Object[] rels=conceptToConcept.toArray();
 
 						if (rels.length!=0)
 						{
+							// on demande à l'utilisateur de choisir parmi les relations possibles
 							Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
 									ApplicationManager.getApplicationManager().getTraduction("enternamerelation") + " : ", ApplicationManager.getApplicationManager().getTraduction("creationlink"), JOptionPane.INFORMATION_MESSAGE, null,
 									rels, rels[0]);
@@ -123,6 +129,7 @@ public class ConceptDropTransferHandler extends TransferHandler
 								}
 							}
 						}
+						// si aucune relation corrrepond au type de relation
 						else
 						{
 							JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Aucune relation possible entre ces deux types d'objet");
@@ -131,7 +138,8 @@ public class ConceptDropTransferHandler extends TransferHandler
 					// si on glisse un concept dans le panneau haut d'edition
 					else if (target.getModel() instanceof HighEditorTableModel)
 					{
-						//-------------------------->
+						// meme algorithme que pour la table ConceptIndexing sauf que ici le type de relation 
+						// est Concept à Concept ou Concept à Terme ou Concept à document
 						LinkableElement le=DisplayManager.mainFrame.getEditionPanel().getCourant();
 						if (le instanceof Concept)
 						{

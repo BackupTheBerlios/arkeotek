@@ -16,10 +16,10 @@ import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
- *
+ * Julien Sanmartin
+ * Classe appelé lors du tranfert d'un objet de type Concept
  */
+
 public class ConceptIndexingDragTranferHandler extends TransferHandler
 {
 //	 The data type exported.

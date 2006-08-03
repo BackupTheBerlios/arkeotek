@@ -263,6 +263,7 @@ public class MainFrame extends JFrame
 		return this.editionPanel;
 	}
 
+	// fonction permettant la mise a jour de l'interface
 	public void mAJ(LinkableElement courant) {
 		// TODO Auto-generated method stub
 		JPanel haut=this.getPanel(TOP_PANEL);

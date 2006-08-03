@@ -20,8 +20,8 @@ import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
+ * Julien Sanmartin
+ * Classe permettant le transfert d'un LinkableElement
  *
  */
 public class LinkableElementDragTransferHandler extends TransferHandler
@@ -66,16 +66,19 @@ public class LinkableElementDragTransferHandler extends TransferHandler
 	protected Transferable createTransferable(JComponent c)
     {
 		LinkableElement element = null;
+		// si c est une JTable
 		if (c instanceof JTable)
 		{
 			JTable source = (JTable) c;
 			element = (LinkableElement)source.getValueAt(source.getSelectedRow(), 0);
 		}
+		// sino c'est un JTree
 		else
 		{
 			JTree source = (JTree) c;
 			if (ApplicationManager.ontology!=null)
 			{
+				// on recherhe le LinkableElement or cela ne peut etre qu'un concept car les document ne sont pas tranferable
 				String nomConcept=source.getLastSelectedPathComponent().toString();
 				for (int i=0;i<ApplicationManager.ontology.get(Concept.KEY).size();i++)
 				{
