@@ -18,10 +18,10 @@ import arkeotek.ontology.Lemma;
 import arkeotek.ontology.LinkableElement;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
- *
+ * Julien Sanmartin
+ * Classe permattant d'afficher l'arbre des concepts
  */
+
 public class LinguisticPanel extends AbstractPanel {
 
     /** Creates new form MainFrame */

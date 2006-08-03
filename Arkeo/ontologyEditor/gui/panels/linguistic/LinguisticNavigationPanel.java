@@ -41,15 +41,13 @@ import arkeotek.ontology.LinkableElement;
 import arkeotek.ontology.Relation;
 
 /**
- * @author Bernadou Pierre
- * @author Czerny Jean
+ * 
+ * @author Sanmartin
+ * 
+ * classe relative au panneau de navigation des lemmes. Associé à un lemme
  */
 public class LinguisticNavigationPanel extends AbstractNavigationPanel
 {
-	//private JTable appearancesTable;
-	
-	//private JButton voirDoc;
-	
 	private JTable linkedLemmasTable;
 	
 	private JTable lemmasParentsTable;
@@ -180,14 +178,6 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		
 		this.precedentButton = new JButton(ApplicationManager.getApplicationManager().getTraduction("retour"));
 		this.precedentButton.setIcon(new ImageIcon(Constants.DEFAULT_ICONS_PATH+"previous.gif"));
-		/*if (precedent.size()!=0)
-		{
-			precedentButton.setToolTipText(precedent.get(precedent.size()-1).toString());
-		}
-		else
-		{
-			precedentButton.setToolTipText("Aucun précédent");
-		}*/
 		
 		this.precedentButton.addMouseListener(new MouseAdapter(){
 			@Override
@@ -210,14 +200,6 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		this.suivantButton.setIcon(new ImageIcon(Constants.DEFAULT_ICONS_PATH+"next.gif"));
 		this.suivantButton.setHorizontalTextPosition(SwingConstants.LEFT);
 		
-		/*if (suivant.size()!=0)
-		{
-			suivantButton.setToolTipText(suivant.get(0).toString());
-		}
-		else
-		{
-			suivantButton.setToolTipText("Aucun suivant");
-		}*/
 		this.suivantButton.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -234,23 +216,6 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 				}
 			}
 		});
-		
-		
-		
-		//this.voirDoc = new JButton("Documents associés");
-		/*if (ApplicationManager.ontology!=null)
-		{
-			final LinkableElement elem=;
-			this.voirDoc.addMouseListener(new MouseAdapter(){
-				@Override
-				public void mouseClicked(MouseEvent e)
-				{
-					DocumentPartToLemme fen = new DocumentPartToLemme(DisplayManager.mainFrame,elem);
-					System.out.println("LEMME : "+elem);
-					fen.setVisible(true);
-				}
-			});
-		}*/
 		
 		// mise en place des renderer
 		this.rendererTableConcept(this.concept);
@@ -276,18 +241,6 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 	 */
 	public void fillTable(LinkableElement element)
 	{
-		//((EditorTableModel) (this.appearancesTable.getModel())).setElement(element);
-		final LinkableElement elem=element;
-		/*this.voirDoc.addMouseListener(new MouseAdapter(){
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				DocumentPartToLemme fen = new DocumentPartToLemme(DisplayManager.mainFrame,elem);
-				fen.setVisible(true);
-			}
-		});*/
-		//((EditorTableModel) (this.linkedLemmasTable.getModel())).setElement(element);
-		//((EditorTableModel) (this.lemmasParentsTable.getModel())).setElement(element);
 		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("navigationpanel")+" "+element));
 		this.validationButton.setText((element.getState() == LinkableElement.VALIDATED)?ApplicationManager.getApplicationManager().getTraduction("unvalidate"):ApplicationManager.getApplicationManager().getTraduction("validate"));
 	}
@@ -373,6 +326,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		final LinkableElement elem=lemme;
 	}
 
+	// rempli la table des concept par rapport au lemme courant
 	public void remplirTableConcept(LinkableElement lemme) {
 		// TODO Auto-generated method stub
 		concept.removeAll();
@@ -412,6 +366,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		this.updateUI();
 	}
 	
+	// retourne les objet qui sont en relation avec les elements courant
 	private ArrayList<Object[]> getElementsFromLinkableElement(LinkableElement element)
 	{
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
@@ -434,6 +389,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		return elements;
 	}
 	
+	// rempli la table des document parent par raport au lemme courant
 	public void remplirTableDocumentParent(LinkableElement lemme)
 	{
 		document.removeAll();

@@ -40,9 +40,8 @@ import ontologyEditor.gui.transfers.LinkableElementDragTransferHandler;
 import arkeotek.ontology.LinkableElement;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
- *
+ * Julien Sanmartin
+ * Classe abstraites pour le panneau de gauche (arbres et table de lemmes)
  */
 public abstract class AbstractPanel extends JPanel
 {

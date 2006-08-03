@@ -18,8 +18,8 @@ import ontologyEditor.ImagesManager;
 import arkeotek.ontology.LinkableElement;
 
 /**
- * @author Bernadou Pierre
- * @author Czerny Jean
+ * Julien Sanmartin
+ * Classe abstraite pour le panneau de navigation
  */
 public abstract class AbstractNavigationPanel extends JPanel
 {

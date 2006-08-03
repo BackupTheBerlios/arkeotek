@@ -61,10 +61,10 @@ import arkeotek.ontology.Ontology;
 import arkeotek.ontology.Relation;
 
 /**
- * @author Bernadou Pierre 
- * @author Czerny Jean
- *
+ * Julien Sanmartin
+ * Classe permattant le panneau d'edition 
  */
+
 public class EditionPanel extends JPanel
 {
 	private JTable parentsEditionTable;
@@ -78,7 +78,7 @@ public class EditionPanel extends JPanel
 	private JButton deleteButton;
 	
 	private JLabel labelIcon = new JLabel();
-	
+	// element courant 
 	private LinkableElement courant;
 	
 	public EditionPanel()
@@ -440,6 +440,7 @@ public class EditionPanel extends JPanel
 		this.rightEditionTable.setDragEnabled(state);
 	}
 	
+	// focntion permattant de remplir la table du bas du panneau d'edition suivant l'element 
 	public void remplirTableBasParent(LinkableElement element) {
 		// TODO Auto-generated method stub
 		courant=element;
@@ -507,6 +508,7 @@ public class EditionPanel extends JPanel
 		this.updateUI();
 	}
 
+	// fonction qui rempli la table du haut du panneau d'edition par raport à l'ement courant
 	public void remplirTableHautParent(LinkableElement element) {
 		// TODO Auto-generated method stub
 		parentsEditionTable.removeAll();
