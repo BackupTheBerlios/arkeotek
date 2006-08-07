@@ -148,6 +148,8 @@ public class MenuBar extends JMenuBar
 		
 		mView.add(miBottomPannel);
 		
+		mView.addSeparator();
+		
 		// "Language" sub menu
 		JMenu miLanguage = new JMenu();
 		miLanguage.setText(ApplicationManager.getApplicationManager().getTraduction("language"));
