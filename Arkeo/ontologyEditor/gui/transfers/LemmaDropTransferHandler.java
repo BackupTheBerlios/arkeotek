@@ -136,8 +136,9 @@ public class LemmaDropTransferHandler extends TransferHandler
 								}
 								if (!trouver)
 								{
+									if (!(element instanceof Lemma))
+										ApplicationManager.ontology.addRelation(element,DisplayManager.mainFrame.getEditionPanel().getCourant()/*,element*/,relation);
 									ApplicationManager.ontology.addRelation(DisplayManager.mainFrame.getEditionPanel().getCourant(),element,relation);
-									ApplicationManager.ontology.addRelation(element,DisplayManager.mainFrame.getEditionPanel().getCourant()/*,element*/,relation);
 									DisplayManager.mainFrame.getEditionPanel().remplirTableBasParent(DisplayManager.mainFrame.getEditionPanel().getCourant());
 									DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(DisplayManager.mainFrame.getEditionPanel().getCourant());
 									//on regarde dans quel panel s'est fait le drag and drop

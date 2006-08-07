@@ -181,8 +181,9 @@ public class ConceptDropTransferHandler extends TransferHandler
 							if (relation !=null)
 							{
 								// on créer une nouvelle relation
+								if (!(le instanceof Concept))
+									ApplicationManager.ontology.addRelation(element,le,relation);
 								ApplicationManager.ontology.addRelation(le,element,relation);
-								ApplicationManager.ontology.addRelation(element,le,relation);
 								// on met a jour l'interface
 								DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(le);
 								DisplayManager.mainFrame.mAJ(le);

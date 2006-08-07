@@ -508,11 +508,12 @@ public class EditionPanel extends JPanel
 		this.updateUI();
 	}
 
-	// fonction qui rempli la table du haut du panneau d'edition par raport à l'ement courant
+	// fonction qui rempli la table du haut du panneau d'edition par rapport à l'element courant
 	public void remplirTableHautParent(LinkableElement element) {
 		// TODO Auto-generated method stub
 		parentsEditionTable.removeAll();
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
+		
 		if (element.getLinks(Concept.KEY) != null)
 		{
 			Set<Relation> keys = element.getLinks(Concept.KEY).keySet();
@@ -535,6 +536,7 @@ public class EditionPanel extends JPanel
 				}
 			}
 		}
+		
 		if (element instanceof Concept)
 			elements.addAll(ApplicationManager.ontology.getParentsOf(element, Concept.KEY)); 
 		

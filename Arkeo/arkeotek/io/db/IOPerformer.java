@@ -969,13 +969,16 @@ public class IOPerformer
 				{
 					String ordreSQL = "INSERT INTO " + table + " VALUES (" + source.getId() + "," + target.getId() + "," + relation.getId() + "," + links.get(relation).get(source).getState() + "," + links.get(relation).get(source).getWeighting() + ")";
 					etatSimple = transaction.getConnexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+					System.out.println(ordreSQL);
 					etatSimple.executeUpdate(ordreSQL);
 				}
 			}
 		}
 		catch (SQLException e)
 		{
-			throw e;
+			System.out.println(e.getErrorCode());
+			if (e.getErrorCode()!=1062)
+				throw e;
 		}
 		//finally
 		//{
@@ -1004,12 +1007,16 @@ public class IOPerformer
 				{
 					String ordreSQL = "INSERT INTO " + table + " VALUES (" + source.getId() + "," + target.getId() + "," + relation.getId() + "," + links.get(relation).get(target).getState() + "," + links.get(relation).get(target).getWeighting() + ")";
 					etatSimple = transaction.getConnexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+					System.out.println(ordreSQL);
 					etatSimple.executeUpdate(ordreSQL);
 				}
 			}
 		} catch (SQLException e)
 		{
-			 throw e;
+			//INSERT INTO L_Term2Concept VALUES (119056,2436,735,0,0)
+			System.out.println(e.getErrorCode());
+			if (e.getErrorCode()!=1062)
+				throw e;
 		}
 		//finally
 		//{
@@ -1051,12 +1058,14 @@ public class IOPerformer
 	     rs.updateInt("idRelation", relation.getId());
 	     rs.updateInt("state", links.get(relation).get(source).getState());
 	     rs.updateInt("weight", links.get(relation).get(source).getWeighting());
+	     System.out.println(req);
 	     rs.insertRow();
 	    }
 	   }
+	   
 	  } catch (SQLException e)
 	  {
-	   throw e;
+			  throw e;
 	  } finally
 	  {
 	   transaction.clean(rs, ps);
@@ -1097,12 +1106,14 @@ public class IOPerformer
 	     rs.updateInt("idRelation", relation.getId());
 	     rs.updateInt("state", links.get(relation).get(target).getState());
 	     rs.updateInt("weight", links.get(relation).get(target).getWeighting());
+	     System.out.println(req);
 	     rs.insertRow();
 	    }
 	   }
 	  } catch (SQLException e)
 	  {
-	   throw e;
+		  throw e;
+		  
 	  } finally
 	  {
 	   transaction.clean(rs, null);
