@@ -3,8 +3,6 @@ package arkeotek.io.exporter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.semanticweb.owl.model.OWLOntology;
-
 import arkeotek.io.importer.AbstractParser;
 import arkeotek.ontology.Ontology;
 
