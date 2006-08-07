@@ -110,7 +110,7 @@ public class NewOntologyDialog extends JDialog  implements ActionListener, Prope
 		this.add(this.lbl_storage_type, "1, 4, 1, 3");
 
 		this.cmb_storage_type = new JComboBox();
-		this.cmb_storage_type.addItem(new StorageCell(ApplicationManager.getApplicationManager().getTraduction("stockagetye"), ""));
+		this.cmb_storage_type.addItem(new StorageCell(ApplicationManager.getApplicationManager().getTraduction("stockagetype"), ""));
 		this.cmb_storage_type.addItem(new StorageCell(ApplicationManager.getApplicationManager().getTraduction("dbmysql"), Service.class.getCanonicalName()));
 		this.add(this.cmb_storage_type, "3, 4, 3, 3");
 		
