@@ -18,10 +18,13 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -65,6 +68,14 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 
 	private LinkableElement currentElement;
 	
+	private JButton suivantButton;
+	
+	private JButton precedentButton;
+	
+	private ArrayList<LinkableElement> suivant;
+	
+	private ArrayList<LinkableElement> precedent;
+	
 	/**
 	 * 
 	 */
@@ -74,8 +85,11 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		// Create a TableLayout for the panel
 		double border = 10;
 		double size[][] = { { border, TableLayout.FILL, border, TableLayout.FILL, border, TableLayout.FILL, border }, // Columns
-				{ border,20,border, TableLayout.FILL, border } }; // Rows
+				{ border,20,border, TableLayout.FILL, border,20,border } }; // Rows
 		this.setLayout(new TableLayout(size));
+		
+		this.suivant=new ArrayList<LinkableElement>();
+		this.precedent=new ArrayList<LinkableElement>();
 		
 		// affichage du pere
 		this.labelPere=new JLabel(ApplicationManager.getApplicationManager().getTraduction("conceptfather"));
@@ -114,6 +128,49 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 				}
 			}
 		});
+		
+		
+		this.precedentButton = new JButton(ApplicationManager.getApplicationManager().getTraduction("retour"));
+		this.precedentButton.setIcon(new ImageIcon(Constants.DEFAULT_ICONS_PATH+"previous.gif"));
+		
+		this.precedentButton.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				suivant.add(0,currentElement);
+				precedent.remove(currentElement);
+				// remplisssage de navigation panel
+				if (precedent.size()!=0)
+				{
+					remplirLabelPere(precedent.get(precedent.size()-1));
+					remplirTableDefini(precedent.get(precedent.size()-1));
+					remplirTableFils(precedent.get(precedent.size()-1));
+					remplirTableLemme(precedent.get(precedent.size()-1));
+				}
+			}
+		});
+		
+		this.suivantButton = new JButton(ApplicationManager.getApplicationManager().getTraduction("suivant"));
+		this.suivantButton.setIcon(new ImageIcon(Constants.DEFAULT_ICONS_PATH+"next.gif"));
+		this.suivantButton.setHorizontalTextPosition(SwingConstants.LEFT);
+		
+		this.suivantButton.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				precedent.add(currentElement);
+				suivant.remove(currentElement);
+				// remplisssage de navigation panel
+				if (suivant.size()!=0)
+				{
+					remplirLabelPere(suivant.get(0));
+					remplirTableDefini(suivant.get(0));
+					remplirTableFils(suivant.get(0));
+					remplirTableLemme(suivant.get(0));
+				}
+			}
+		});
+		
 		
 		String[] titreL={ApplicationManager.getApplicationManager().getTraduction("assiociatedterm")};
 		LemmasToConceptTableModel tableCLModel = new LemmasToConceptTableModel();
@@ -226,6 +283,8 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		this.add(filsScrollPane, "1, 3, 1, 1");
 		this.add(lemmeScrollPane, "3, 3, 1, 1");
 		this.add(definiScrollPane, "5, 3, 1, 1");
+		this.add(this.suivantButton, "5, 5, 1, 1");
+		this.add(this.precedentButton, "1, 5, 1, 1");
 		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("navigationpanel")));
 
 	}
@@ -513,6 +572,22 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 	protected void doNavigationKeyPressed(KeyEvent evt) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public ArrayList<LinkableElement> getPrecedent() {
+		return precedent;
+	}
+
+	public void setPrecedent(ArrayList<LinkableElement> precedent) {
+		this.precedent = precedent;
+	}
+
+	public ArrayList<LinkableElement> getSuivant() {
+		return suivant;
+	}
+
+	public void setSuivant(ArrayList<LinkableElement> suivant) {
+		this.suivant = suivant;
 	}
 
 }

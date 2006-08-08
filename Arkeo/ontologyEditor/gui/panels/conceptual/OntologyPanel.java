@@ -14,6 +14,7 @@ import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.dialogs.popup.PopupConceptTree;
 import ontologyEditor.gui.model.treeModel.ConceptualTreeModel;
 import ontologyEditor.gui.panels.AbstractPanel;
+import ontologyEditor.gui.panels.linguistic.LinguisticNavigationPanel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.LinkableElement;
 
@@ -47,6 +48,7 @@ public class OntologyPanel extends AbstractPanel {
 							((OntologyNavigationPanel) this.navigationPanel).remplirTableFils(concept);
 							((OntologyNavigationPanel) this.navigationPanel).remplirTableLemme(concept);
 							((OntologyNavigationPanel) this.navigationPanel).remplirTableDefini(concept);
+							((OntologyNavigationPanel) this.navigationPanel).getPrecedent().add(concept);
 							DisplayManager.getInstance().reflectNavigation(concept);
 						} 
 						//Bouton DROIT enfoncé
