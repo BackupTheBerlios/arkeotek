@@ -466,7 +466,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 				{
 					for (LinkableElement con:hm.keySet())
 					{
-						Object[] triple = {"annote", con};
+						Object[] triple = {rel, con};
 						Boolean deja=false;
 						for (int i=0;i<elements.size();i++)
 						{
