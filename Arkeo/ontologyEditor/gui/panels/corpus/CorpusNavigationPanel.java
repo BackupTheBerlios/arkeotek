@@ -695,5 +695,13 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		// TODO Auto-generated method stub
 		
 	}
+
+	public JTextArea getTxtArea_docComm() {
+		return txtArea_docComm;
+	}
+
+	public void setTxtArea_docComm(JTextArea txtArea_docComm) {
+		this.txtArea_docComm = txtArea_docComm;
+	}
 	
 }

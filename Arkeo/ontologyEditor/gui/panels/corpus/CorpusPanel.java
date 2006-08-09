@@ -55,6 +55,7 @@ public class CorpusPanel extends AbstractPanel {
 								((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptPotentiel(document);
 								((CorpusNavigationPanel) this.navigationPanel).remplirTableLemmeLier(document);
 								((CorpusNavigationPanel) this.navigationPanel).remplirTableimages(document);
+								((CorpusNavigationPanel) this.navigationPanel).getTxtArea_docComm().setText("");
 								//((OntologyNavigationPanel) this.navigationPanel).rollFirstPanel((LinkableElement)((JTree)e.getSource()).getSelectionPath().getLastPathComponent());
 								DisplayManager.getInstance().reflectNavigation(document);
 							}
