@@ -331,8 +331,8 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		this.validationButton.setText((doc.getState() == LinkableElement.VALIDATED)?ApplicationManager.getApplicationManager().getTraduction("unvalidate"):ApplicationManager.getApplicationManager().getTraduction("validate"));
 		this.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("corpusnavpanel")+" "+doc.getName()));
 		this.txtArea_docText.setText(((DocumentPart)doc).getValue());
-		if (((DocumentPart)doc).getCommentaire()!=null)
-			this.txtArea_docComm.setText(((DocumentPart)doc).getCommentaire().getValue());
+		//if (((DocumentPart)doc).getCommentaire()!=null)
+		//	this.txtArea_docComm.setText(((DocumentPart)doc).getCommentaire().getValue());
 		this.conceptsIndexingTable.removeAll();
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 		ArrayList<Integer> links_categories = new ArrayList<Integer>(1);
