@@ -56,6 +56,7 @@ import arkeotek.indexing.generic.GenericIndexer;
 import arkeotek.indexing.scd.SCDIndexer;
 import arkeotek.io.importer.AbstractParser;
 import arkeotek.io.importer.termonto.Importer;
+import arkeotek.io.importer.termonto.NewImporter;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.DuplicateElementException;
@@ -493,10 +494,14 @@ public class ApplicationManager
 									/* Importer est la classe qui s'occupe de l'importation
 									 * Paramètres : ontologie
 									 */
-									Importer termonto = new Importer(ontology, ((String)((Object[])this.getArgument())[0]));
+									NewImporter termonto = new NewImporter(ontology, ((String)((Object[])this.getArgument())[0]));
 									
 									/* Lancement du traitement des données */
 									termonto.performImport();
+									for (LinkableElement le:ontology.get(Relation.KEY))
+									{
+										System.out.println(le);
+									}
 									
 									/* Une fois le traitement effectué, on ferme la barre d'avancement */
 									((ProgressBarDialog)((Object[])this.getArgument())[1]).dispose();

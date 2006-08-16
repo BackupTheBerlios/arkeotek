@@ -69,8 +69,8 @@ public abstract class AbstractImporter
 						
 					if (token == StreamTokenizer.TT_EOL) {
 						word = 0;
-						this.innerTransitionTreatment(i, j);
-						this.previous_result = this.current_result;
+						//this.innerTransitionTreatment(i, j);
+						//this.previous_result = this.current_result;
 						this.parsers.get(i).current_col = 0;
 						this.current_result = this.parsers.get(i).treat(line);
 						this.innerTransitionTreatment(i, j);
@@ -100,8 +100,9 @@ public abstract class AbstractImporter
 	 * <b>Note that</b> innerTransitionTreatment(0) will surely be empty. 
 	 * @param i The current iteration indicating the treatment to perform. 
 	 * @param j The current importing situation in the iteration indicating the treatment to perform. 
+	 * @throws Exception 
 	 */
-	protected abstract void innerTransitionTreatment(int i, int j);
+	protected abstract void innerTransitionTreatment(int i, int j) throws Exception;
 
 	/**
 	 * Performs the treatment between the <code>i</code>th and the <code>(i+1)</code>th iterations of the import method. 

@@ -39,6 +39,7 @@ import ontologyEditor.gui.model.tableModel.IndexingConceptTableModel;
 import ontologyEditor.gui.model.tableModel.LemmasToDocumentPartTableModel;
 import ontologyEditor.gui.model.tableModel.PotentialConceptTableModel;
 import ontologyEditor.gui.panels.AbstractNavigationPanel;
+import ontologyEditor.gui.panels.conceptual.OntologyNavigationPanel;
 import ontologyEditor.gui.panels.linguistic.LinguisticNavigationPanel;
 import ontologyEditor.gui.transfers.ConceptDropTransferHandler;
 import ontologyEditor.gui.transfers.ConceptIndexingDragTranferHandler;
@@ -109,10 +110,31 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		column2.setPreferredWidth(150);
 		this.conceptsIndexingTable.addMouseListener(new MouseAdapter()
 		{
+
 			public void mouseClicked(MouseEvent e)
 			{
-				//LinkableElement selected = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
-				//reflectNavigation(selected);
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				if (e.getClickCount() >= 2)
+				{
+					int panel=-1;
+					if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getNavigationPanel() instanceof OntologyNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()==1))
+					{
+						panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+					}
+					else if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getNavigationPanel() instanceof OntologyNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()!=1))
+					{
+						panel=DisplayManager.mainFrame.TOP_PANEL;
+					}
+					if (panel!=-1)
+					{
+						// remplisssage de navigation panel
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirLabelPere(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableDefini(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableFils(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableLemme(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getPrecedent().add(element);
+					}
+				}
 			}
 		});
 		this.conceptsIndexingTable.addMouseMotionListener(new MouseMotionAdapter()
@@ -233,16 +255,29 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		column23.setPreferredWidth(150);
 		this.potentialConceptsTable.addMouseListener(new MouseAdapter()
 		{
+
 			public void mouseClicked(MouseEvent e)
 			{
-				String value=(String)((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0);
-				LinkableElement selected; 
-				for (int i=0;i<ApplicationManager.ontology.get(Concept.KEY).size();i++)
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				if (e.getClickCount() >= 2)
 				{
-					if (ApplicationManager.ontology.get(Concept.KEY).get(i).toString().equals(value))
+					int panel=-1;
+					if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getNavigationPanel() instanceof OntologyNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()==1))
 					{
-						selected=ApplicationManager.ontology.get(Concept.KEY).get(i);
-						reflectNavigation(selected);
+						panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+					}
+					else if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getNavigationPanel() instanceof OntologyNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()!=1))
+					{
+						panel=DisplayManager.mainFrame.TOP_PANEL;
+					}
+					if (panel!=-1)
+					{
+						// remplisssage de navigation panel
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirLabelPere(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableDefini(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableFils(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableLemme(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getPrecedent().add(element);
 					}
 				}
 			}

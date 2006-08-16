@@ -33,6 +33,8 @@ import ontologyEditor.gui.model.tableModel.LemmaParentTableModel;
 import ontologyEditor.gui.model.tableModel.LemmasToConceptTableModel;
 import ontologyEditor.gui.model.tableModel.LemmasToDocumentPartTableModel;
 import ontologyEditor.gui.panels.AbstractNavigationPanel;
+import ontologyEditor.gui.panels.conceptual.OntologyNavigationPanel;
+import ontologyEditor.gui.panels.corpus.CorpusNavigationPanel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
 import arkeotek.ontology.Lemma;
@@ -89,6 +91,24 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		this.linkedLemmasTable = new JTable(tableLLModel);
 		//this.linkedLemmasTable.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		this.linkedLemmasTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//		 quand on clique sur un lemme et que une vue par lemme est active alors le lemme courant de la vue lemme
+		// passe au lemme sur lequel on vient de' cliquer
+		this.linkedLemmasTable.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				if (e.getClickCount() >= 2)
+				{
+					// remplisssage de navigation panel
+					LinguisticNavigationPanel.this.remplirTableLemmeParent(element);
+					LinguisticNavigationPanel.this.remplirTableLemmeLier(element);
+					LinguisticNavigationPanel.this.remplirTableConcept(element);
+					LinguisticNavigationPanel.this.remplirTableDocumentParent(element);
+					LinguisticNavigationPanel.this.getPrecedent().add(element);
+				}
+			}
+		});
 		
 		
 		JScrollPane linkedLemmasScrollPane = new JScrollPane();
@@ -105,12 +125,59 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		JScrollPane lemmasParentsScrollPane = new JScrollPane();
 		lemmasParentsScrollPane.setViewportView(this.lemmasParentsTable);
 		lemmasParentsScrollPane.setBorder(BorderFactory.createTitledBorder(ApplicationManager.getApplicationManager().getTraduction("dependentparentslemmas")));
-		
+		// quand on clique sur un lemme et que une vue par lemme est active alors le lemme courant de la vue lemme
+		// passe au lemme sur lequel on vient de' cliquer
+		this.lemmasParentsTable.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				if (e.getClickCount() >= 2)
+				{
+					// remplisssage de navigation panel
+					LinguisticNavigationPanel.this.remplirTableLemmeParent(element);
+					LinguisticNavigationPanel.this.remplirTableLemmeLier(element);
+					LinguisticNavigationPanel.this.remplirTableConcept(element);
+					LinguisticNavigationPanel.this.remplirTableDocumentParent(element);
+					LinguisticNavigationPanel.this.getPrecedent().add(element);
+				}
+			}
+		});
 		LemmasToConceptTableModel tableConceptModel = new LemmasToConceptTableModel();
 		tableConceptModel.setColumnNames(titreParent);
 		this.concept = new JTable(tableConceptModel);
 		//this.concept.setDefaultRenderer(LinkableElement.class, new TableComponentCellRenderer());
 		this.concept.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		this.concept.addMouseListener(new MouseAdapter()
+		{
+
+			public void mouseClicked(MouseEvent e)
+			{
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				if (e.getClickCount() >= 2)
+				{
+					int panel=-1;
+					if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getNavigationPanel() instanceof OntologyNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()==1))
+					{
+						panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+					}
+					else if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getNavigationPanel() instanceof OntologyNavigationPanel) && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()!=1))
+					{
+						panel=DisplayManager.mainFrame.TOP_PANEL;
+					}
+					if (panel!=-1)
+					{
+						// remplisssage de navigation panel
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirLabelPere(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableDefini(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableFils(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableLemme(element);
+						((OntologyNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getPrecedent().add(element);
+					}
+				}
+			}
+		});
 		
 		JScrollPane conceptScrollPane = new JScrollPane();
 		conceptScrollPane.setViewportView(this.concept);
@@ -121,6 +188,46 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		tableModel.setColumnNames(titre);
 		this.document=new JTable();
 		this.document.setModel(tableModel);
+		this.document.addMouseListener(new MouseAdapter()
+		{
+
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() >= 2)
+				{
+					String nom = ((String) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+					DocumentPart element;
+					for (LinkableElement le:ApplicationManager.ontology.get(DocumentPart.KEY))
+					{
+						if (le.getName().toString().equals(nom))
+						{
+							element=(DocumentPart)le;
+							int panel=-1;
+							if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getNavigationPanel() instanceof CorpusNavigationPanel) /*&& (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()==1)*/)
+							{
+								panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+							}
+							else if ((DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getNavigationPanel() instanceof CorpusNavigationPanel)/* && (e.getComponent().getParent().getParent().getParent().getParent().getParent().getY()!=1)*/)
+							{
+								panel=DisplayManager.mainFrame.TOP_PANEL;
+							}
+							if (panel!=-1)
+							{
+								// remplisssage de navigation panel
+								((CorpusNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptIndexant(element);
+								((CorpusNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableConceptPotentiel(element);
+								((CorpusNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableimages(element);
+								((CorpusNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).remplirTableLemmeLier(element);
+								if (((DocumentPart)element).getCommentaire()!=null)
+									((CorpusNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getTxtArea_docComm().setText(((DocumentPart)element).getCommentaire().toString());
+								else
+									((CorpusNavigationPanel) DisplayManager.mainFrame.getPanel(panel).getNavigationPanel()).getTxtArea_docComm().setText("");
+							}
+						}
+					}			
+				}
+			}
+		});
 		TableColumn columndoc1 = document.getColumnModel().getColumn(0);
 		columndoc1.setPreferredWidth(70);
 		TableColumn columndoc2 = document.getColumnModel().getColumn(1);
@@ -332,17 +439,19 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		concept.removeAll();
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();
 
-		
-		HashMap<Relation,HashMap<LinkableElement,Link>> conc=lemme.getLinks(Concept.KEY);
-		for (Relation rel:conc.keySet())
+		if (lemme != null)
 		{
-			HashMap<LinkableElement,Link>hm=conc.get(rel);
-			if (!hm.isEmpty())
+			Set<Relation> keys = null;
+			if (lemme.getLinks(Concept.KEY) != null)
 			{
-				for (LinkableElement con:hm.keySet())
+				keys = lemme.getLinks(Concept.KEY).keySet();
+				for (Relation key : keys)
 				{
-					Object[] triple = {rel, con};
-					elements.add(triple);
+					for (LinkableElement elem : lemme.getLinks(Concept.KEY, key))
+					{
+						Object[] line = {key, elem};
+						elements.add(line);
+					}
 				}
 			}
 		}
@@ -366,7 +475,7 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 		this.updateUI();
 	}
 	
-	// retourne les objet qui sont en relation avec les elements courant
+	// retourne les objet qui sont en relation avec l' elements courant
 	private ArrayList<Object[]> getElementsFromLinkableElement(LinkableElement element)
 	{
 		ArrayList<Object[]> elements = new ArrayList<Object[]>();

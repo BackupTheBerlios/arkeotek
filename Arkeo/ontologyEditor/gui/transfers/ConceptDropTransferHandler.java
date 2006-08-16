@@ -99,7 +99,7 @@ public class ConceptDropTransferHandler extends TransferHandler
 						{
 							// on demande à l'utilisateur de choisir parmi les relations possibles
 							Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
-									ApplicationManager.getApplicationManager().getTraduction("enternamerelation") + " : ", ApplicationManager.getApplicationManager().getTraduction("creationlink"), JOptionPane.INFORMATION_MESSAGE, null,
+									ApplicationManager.getApplicationManager().getTraduction("enternamerelation") + " : ", ApplicationManager.getApplicationManager().getTraduction("creationlink"), JOptionPane.INFORMATION_MESSAGE,null,
 									rels, rels[0]);
 							if (relation !=null)
 							{
@@ -179,29 +179,25 @@ public class ConceptDropTransferHandler extends TransferHandler
 							Relation relation = (Relation)JOptionPane.showInputDialog(DisplayManager.mainFrame, 
 									ApplicationManager.getApplicationManager().getTraduction("enternamerelation") + " : ", ApplicationManager.getApplicationManager().getTraduction("creationlink"), JOptionPane.INFORMATION_MESSAGE, null,
 									rels, rels[0]);
-							if (relation !=null)
+							int choice=0;
+							if (le instanceof Concept)
 							{
-								// on créer une nouvelle relation
-								if (!(le instanceof Concept))
-									ApplicationManager.ontology.addRelation(element,le,relation);
-								ApplicationManager.ontology.addRelation(le,element,relation);
-								// on met a jour l'interface
-								DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(le);
-								if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree() != null)
+								Object[] options = {ApplicationManager.getApplicationManager().getTraduction("yes"), ApplicationManager.getApplicationManager().getTraduction("no")};
+								choice = JOptionPane.showOptionDialog(DisplayManager.mainFrame, le +" sera le père de "+ element+" dans le cas d'une relation généralise ! Voulez-vous continuez?", ApplicationManager.getApplicationManager().getTraduction("warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+							}
+							if (choice == 0)
+							{
+								if (relation !=null)
 								{
-									if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel() instanceof ConceptualTreeModel)
-									{	
-										((ConceptualTreeModel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel()).remplirArbreConcept();
-										DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().updateUI();
-									}
-								}
-								if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree() != null)
-								{	
-									if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().getModel() instanceof ConceptualTreeModel)
-									{
-										((ConceptualTreeModel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().getModel()).remplirArbreConcept();
-										DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().updateUI();
-									}
+									// on créer une nouvelle relation
+									if (!(le instanceof Concept))
+										ApplicationManager.ontology.addRelation(element,le,relation);
+									ApplicationManager.ontology.addRelation(le,element,relation);
+									// on met a jour l'interface
+									DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(le);
+									
+									DisplayManager.mainFrame.mAJ(le);
+									DisplayManager.mainFrame.mAJ(element);
 								}
 							}
 						}

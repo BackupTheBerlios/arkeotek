@@ -14,8 +14,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import arkeotek.ontology.DocumentPart;
+import arkeotek.ontology.LinkableElement;
+
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
+import ontologyEditor.gui.model.treeModel.CorpusTreeModel;
+import ontologyEditor.gui.panels.corpus.CorpusPanel;
 
 /*
  * Julien Sanmartin
@@ -45,6 +50,7 @@ public class DocumentPartTreeRenderer extends DefaultTreeCellRenderer  {
 		    {
 	        	// affichage du noeud en magenta
 		    	this.setForeground(Color.MAGENTA);
+		    	this.setText(((DocumentPart)((DefaultMutableTreeNode)value).getUserObject()).getName());
 		    }
 		    else
 		    {
@@ -53,6 +59,21 @@ public class DocumentPartTreeRenderer extends DefaultTreeCellRenderer  {
 		    }
 	        //tree.expandPath(tree.getSelectionPath());
 		}
+        if (((CorpusTreeModel)tree.getModel()).getVue()==1)
+        {
+        	if (((DefaultMutableTreeNode)value).getUserObject() instanceof DocumentPart)
+        	{
+        		DocumentPart nom = (DocumentPart)((DefaultMutableTreeNode)value).getUserObject();
+        		this.setText(nom.getName());
+        	}
+        }
+        else
+        {	if (((DefaultMutableTreeNode)value).getUserObject() instanceof DocumentPart)
+    		{
+	        	DocumentPart nom = (DocumentPart)((DefaultMutableTreeNode)value).getUserObject();
+				this.setText(nom.toString());
+    		}
+        }
         return this;
     }
 	

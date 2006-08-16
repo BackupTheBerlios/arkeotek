@@ -39,72 +39,30 @@ public class CorpusPanel extends AbstractPanel {
 		{
 			if (((JTree)e.getSource()).getLastSelectedPathComponent()!=null)
 			{
-				String nomDoc=((JTree)e.getSource()).getLastSelectedPathComponent().toString();
-				DocumentPart document;
-				if (vue==1)
+				DocumentPart document=(DocumentPart)((DefaultMutableTreeNode)((JTree)e.getSource()).getLastSelectedPathComponent()).getUserObject();//  getLastSelectedPathComponent().toString();
+				this.getTree().setToolTipText(document.getName());
+				if (e.getButton()==MouseEvent.BUTTON1)
 				{
-					for (int i=0;i<ApplicationManager.ontology.get(DocumentPart.KEY).size();i++)
+					((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptIndexant(document);
+					((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptPotentiel(document);
+					((CorpusNavigationPanel) this.navigationPanel).remplirTableLemmeLier(document);
+					((CorpusNavigationPanel) this.navigationPanel).remplirTableimages(document);
+					if (document.getCommentaire()!=null)
 					{
-						if (ApplicationManager.ontology.get(DocumentPart.KEY).get(i).getName().toString().equals(nomDoc))
-						{
-							document=(DocumentPart)ApplicationManager.ontology.get(DocumentPart.KEY).get(i);
-							this.getTree().setToolTipText(document.toString());
-							if (e.getButton()==MouseEvent.BUTTON1)
-							{
-								((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptIndexant(document);
-								((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptPotentiel(document);
-								((CorpusNavigationPanel) this.navigationPanel).remplirTableLemmeLier(document);
-								((CorpusNavigationPanel) this.navigationPanel).remplirTableimages(document);
-								if (document.getCommentaire()!=null)
-									((CorpusNavigationPanel) this.navigationPanel).getTxtArea_docComm().setText(document.getCommentaire().toString());
-								else
-									((CorpusNavigationPanel) this.navigationPanel).getTxtArea_docComm().setText("");
-								//((OntologyNavigationPanel) this.navigationPanel).rollFirstPanel((LinkableElement)((JTree)e.getSource()).getSelectionPath().getLastPathComponent());
-								DisplayManager.getInstance().reflectNavigation(document);
-							}
-							else if (e.getButton()==MouseEvent.BUTTON3)
-							{
-								PopupDocumentPartTree popup=new PopupDocumentPartTree(document);
-								e.consume();
-								// afficher le menu contextuel
-								popup.show(this, e.getX(), e.getY());
-							}
-							break;
-						}
+						((CorpusNavigationPanel) this.navigationPanel).getTxtArea_docComm().setText(document.getCommentaire().toString());
 					}
+					else
+						((CorpusNavigationPanel) this.navigationPanel).getTxtArea_docComm().setText("");
+					
+					//((OntologyNavigationPanel) this.navigationPanel).rollFirstPanel((LinkableElement)((JTree)e.getSource()).getSelectionPath().getLastPathComponent());
+					DisplayManager.getInstance().reflectNavigation(document);
 				}
-				else
+				else if (e.getButton()==MouseEvent.BUTTON3)
 				{
-					for (int i=0;i<ApplicationManager.ontology.get(DocumentPart.KEY).size();i++)
-					{
-						if (ApplicationManager.ontology.get(DocumentPart.KEY).get(i).toString().equals(nomDoc))
-						{
-							document=(DocumentPart)ApplicationManager.ontology.get(DocumentPart.KEY).get(i);
-							this.getTree().setToolTipText(document.getName());
-							if (e.getButton()==MouseEvent.BUTTON1)
-							{
-								((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptIndexant(document);
-								((CorpusNavigationPanel) this.navigationPanel).remplirTableConceptPotentiel(document);
-								((CorpusNavigationPanel) this.navigationPanel).remplirTableLemmeLier(document);
-								((CorpusNavigationPanel) this.navigationPanel).remplirTableimages(document);
-								if (document.getCommentaire()!=null)
-									((CorpusNavigationPanel) this.navigationPanel).getTxtArea_docComm().setText(document.getCommentaire().toString());
-								else
-									((CorpusNavigationPanel) this.navigationPanel).getTxtArea_docComm().setText("");
-								
-								//((OntologyNavigationPanel) this.navigationPanel).rollFirstPanel((LinkableElement)((JTree)e.getSource()).getSelectionPath().getLastPathComponent());
-								DisplayManager.getInstance().reflectNavigation(document);
-							}
-							else if (e.getButton()==MouseEvent.BUTTON3)
-							{
-								PopupDocumentPartTree popup=new PopupDocumentPartTree(document);
-								e.consume();
-								// afficher le menu contextuel
-								popup.show(this, e.getX(), e.getY());
-							}
-							break;
-						}
-					}
+					PopupDocumentPartTree popup=new PopupDocumentPartTree(document);
+					e.consume();
+					// afficher le menu contextuel
+					popup.show(this, e.getX(), e.getY());
 				}
 			}
 		}
@@ -125,20 +83,20 @@ public class CorpusPanel extends AbstractPanel {
 	
 	public void refresh() {
 		
-		if (vue==0)
-		{
-			((CorpusTreeModel)this.getTree().getModel()).setRacine(new DefaultMutableTreeNode(null));
-			this.getTree().removeAll();
-			((CorpusTreeModel)this.getTree().getModel()).remplirArbreDocumentSeq();
-			this.getTree().updateUI();
-		}
-		else
-		{
-			this.getTree().removeAll();
-			((CorpusTreeModel)this.getTree().getModel()).setRacine(new DefaultMutableTreeNode(null));
-			((CorpusTreeModel)this.getTree().getModel()).remplirArbreDocumentId();
-			this.getTree().updateUI();
-		}
+//		if (vue==0)
+//		{
+//			((CorpusTreeModel)this.getTree().getModel()).setRacine(new DefaultMutableTreeNode(null));
+//			this.getTree().removeAll();
+//			((CorpusTreeModel)this.getTree().getModel()).remplirArbreDocumentSeq();
+//			this.getTree().updateUI();
+//		}
+//		else
+//		{
+//			this.getTree().removeAll();
+//			((CorpusTreeModel)this.getTree().getModel()).setRacine(new DefaultMutableTreeNode(null));
+//			((CorpusTreeModel)this.getTree().getModel()).remplirArbreDocumentId();
+//			this.getTree().updateUI();
+//		}
 		if (ApplicationManager.ontology!=null)
 			((CorpusNavigationPanel)this.getNavigationPanel()).refresh();
 	}
@@ -149,6 +107,7 @@ public class CorpusPanel extends AbstractPanel {
 
 	public void setVue(int vue) {
 		this.vue = vue;
+		((CorpusTreeModel)this.getTree().getModel()).setVue(vue);
 	}
 	
 }

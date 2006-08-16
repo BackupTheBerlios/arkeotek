@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
@@ -21,6 +22,8 @@ import arkeotek.ontology.Relation;
 public class CorpusTreeModel extends AbstractTreeModel {
 	// racine de l'arbre
 	private DefaultMutableTreeNode racine;
+	
+	private int vue=0;
 	
 	public CorpusTreeModel() {
 		super();
@@ -113,6 +116,14 @@ public class CorpusTreeModel extends AbstractTreeModel {
 			if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().getModel() instanceof CorpusTreeModel)
 				DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().setModel(this);
 		}
+		// modification dans l'arbre
+		for (int i=0;i<racine.getChildCount();i++)
+		{
+			remodelage((DefaultMutableTreeNode)racine.getChildAt(i));
+		}
+		
+		
+		
 		// MAJ de l'interface
 		DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).updateUI();
 		DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).updateUI();
@@ -158,70 +169,33 @@ public class CorpusTreeModel extends AbstractTreeModel {
 	}
 	
 	
-//	focntion permettant de construire l'arbre des documents sous la forme de identifiant
-	public void remplirArbreDocumentId() {
-		// concepts= liste de tout les concepts
-		this.setRacine(new DefaultMutableTreeNode("Corpus"));
-		ArrayList<LinkableElement> documents = ApplicationManager.ontology.get(DocumentPart.KEY);
-		for (int i=0;i<documents.size();i++)
+	private void remodelage(DefaultMutableTreeNode noeud)
+	{
+		for (int i=0;i<noeud.getChildCount();i++)
 		{
-			/*if (documents.get(i).getState()==LinkableElement.VALIDATED)
-	        {
-	        	ApplicationManager.ontology.getLemmeValider().add(documents.get(i));
-	        }*/
-			// creation du neoud courant
-			DefaultMutableTreeNode courant=new DefaultMutableTreeNode(documents.get(i).getName());
-			creerSousNoeudId(courant,documents.get(i));
-			if (ApplicationManager.ontology.getParentsOf(documents.get(i),DocumentPart.KEY).size()==0)
+			if (noeud.getChildAt(i).isLeaf())
 			{
-				racine.add(courant);
+				((DocumentPart)((DefaultMutableTreeNode)noeud.getChildAt(i)).getUserObject()).setCommentaire(((DocumentPart)noeud.getUserObject()).getCommentaire());
+				noeud.setUserObject(((DefaultMutableTreeNode)noeud.getChildAt(i)).getUserObject());
+				((DefaultMutableTreeNode)noeud.getChildAt(i)).removeFromParent();
+				i=i-1;
+			}
+			else
+			{
+				remodelage((DefaultMutableTreeNode)noeud.getChildAt(i));
 			}
 		}
-		if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree()!=null)
-		{
-			if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().getModel() instanceof CorpusTreeModel)
-				DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getTree().setModel(this);
-		}
-		if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree()!=null)
-		{
-			if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().getModel() instanceof CorpusTreeModel)
-				DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).getTree().setModel(this);
-		}
-		DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).updateUI();
-		DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.BOTTOM_PANEL).updateUI();
 	}
 	
-	private void creerSousNoeudId(DefaultMutableTreeNode courant, LinkableElement element) {
-		
-		ArrayList<LinkableElement> tmp=new ArrayList<LinkableElement>();
-		if (element instanceof Concept)
-		{
-			tmp = ((Concept) element).getLinks(Concept.KEY, new Relation(Relation.DEFAULT_CONCEPTS_RELATION)); 
-			
-		}
-		else if (element instanceof DocumentPart)
-		{
-			tmp = ((DocumentPart) element).getLinks(DocumentPart.KEY, new Relation(Relation.DEFAULT_DOCUMENT_DOWNGOING_RELATION));
-		}
-		for(int j=0;j<tmp.size();j++)
-		{
-			if (!tmp.get(j).getName().contains("-COM"))
-			{
-				DefaultMutableTreeNode fils;
-				fils=new DefaultMutableTreeNode(tmp.get(j).getName());
-				creerSousNoeudId(fils,tmp.get(j));
-				courant.add(fils);
-			}
-			else if (tmp.get(j).getName().contains("-COM-"))
-			{
-				if (!((DocumentPart)element).getImages().contains((DocumentPart)tmp.get(j)))
-					((DocumentPart)element).getImages().add((DocumentPart)tmp.get(j));
-			}
-			else if (tmp.get(j).getName().contains("-COM"))
-			{
-				((DocumentPart)element).setCommentaire((DocumentPart)tmp.get(j));
-			}
-		}
+
+	public int getVue() {
+		// TODO Auto-generated method stub
+		return this.vue;
+	}
+	
+	public void setVue(int vue) {
+		// TODO Auto-generated method stub
+		this.vue=vue;
 	}
 
 }

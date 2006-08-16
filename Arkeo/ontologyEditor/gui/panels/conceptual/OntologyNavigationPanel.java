@@ -128,6 +128,22 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 				}
 			}
 		});
+		this.conceptFilsTable.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0));
+				if (e.getClickCount() >= 2)
+				{
+					// remplisssage de navigation panel
+					OntologyNavigationPanel.this.remplirLabelPere(element);
+					OntologyNavigationPanel.this.remplirTableDefini(element);
+					OntologyNavigationPanel.this.remplirTableFils(element);
+					OntologyNavigationPanel.this.remplirTableLemme(element);
+					OntologyNavigationPanel.this.getPrecedent().add(element);
+				}
+			}
+		});
 		
 		
 		this.precedentButton = new JButton(ApplicationManager.getApplicationManager().getTraduction("retour"));
@@ -251,6 +267,22 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 				{
 					TransferHandler handler = OntologyNavigationPanel.this.conceptDefiniTable.getTransferHandler();
 					handler.exportAsDrag(OntologyNavigationPanel.this.conceptDefiniTable, e, TransferHandler.COPY);
+				}
+			}
+		});
+		this.conceptFilsTable.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				if (e.getClickCount() >= 2)
+				{
+					// remplisssage de navigation panel
+					OntologyNavigationPanel.this.remplirLabelPere(element);
+					OntologyNavigationPanel.this.remplirTableDefini(element);
+					OntologyNavigationPanel.this.remplirTableFils(element);
+					OntologyNavigationPanel.this.remplirTableLemme(element);
+					OntologyNavigationPanel.this.getPrecedent().add(element);
 				}
 			}
 		});
