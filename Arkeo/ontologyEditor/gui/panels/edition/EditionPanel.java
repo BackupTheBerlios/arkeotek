@@ -526,10 +526,7 @@ public class EditionPanel extends JPanel
 					for (LinkableElement linkedElem : tmp)
 					{
 						link = new Object[2];
-						if (element instanceof Concept)
-							link[0] = ApplicationManager.getApplicationManager().getTraduction("is")+" "+key+" "+ApplicationManager.getApplicationManager().getTraduction("by");
-						else
-							link[0]=key;
+						link[0]=key;
 						link[1] = linkedElem;
 						elements.add(link);
 					}
@@ -538,8 +535,15 @@ public class EditionPanel extends JPanel
 		}
 		
 		if (element instanceof Concept)
-			elements.addAll(ApplicationManager.ontology.getParentsOf(element, Concept.KEY)); 
-		
+		{
+			Object[] link = new Object[2];
+			if (ApplicationManager.ontology.getParentsOf(element, Concept.KEY).size()!=0)
+			{
+				link=ApplicationManager.ontology.getParentsOf(element, Concept.KEY).get(0);
+				link[0]="fils de";
+				elements.add(link);
+			}
+		}
 		if (elements.size()!=0)
 		{
 			Object [][] donnees=new Object[elements.size()][2];
