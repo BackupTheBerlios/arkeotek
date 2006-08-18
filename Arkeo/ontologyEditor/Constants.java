@@ -169,4 +169,9 @@ public interface Constants
 	 * Default icon
 	 */
 	public static final String DEFAULT_ICON = "about.gif";
+	
+	/**
+	 * Flag used in the actions map of <code>ActionManager</code> for the <code>SearchConceptAction</code> action. 
+	 */
+	public static final String ACTION_SEARCH_CONCEPT = "Rechercher un concept";
 }

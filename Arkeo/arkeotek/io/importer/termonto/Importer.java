@@ -11,6 +11,7 @@ import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import arkeotek.io.importer.engine.ConceptsParser;
 import arkeotek.io.importer.engine.ConceptsToTermsParser;
@@ -46,7 +47,6 @@ public class Importer extends arkeotek.io.importer.AbstractImporter
 	private DocumentsToLemmasParser docs2lemmas_parser = new DocumentsToLemmasParser(this.owner, this.file, "OCC.txt");
 
 	private TermsToTermsParser terms2terms_parser = new TermsToTermsParser(this.owner, this.file, "DEP.txt");
-
 	/**
 	 * @param owner
 	 *            The ontology for wich this parser will work.

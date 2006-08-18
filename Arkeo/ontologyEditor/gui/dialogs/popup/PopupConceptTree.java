@@ -12,6 +12,7 @@ import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.dialogs.AddChidlConceptDialog;
 import ontologyEditor.gui.dialogs.RenameConceptDialog;
+import ontologyEditor.gui.dialogs.SearchConceptDialog;
 import arkeotek.ontology.LinkableElement;
 
 /**
@@ -24,6 +25,7 @@ public class PopupConceptTree extends JPopupMenu implements ActionListener{
 	private JMenuItem ajouter;
 	private JMenuItem supprimer;
 	private JMenuItem renommer;
+	private JMenuItem rechercher;
 	private LinkableElement concept;
 	private int panel;
 	
@@ -41,6 +43,10 @@ public class PopupConceptTree extends JPopupMenu implements ActionListener{
 		this.ajouter = new JMenuItem (ApplicationManager.getApplicationManager().getTraduction("addchildconcept")) ;
 		this.add (this.ajouter) ;
 		this.ajouter.addActionListener (this) ;  
+		
+		this.rechercher = new JMenuItem (/*ApplicationManager.getApplicationManager().getTraduction("search")*/"Rechercher un concept") ;
+		this.add (this.rechercher) ;
+		this.rechercher.addActionListener (this) ;  
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -76,6 +82,12 @@ public class PopupConceptTree extends JPopupMenu implements ActionListener{
 		else if (source== this.ajouter)
 		{
 			AddChidlConceptDialog fsc=new AddChidlConceptDialog(this.concept,panel);
+			fsc.show();
+		}
+//		 si on recherche un concept
+		else if (source== this.rechercher)
+		{
+			SearchConceptDialog fsc=new SearchConceptDialog(panel);
 			fsc.show();
 		}
 	}

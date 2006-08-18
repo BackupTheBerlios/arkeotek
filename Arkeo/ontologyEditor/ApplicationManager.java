@@ -43,6 +43,7 @@ import ontologyEditor.actions.TopPanelChangeAction;
 import ontologyEditor.gui.MainFrame;
 import ontologyEditor.gui.MenuBar;
 import ontologyEditor.gui.dialogs.AboutDialog;
+import ontologyEditor.gui.dialogs.SearchConceptDialog;
 import ontologyEditor.gui.dialogs.SearchLemmaDialog;
 import ontologyEditor.gui.dialogs.NewOntologyDialog;
 import ontologyEditor.gui.dialogs.ProgressBarDialog;
@@ -187,7 +188,11 @@ public class ApplicationManager
         /**
          * Performs Edition Relations
          */
-        EDITION_RELATIONS
+        EDITION_RELATIONS, 
+        /**
+         * Recherche un concept
+         */
+        CONCEPT_SEARCH, 
     }
     
     // Language
@@ -232,6 +237,7 @@ public class ApplicationManager
             am.registerAction(Constants.ACTION_CHANGE_TOP_PANNEL_DOCUMENTS, new TopPanelChangeAction(DocumentPart.KEY));
             
             am.registerAction(Constants.ACTION_SEARCH_LEMMA, new LemmaSearchAction());
+            am.registerAction(Constants.ACTION_SEARCH_CONCEPT, new ConceptSearchAction());
 			am.registerAction(Constants.ACTION_APROPOS, new AProposAction());
 			am.registerAction(Constants.ACTION_CHANGE_LANGUAGE, new ChangeLanguageAction());
 
@@ -733,7 +739,36 @@ public class ApplicationManager
 					JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Veuillez charger une ontologie, avant d'effectuer une recherche.");
 				}
 				break;
-			
+				
+			case CONCEPT_SEARCH :
+				if (ontology != null)
+				{
+					// Si la vue lemme est active
+					if(DisplayManager.mainFrame.isActive(Concept.KEY))
+					{
+						if (DisplayManager.mainFrame.isAtBottomPanel(Concept.KEY))
+						{
+							SearchConceptDialog fsc=new SearchConceptDialog(DisplayManager.mainFrame.BOTTOM_PANEL);
+							fsc.show();
+						}
+						else if (DisplayManager.mainFrame.isAtTopPanel(Concept.KEY))
+						{
+							SearchConceptDialog fsc=new SearchConceptDialog(DisplayManager.mainFrame.TOP_PANEL);
+							fsc.show();
+						}
+					}
+					else
+					{
+						//if not active we display a message...
+						JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Veuillez afficher le panneau des concepts.");
+					}
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Veuillez charger une ontologie, avant d'effectuer une recherche.");
+				}
+				break;
+				
 			case SHOW_APROPOS : // Instanciation de la boite de dialog "a propos" de l'application
 					/*AboutDialog aboutDialog = */new AboutDialog();break;
 				

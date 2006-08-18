@@ -43,10 +43,13 @@ import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.ImagesManager;
+import ontologyEditor.gui.dialogs.popup.PopupDocumentPartTree;
+import ontologyEditor.gui.dialogs.popup.PopupTableEdition;
 import ontologyEditor.gui.model.tableModel.BottomEditorTableModel;
 import ontologyEditor.gui.model.tableModel.EditorTableModel;
 import ontologyEditor.gui.model.tableModel.HighEditorTableModel;
 import ontologyEditor.gui.model.treeModel.ConceptualTreeModel;
+import ontologyEditor.gui.panels.conceptual.OntologyNavigationPanel;
 import ontologyEditor.gui.renderer.tableRenderer.LemmaTableRenderer;
 import ontologyEditor.gui.renderer.tableRenderer.LemmeEditionRenderer;
 import ontologyEditor.gui.transfers.ConceptDropTransferHandler;
@@ -109,6 +112,20 @@ public class EditionPanel extends JPanel
 					}
 	        }
 	    });
+		this.parentsEditionTable.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				LinkableElement elementCourant = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				if (e.getButton()==e.BUTTON3)
+				{
+					PopupTableEdition popup=new PopupTableEdition(elementCourant,EditionPanel.this.courant,((Relation) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0)));
+					e.consume();
+					// afficher le menu contextuel
+					popup.show(EditionPanel.this,e.getX(), e.getY());
+				}
+			}
+		});
 		this.editionButton = new JToggleButton(ApplicationManager.getApplicationManager().getTraduction("modify"));
 		this.editionButton.addMouseListener(new MouseAdapter()
 		{
@@ -177,6 +194,20 @@ public class EditionPanel extends JPanel
 					}
 	        }
 	    });
+		this.rightEditionTable.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				LinkableElement elementCourant = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				if (e.getButton()==e.BUTTON3)
+				{
+					PopupTableEdition popup=new PopupTableEdition(elementCourant,EditionPanel.this.courant,((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0)));
+					e.consume();
+					// afficher le menu contextuel
+					popup.show(EditionPanel.this,e.getX(), e.getY());
+				}
+			}
+		});
 		JScrollPane parentsEditionScrollPane = new JScrollPane();
 		parentsEditionScrollPane.setDropTarget(new DropTarget(parentsEditionScrollPane, new DropTargetAdapter()
 		{
@@ -516,6 +547,30 @@ public class EditionPanel extends JPanel
 		
 		if (element.getLinks(Concept.KEY) != null)
 		{
+			if (element instanceof Lemma)
+			{
+				Set<Relation> keys2 = null;
+				ArrayList<LinkableElement> concepts=ApplicationManager.ontology.get(Concept.KEY);
+				for (LinkableElement conc:concepts)
+				{
+					if (conc.getLinks(Lemma.KEY) != null)
+					{
+						keys2 = conc.getLinks(Lemma.KEY).keySet();
+						for (Relation key2 : keys2)
+						{
+							for (LinkableElement elem : conc.getLinks(Lemma.KEY, key2))
+							{
+								if (elem.toString().equals(element.toString()))
+								{
+									Object[] couple = {key2, conc};
+									elements.add(couple);
+								}
+							}
+						}
+					}
+				}
+			}
+			
 			Set<Relation> keys = element.getLinks(Concept.KEY).keySet();
 			if (keys != null)
 			{

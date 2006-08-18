@@ -274,7 +274,7 @@ public class OntologyNavigationPanel extends AbstractNavigationPanel
 		{
 			public void mouseClicked(MouseEvent e)
 			{
-				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 1));
+				LinkableElement element = ((LinkableElement) ((JTable) e.getSource()).getModel().getValueAt(((JTable) e.getSource()).getSelectedRow(), 0));
 				if (e.getClickCount() >= 2)
 				{
 					// remplisssage de navigation panel

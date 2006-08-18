@@ -14,12 +14,14 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
+import javax.swing.tree.TreePath;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.model.tableModel.HighEditorTableModel;
 import ontologyEditor.gui.model.tableModel.IndexingConceptTableModel;
 import ontologyEditor.gui.model.treeModel.ConceptualTreeModel;
+import ontologyEditor.gui.panels.conceptual.OntologyPanel;
 import ontologyEditor.gui.panels.corpus.CorpusNavigationPanel;
 import arkeotek.ontology.Concept;
 import arkeotek.ontology.DocumentPart;
@@ -195,7 +197,6 @@ public class ConceptDropTransferHandler extends TransferHandler
 									ApplicationManager.ontology.addRelation(le,element,relation);
 									// on met a jour l'interface
 									DisplayManager.mainFrame.getEditionPanel().remplirTableHautParent(le);
-									
 									DisplayManager.mainFrame.mAJ(le);
 									DisplayManager.mainFrame.mAJ(element);
 								}

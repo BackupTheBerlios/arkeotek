@@ -441,6 +441,28 @@ public class LinguisticNavigationPanel extends AbstractNavigationPanel
 
 		if (lemme != null)
 		{
+			Set<Relation> keys2 = null;
+			ArrayList<LinkableElement> concepts=ApplicationManager.ontology.get(Concept.KEY);
+			for (LinkableElement conc:concepts)
+			{
+				if (conc.getLinks(Lemma.KEY) != null)
+				{
+					keys2 = conc.getLinks(Lemma.KEY).keySet();
+					for (Relation key2 : keys2)
+					{
+						for (LinkableElement elem : conc.getLinks(Lemma.KEY, key2))
+						{
+							if (elem.toString().equals(lemme.toString()))
+							{
+								Object[] couple = {key2, conc};
+								elements.add(couple);
+							}
+						}
+					}
+				}
+			}
+			
+			
 			Set<Relation> keys = null;
 			if (lemme.getLinks(Concept.KEY) != null)
 			{

@@ -9,13 +9,16 @@ import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import ontologyEditor.ApplicationManager;
+import ontologyEditor.DisplayManager;
 import ontologyEditor.gui.model.tableModel.LemmaTableModel;
+import ontologyEditor.gui.model.treeModel.ConceptualTreeModel;
 import ontologyEditor.gui.panels.AbstractPanel;
 import ontologyEditor.gui.panels.conceptual.OntologyNavigationPanel;
 import ontologyEditor.gui.panels.conceptual.OntologyPanel;
@@ -272,6 +275,7 @@ public class MainFrame extends JFrame
 		{
 			if (bas instanceof OntologyPanel)
 			{
+				((ConceptualTreeModel)((AbstractPanel)bas).getTree().getModel()).remplirArbreConcept();
 				((OntologyNavigationPanel)((OntologyPanel) bas).getNavigationPanel()).remplirLabelPere(courant);
 				((OntologyNavigationPanel)((OntologyPanel) bas).getNavigationPanel()).remplirTableDefini(courant);
 				((OntologyNavigationPanel)((OntologyPanel) bas).getNavigationPanel()).remplirTableFils(courant);
@@ -279,6 +283,7 @@ public class MainFrame extends JFrame
 			}
 			else if (haut instanceof OntologyPanel)
 			{
+				((ConceptualTreeModel)((AbstractPanel)haut).getTree().getModel()).remplirArbreConcept();
 				((OntologyNavigationPanel)((OntologyPanel) haut).getNavigationPanel()).remplirLabelPere(courant);
 				((OntologyNavigationPanel)((OntologyPanel) haut).getNavigationPanel()).remplirTableDefini(courant);
 				((OntologyNavigationPanel)((OntologyPanel) haut).getNavigationPanel()).remplirTableFils(courant);
@@ -318,6 +323,17 @@ public class MainFrame extends JFrame
 			
 			}
 		}
+	}
+	
+	public int recherchePanel(JComponent component)
+	{
+		int panel=DisplayManager.mainFrame.BOTTOM_PANEL;
+		System.out.println(DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getY()+"============"+component.getParent().getParent().getY());
+		if (DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.TOP_PANEL).getY()==component.getParent().getParent().getY())
+		{
+			panel=DisplayManager.mainFrame.TOP_PANEL;
+		}
+		return (panel);
 	}
 	
 }

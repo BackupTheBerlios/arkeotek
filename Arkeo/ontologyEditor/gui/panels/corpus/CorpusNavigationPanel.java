@@ -25,10 +25,12 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.TransferHandler;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import ontologyEditor.ApplicationManager;
 import ontologyEditor.Constants;
@@ -478,21 +480,17 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 		// on regarde les fils du document courant 
 		HashMap<Relation,HashMap<LinkableElement,Link>> docs=doc.getLinks(DocumentPart.KEY);
 		ArrayList<LinkableElement> docFils=new ArrayList<LinkableElement>();
-		for (Relation rel:docs.keySet())
+		JTree arbreDoc=((CorpusPanel)DisplayManager.mainFrame.getPanel(DisplayManager.mainFrame.recherchePanel(this))).getTree();
+		DefaultMutableTreeNode noeudCourant=((DefaultMutableTreeNode)arbreDoc.getLastSelectedPathComponent());
+		for (int i=0;i<noeudCourant.getChildCount();i++)
 		{
-			if (rel.toString().equals("englobe"))
-			{
-				HashMap<LinkableElement,Link>hm=docs.get(rel);
-				for (LinkableElement le:hm.keySet())
-				{
-					docFils.add(le);
-				}
-			}
+			docFils.add((LinkableElement)((DefaultMutableTreeNode)noeudCourant.getChildAt(i)).getUserObject());
 		}
 		
-		// pour chaque fils on cherche les concept indexant
+		// pour chaque fils on cherche les concepts indexants
 		for (LinkableElement le:docFils)
 		{
+			System.out.println("fils de "+doc+" : "+le);
 			HashMap<Relation,HashMap<LinkableElement,Link>> concep=le.getLinks(Concept.KEY);
 			for (Relation rel:concep.keySet())
 			{
@@ -501,6 +499,7 @@ public class CorpusNavigationPanel extends AbstractNavigationPanel
 				{
 					for (LinkableElement con:hm.keySet())
 					{
+						System.out.println(le+"       "+con);
 						Object[] triple = {rel, con};
 						Boolean deja=false;
 						for (int i=0;i<elements.size();i++)

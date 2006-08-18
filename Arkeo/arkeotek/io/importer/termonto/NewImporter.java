@@ -325,7 +325,6 @@ public class NewImporter extends arkeotek.io.importer.AbstractImporter
 			//System.out.println("Le noeud père est : "+ parentNode);
 			while (!this.metTags.contains(parentNode))
 			{
-				//System.out.println("Le noeud "+parentNode+" est nouveau");
 				parentNodes.add(parentNode);
 				parentNode=this.getParentNode(parentNode);
 			}
@@ -398,7 +397,7 @@ public class NewImporter extends arkeotek.io.importer.AbstractImporter
 				{
 					tagId="nouveau";
 				}
-				System.out.println(tagId);
+				//System.out.println(tagId);
 				position = Collections.binarySearch(this.owner.get(Relation.KEY), new Relation(tagId));
 				if (position < 0)
 				{

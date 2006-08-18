@@ -178,9 +178,12 @@ public class MenuBar extends JMenuBar
 
 		JMenuItem miSearchLemma = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_SEARCH_LEMMA));
+		JMenuItem miSearchConcept = new JMenuItem(ActionManager.getActionManager().getAction(
+                Constants.ACTION_SEARCH_CONCEPT));
 		miSearchLemma.setText(ApplicationManager.getApplicationManager().getTraduction("findterm"));
         mSearch.add(miSearchLemma);
-
+        miSearchConcept.setText(/*ApplicationManager.getApplicationManager().getTraduction("findterm")*/"Rechercher un concept");
+        mSearch.add(miSearchConcept);
         this.add(mSearch);
 
 		// "Help" menu creation. 
