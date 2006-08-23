@@ -161,12 +161,13 @@ public class Exporter extends AbstractExporter
 						
 						// On rajoute, à l'interieur de la balise du concept, une balise qui indique que ce concept est fils du concept "nomDuPere".. 
 						Element baliseSubClass = new Element(OwlConstants.subClassOf, OwlConstants.espNomRdfs);
+						baliseSubClass.setAttribute("resource", "#" + nomDuPere, OwlConstants.espNomRdf);
 						baliseConcept.addContent(baliseSubClass);
 						
-						Element baliseConceptPere = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
-						baliseConceptPere.setAttribute("resource", "#" + nomDuPere, OwlConstants.espNomRdf);
+						//Element baliseConceptPere = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
+						//baliseConceptPere.setAttribute("resource", "#" + nomDuPere, OwlConstants.espNomRdf);
 						
-						baliseSubClass.addContent(baliseConceptPere);
+						//baliseSubClass.addContent(baliseConceptPere);
 					}
 				}
 
