@@ -130,7 +130,7 @@ public class Exporter extends AbstractExporter
 					
 					// L'identifiant du concept dans le fichier OWL est en fait l'id du concept dans la base de données
 					Element baliseConcept = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
-					baliseConcept.setAttribute("ID", id.toString(), OwlConstants.espNomRdf);
+					baliseConcept.setAttribute("ID", "I" + id.toString(), OwlConstants.espNomRdf);
 					
 					// Ajout du label contenant le nom du concept tel qu'il est dans arkéotek...
 					Element labelConcept = new Element(OwlConstants.label, OwlConstants.espNomRdfs);
@@ -169,7 +169,7 @@ public class Exporter extends AbstractExporter
 						
 						// On rajoute, à l'interieur de la balise du concept, une balise qui indique que ce concept est fils du concept "nomDuPere".. 
 						Element baliseSubClass = new Element(OwlConstants.subClassOf, OwlConstants.espNomRdfs);
-						baliseSubClass.setAttribute("resource", "#" + idPere, OwlConstants.espNomRdf);
+						baliseSubClass.setAttribute("resource", "#I" + idPere.toString(), OwlConstants.espNomRdf);
 						baliseConcept.addContent(baliseSubClass);
 						
 						//Element baliseConceptPere = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
