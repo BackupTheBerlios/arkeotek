@@ -164,7 +164,7 @@ public class Exporter extends AbstractExporter
 						baliseConcept.addContent(baliseSubClass);
 						
 						Element baliseConceptPere = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
-						baliseConceptPere.setAttribute("resource", nomDuPere, OwlConstants.espNomRdf);
+						baliseConceptPere.setAttribute("resource", "#" + nomDuPere, OwlConstants.espNomRdf);
 						
 						baliseSubClass.addContent(baliseConceptPere);
 					}
