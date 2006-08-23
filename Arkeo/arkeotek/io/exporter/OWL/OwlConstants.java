@@ -29,6 +29,8 @@ public interface OwlConstants
     public static String allValuesFrom = "allValuesFrom";
     public static String someValuesFrom = "someValuesFrom";
     public static String classe = "Class";
+    public static String label = "label";
+    public static String lang = "lang";
     public static String subPropertyOf = "subPropertyOf";
     public static String objectProperty = "ObjectProperty";
     public static String domain = "domain";

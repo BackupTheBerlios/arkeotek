@@ -128,8 +128,15 @@ public class Exporter extends AbstractExporter
 					Integer id = rs.getInt("id");
 					String name = rs.getString("name");
 					
+					// L'identifiant du concept dans le fichier OWL est en fait l'id du concept dans la base de données
 					Element baliseConcept = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
-					baliseConcept.setAttribute("ID", name, OwlConstants.espNomRdf);
+					baliseConcept.setAttribute("ID", id.toString(), OwlConstants.espNomRdf);
+					
+					// Ajout du label contenant le nom du concept tel qu'il est dans arkéotek...
+					Element labelConcept = new Element(OwlConstants.label, OwlConstants.espNomRdfs);
+					labelConcept.setAttribute(OwlConstants.lang, "fr", OwlConstants.espNomXMLSchema);
+					labelConcept.addContent(name);
+					baliseConcept.addContent(labelConcept);
 					
 					baliseOntologie.addContent(baliseConcept);
 					
