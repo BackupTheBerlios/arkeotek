@@ -159,16 +159,17 @@ public class Exporter extends AbstractExporter
 					if(conceptPereTrouve && idPere!=null)
 					{
 						// On cherche le nom du pere avec une requete (statement) sans oublier de fermer le curseur
-						Statement stat3 = trans.getConnexion().createStatement();
-						String requete3 = "SELECT name FROM t_concept WHERE id = " + idPere.toString();
-						ResultSet rs3 = stat3.executeQuery(requete3);
-						rs3.first();
-						String nomDuPere = rs3.getString("name");
-						rs3.close();
+						//Statement stat3 = trans.getConnexion().createStatement();
+						//String requete3 = "SELECT name FROM t_concept WHERE id = " + idPere.toString();
+						//ResultSet rs3 = stat3.executeQuery(requete3);
+						//rs3.first();
+						//String nomDuPere = rs3.getString("name");
+						//rs3.close();
+						// On a plus besoin du nom du pere pasque l'id owl est l'id de la base maintenant
 						
 						// On rajoute, à l'interieur de la balise du concept, une balise qui indique que ce concept est fils du concept "nomDuPere".. 
 						Element baliseSubClass = new Element(OwlConstants.subClassOf, OwlConstants.espNomRdfs);
-						baliseSubClass.setAttribute("resource", "#" + nomDuPere, OwlConstants.espNomRdf);
+						baliseSubClass.setAttribute("resource", "#" + idPere, OwlConstants.espNomRdf);
 						baliseConcept.addContent(baliseSubClass);
 						
 						//Element baliseConceptPere = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
