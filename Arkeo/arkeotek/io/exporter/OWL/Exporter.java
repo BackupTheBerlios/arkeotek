@@ -134,7 +134,7 @@ public class Exporter extends AbstractExporter
 					
 					// Ajout du label contenant le nom du concept tel qu'il est dans arkéotek...
 					Element labelConcept = new Element(OwlConstants.label, OwlConstants.espNomRdfs);
-					labelConcept.setAttribute(OwlConstants.lang, "fr", OwlConstants.espNomXMLSchema);
+					labelConcept.setAttribute(OwlConstants.lang, "fr", OwlConstants.espNomXml);
 					labelConcept.addContent(name);
 					baliseConcept.addContent(labelConcept);
 					

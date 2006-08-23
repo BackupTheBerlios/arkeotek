@@ -49,5 +49,6 @@ public interface OwlConstants
     public static Namespace espNomRdfs = Namespace.getNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
     public static Namespace espNomArkeotek = Namespace.getNamespace("arkeotek","http://www.irit.fr");
     public static Namespace espNomXMLSchema = Namespace.getNamespace("xsd","http://www.w3.org/2000/10/XMLSchema#");
+    public static Namespace espNomXml = Namespace.getNamespace("xml","http://www.w3.org/2000/10/XML#");
     public static String owl = "owl";
 }
