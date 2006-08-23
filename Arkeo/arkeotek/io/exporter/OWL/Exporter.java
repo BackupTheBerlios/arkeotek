@@ -138,7 +138,7 @@ public class Exporter extends AbstractExporter
 					labelConcept.addContent(name);
 					baliseConcept.addContent(labelConcept);
 					
-					baliseOntologie.addContent(baliseConcept);
+					kbOwl.addContent(baliseConcept);
 					
 					Integer idPere = null;
 					boolean conceptPereTrouve = false;
