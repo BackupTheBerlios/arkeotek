@@ -26,6 +26,7 @@ import ontologyEditor.actions.AProposAction;
 import ontologyEditor.actions.BottomPanelChangeAction;
 import ontologyEditor.actions.BreedAction;
 import ontologyEditor.actions.ChangeLanguageAction;
+import ontologyEditor.actions.ExportOWLAction;
 import ontologyEditor.actions.GenericIndexationAction;
 import ontologyEditor.actions.ImportTermontoAction;
 import ontologyEditor.actions.LemmaSearchAction;
@@ -55,6 +56,7 @@ import ontologyEditor.gui.model.tableModel.LemmaTableModel;
 import ontologyEditor.gui.panels.linguistic.LinguisticPanel;
 import arkeotek.indexing.generic.GenericIndexer;
 import arkeotek.indexing.scd.SCDIndexer;
+import arkeotek.io.exporter.OWL.Exporter;
 import arkeotek.io.importer.AbstractParser;
 import arkeotek.io.importer.termonto.Importer;
 import arkeotek.io.importer.termonto.NewImporter;
@@ -92,7 +94,8 @@ public class ApplicationManager
     /**
      * Requests wich may be resolved by ApplicationManager
      */
-    public enum Request {
+    public enum Request
+    {
         /**
          * Launchs application
          */
@@ -185,10 +188,17 @@ public class ApplicationManager
          * Performs Changing Language of the application
          */
         CHANGE_LANGUAGE,
+
+        /**
+         * Performs Edition Relations
+         */
+        EXPORT_OWL,
+        
         /**
          * Performs Edition Relations
          */
         EDITION_RELATIONS, 
+
         /**
          * Recherche un concept
          */
@@ -240,7 +250,7 @@ public class ApplicationManager
             am.registerAction(Constants.ACTION_SEARCH_CONCEPT, new ConceptSearchAction());
 			am.registerAction(Constants.ACTION_APROPOS, new AProposAction());
 			am.registerAction(Constants.ACTION_CHANGE_LANGUAGE, new ChangeLanguageAction());
-
+			am.registerAction(Constants.ACTION_EXPORTOWL, new ExportOWLAction());
 			
 			// Retrieview of ontology (we must create the ontology before the mainframe)
 			// ApplicationManager.ontology = new Ontology("Pipontologie");
@@ -787,6 +797,7 @@ public class ApplicationManager
 					new RelationEditionDialog();
 				}
 				break;
+			case EXPORT_OWL : Exporter exp = new Exporter(); exp.ecrFichierOWL(); break;
 			case QUIT_APPLICATION : System.exit(0);
 			case RUN_APPLICATION : 
 				// No special action is to be done during launching. 

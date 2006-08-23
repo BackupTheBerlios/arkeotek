@@ -55,6 +55,11 @@ public class MenuBar extends JMenuBar
                 Constants.ACTION_SAVE));
 		miSave.setText(ApplicationManager.getApplicationManager().getTraduction("saveontology"));
         mFile.add(miSave);
+        
+        JMenuItem miExportOWL = new JMenuItem(ActionManager.getActionManager().getAction(
+                Constants.ACTION_EXPORTOWL));
+		miExportOWL.setText(ApplicationManager.getApplicationManager().getTraduction("exportowlontology"));
+        mFile.add(miExportOWL);
 
 		mFile.addSeparator();
 		

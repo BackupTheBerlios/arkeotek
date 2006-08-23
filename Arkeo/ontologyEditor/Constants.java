@@ -54,6 +54,11 @@ public interface Constants
 	public static final String ACTION_SAVE = "save";
 	
 	/**
+	 * Flag used in the actions map of <code>ActionManager</code> for the <code>EportOWLAction</code> action. 
+	 */
+	public static final String ACTION_EXPORTOWL = "exportowl";
+	
+	/**
 	 * Flag used in the actions map of <code>ActionManager</code> for the <code>OpenAction</code> action. 
 	 */
 	public static final String ACTION_OPEN = "open";
