@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -130,23 +131,31 @@ public class AddChidlConceptDialog extends JDialog implements ActionListener {
 				ApplicationManager.ontology.get(Concept.KEY).add(fils);
 				// création d'une nouvelle relation DEFAULT_CONCEPTS_RELATION entre le pere et le fils
 				ArrayList<LinkableElement> relations = ApplicationManager.ontology.get(Relation.KEY);
-				Relation rel=new Relation(Relation.DEFAULT_CONCEPTS_RELATION);
-				// on recherche l'identifiant de cette relation
-				for (int i=0;i<relations.size();i++)
+				if (relations.size()!=0)
 				{
-					if (rel.getName().equals(((Relation)relations.get(i)).getName()))
+					Relation rel=new Relation(Relation.DEFAULT_CONCEPTS_RELATION);
+					// on recherche l'identifiant de cette relation
+					for (int i=0;i<relations.size();i++)
 					{
-						rel.setId(((Relation)relations.get(i)).getId());
+						if (rel.getName().toString().equals(((Relation)relations.get(i)).getName().toString()))
+						{
+							rel=(Relation)relations.get(i);
+							// on ajoute la relation
+							ApplicationManager.ontology.addRelation(conceptSource,fils,rel);
+							// on ajoute le concept à l'arbre
+							DefaultMutableTreeNode courant=(DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(panel).getTree().getLastSelectedPathComponent();
+							courant.add(new DefaultMutableTreeNode(fils));
+							// MAJ de l'interface
+							DisplayManager.mainFrame.getPanel(panel).getTree().expandPath(DisplayManager.mainFrame.getPanel(panel).getTree().getSelectionPath());
+							DisplayManager.mainFrame.getPanel(panel).getTree().updateUI();
+						}
 					}
+					
 				}
-				// on ajoute la relation
-				ApplicationManager.ontology.addRelation(conceptSource,fils,rel);
-				// on ajoute le concept à l'arbre
-				DefaultMutableTreeNode courant=(DefaultMutableTreeNode)DisplayManager.mainFrame.getPanel(panel).getTree().getLastSelectedPathComponent();
-				courant.add(new DefaultMutableTreeNode(fils));
-				// MAJ de l'interface
-				DisplayManager.mainFrame.getPanel(panel).getTree().expandPath(DisplayManager.mainFrame.getPanel(panel).getTree().getSelectionPath());
-				DisplayManager.mainFrame.getPanel(panel).getTree().updateUI();
+				else
+				{
+					JOptionPane.showMessageDialog(DisplayManager.mainFrame,"Aucune relation existe. Créer au moins une relation de Concept à Concept");
+				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
