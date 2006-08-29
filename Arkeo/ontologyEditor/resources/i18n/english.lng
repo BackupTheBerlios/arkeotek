@@ -196,3 +196,7 @@ is=is
 by=by
 retour=Back
 suivant=Next
+savebeforeexporttitle=Do you want to save ?
+savebeforeexport=Current ontologie need to be saved before OWL export, do you want to save it now ?
+refxmltitle=Reference frame of the OWL document
+refxml=You can change the reference frame of the OWL document

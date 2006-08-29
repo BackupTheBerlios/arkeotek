@@ -198,4 +198,7 @@ is=est
 by=par
 retour=Retour
 suivant=Suivant
-
+savebeforeexporttitle=Souhaitez vous sauvegarder ?
+savebeforeexport=L'ontologie doit etre sauvegard\u00e9e avant de pouvoir effectuer un export OWL, souhaitez sauvegarder l'ontologie ?
+refxmltitle=R\u00e9f\u00e9rentiel du document OWL
+refxml=Vous pouvez changer manuellement le r\u00e9f\u00e9rentiel du document OWL

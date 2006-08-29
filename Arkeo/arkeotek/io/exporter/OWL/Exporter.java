@@ -5,12 +5,14 @@ import java.io.FileWriter;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import ontologyEditor.ApplicationManager;
+import ontologyEditor.DisplayManager;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -55,149 +57,212 @@ public class Exporter extends AbstractExporter
 		ExtensionFileFilter filter = new ExtensionFileFilter();
 		filter.addExtension("owl");
 		fj.setFileFilter(filter);
+		boolean onpeutexporter = true;
 
-		boolean bool = false;
-		do
+		// On verifie d'abord que l'ontologie en cours d'edition est bien sauvegardée
+		// Car l'exportation s'effectue à partir de ce qu'il y a dans la base de données
+		if(ApplicationManager.ontology == null)
 		{
-			fj.showSaveDialog(null);
-			file = fj.getSelectedFile();
-			if (file == null)
+			JOptionPane.showMessageDialog(DisplayManager.mainFrame,ApplicationManager.getApplicationManager().getTraduction("pleaseopenontology"),"",JOptionPane.OK_OPTION);
+		}
+		else if(ApplicationManager.ontology.isDirty() != null)
+		{
+			onpeutexporter=false;
+			int res = JOptionPane.showConfirmDialog(DisplayManager.mainFrame, ApplicationManager.getApplicationManager().getTraduction("savebeforeexport"), ApplicationManager.getApplicationManager().getTraduction("savebeforeexporttitle"), JOptionPane.YES_NO_OPTION);
+			if(res==0)
 			{
-				return;
-			}
-			String nomFile = file.getName();
-			if (!(nomFile.endsWith(".owl")))
-			{
-				nomFile = new String(nomFile + ".owl");
-				file = new File(file.getParent(), nomFile);
-			}
-			if (file.exists())
-			{
-				int rep = JOptionPane.showConfirmDialog(null,VarGlobales.resTerm.getString("Ce_fichier_existe_d_j"));
-				bool = rep == JOptionPane.YES_OPTION;
+				// On sauvegarde
+				try {
+					ApplicationManager.ontology.save();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// on peut alors exporter
+				onpeutexporter = true;
 			}
 			else
 			{
-				bool = true;
+				// rien a faire
 			}
-		} while(!bool);
+		}
 		
-		
-
-		FileWriter writer;
-		try
+		if(onpeutexporter)
 		{
-			writer = new FileWriter(file);
-			System.out.println(writer.getEncoding());
-			
-			org.jdom.Element kbOwl = new Element("RDF", OwlConstants.espNomRdf);
-			kbOwl.addNamespaceDeclaration(OwlConstants.espNomOwl);
-			kbOwl.addNamespaceDeclaration(OwlConstants.espNomRdfs);
-			kbOwl.addNamespaceDeclaration(OwlConstants.espNomXMLSchema);
-			kbOwl.addNamespaceDeclaration(OwlConstants.espNomArkeotek);
-
-			
-			// Création d'un Document XML de JDOM qui contiendra l'élément racine nommé "RDF"
-			Document myDocument = new Document(kbOwl);
-			
-			// On vérifie qu'une ontologie est chargée
-			if(ApplicationManager.ontology!=null)
+			System.out.println("beeeeed");
+			boolean bool = false;
+			do
 			{
-				// On construit l'élément "Ontology" que l'on rajoute dans la racine du fichier XML (élément RDF)
-				Element baliseOntologie = new Element("Ontology", OwlConstants.espNomOwl);
-				baliseOntologie.setAttribute("about", ApplicationManager.ontology.getName(), OwlConstants.espNomRdf);
-				kbOwl.addContent(baliseOntologie);
-			
-				// Les concepts de l'ontologie
-				// On doit parcourir la base de données
-				// Pour chaque concept il faut donner son concept pere si celui ci en a un !
-				// Tous les concept qui n'ont pas de pere seront traités comme orphelins .. en fait on fait rien de spécial pour l'instant ..
-				
-				Transaction trans = new Transaction(ApplicationManager.ontology.getDataAccessor());
-				Statement stat = trans.getConnexion().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-				
-				String requete = "SELECT id, name FROM t_concept";
-				ResultSet rs = stat.executeQuery(requete);
-				
-				Statement stat2 = trans.getConnexion().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-				String requete2 = "SELECT idSource, idTarget FROM l_concept2concept";
-				ResultSet rs2 = stat2.executeQuery(requete2);
-				// Pour chaque concept on regarde si il est sous concept d'un autre concept...
-				while(rs.next())
+				fj.showSaveDialog(null);
+				file = fj.getSelectedFile();
+				if (file == null)
 				{
-					Integer id = rs.getInt("id");
-					String name = rs.getString("name");
+					return;
+				}
+				String nomFile = file.getName();
+				if (!(nomFile.endsWith(".owl")))
+				{
+					nomFile = new String(nomFile + ".owl");
+					file = new File(file.getParent(), nomFile);
+				}
+				if (file.exists())
+				{
+					int rep = JOptionPane.showConfirmDialog(null,VarGlobales.resTerm.getString("Ce_fichier_existe_d_j"));
+					bool = rep == JOptionPane.YES_OPTION;
+				}
+				else
+				{
+					bool = true;
+				}
+			} while(!bool);
+			
+			System.out.println("beeeeed");
+
+			FileWriter writer;
+			try
+			{
+				writer = new FileWriter(file);
+				System.out.println(writer.getEncoding());
+				
+				org.jdom.Element kbOwl = new Element("RDF", OwlConstants.espNomRdf);
+				kbOwl.addNamespaceDeclaration(OwlConstants.espNomOwl);
+				kbOwl.addNamespaceDeclaration(OwlConstants.espNomRdfs);
+				kbOwl.addNamespaceDeclaration(OwlConstants.espNomXMLSchema);
+				kbOwl.addNamespaceDeclaration(OwlConstants.espNomArkeotek);
+
+				
+				// Création d'un Document XML de JDOM qui contiendra l'élément racine nommé "RDF"
+				Document myDocument = new Document(kbOwl);
+				
+				// On vérifie qu'une ontologie est chargée
+				if(ApplicationManager.ontology!=null)
+				{
+					// On construit l'élément "Ontology" que l'on rajoute dans la racine du fichier XML (élément RDF)
+					Element baliseOntologie = new Element("Ontology", OwlConstants.espNomOwl);
+					baliseOntologie.setAttribute("about", ApplicationManager.ontology.getName(), OwlConstants.espNomRdf);
+					kbOwl.addContent(baliseOntologie);
+				
+					// Les concepts de l'ontologie
+					// On doit parcourir la base de données
+					// Pour chaque concept il faut donner son concept pere si celui ci en a un !
+					// Tous les concept qui n'ont pas de pere seront traités comme orphelins .. en fait on fait rien de spécial pour l'instant ..
 					
-					// L'identifiant du concept dans le fichier OWL est en fait l'id du concept dans la base de données
-					Element baliseConcept = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
-					baliseConcept.setAttribute("ID", "I" + id.toString(), OwlConstants.espNomRdf);
 					
-					// Ajout du label contenant le nom du concept tel qu'il est dans arkéotek...
-					Element labelConcept = new Element(OwlConstants.label, OwlConstants.espNomRdfs);
-					labelConcept.setAttribute(OwlConstants.lang, "fr");
-					labelConcept.addContent(name);
-					baliseConcept.addContent(labelConcept);
+					// On établit la connexion a la base
+					Transaction trans = new Transaction(ApplicationManager.ontology.getDataAccessor());
+					Statement stat = trans.getConnexion().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 					
-					kbOwl.addContent(baliseConcept);
+					// On cré un état pour récuperer la liste des concepts
+					String requete = "SELECT id, name FROM t_concept";
+					ResultSet rs = stat.executeQuery(requete);
 					
-					Integer idPere = null;
-					boolean conceptPereTrouve = false;
-					rs2.beforeFirst(); // On se replace au début du curseur pour reparcourir celui-ci
-					while(rs2.next() && !conceptPereTrouve)
+					// On cré un état pour récuperer la table des liens entre concepts
+					Statement stat2 = trans.getConnexion().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+					String requete2 = "SELECT idSource, idTarget FROM l_concept2concept";
+					ResultSet rs2 = stat2.executeQuery(requete2);
+					
+
+					// Pour chaque concept on regarde si il est sous concept d'un autre concept...
+					while(rs.next())
 					{
-						Integer idSource = rs2.getInt("idSource");
-						Integer idTarget = rs2.getInt("idTarget");
-												
-						if(id == idTarget)
+						Integer id = rs.getInt("id");
+						String name = rs.getString("name");
+						
+						// L'identifiant du concept dans le fichier OWL est en fait l'id du concept dans la base de données
+						Element baliseConcept = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
+						baliseConcept.setAttribute("ID", "I" + id.toString(), OwlConstants.espNomRdf);
+						
+						// Ajout du label contenant le nom du concept tel qu'il est dans arkéotek...
+						Element labelConcept = new Element(OwlConstants.label, OwlConstants.espNomRdfs);
+						labelConcept.setAttribute(OwlConstants.lang, "fr");
+						labelConcept.addContent(name);
+						baliseConcept.addContent(labelConcept);
+						
+						kbOwl.addContent(baliseConcept);
+						
+						Integer idPere = null;
+						boolean conceptPereTrouve = false;
+						rs2.beforeFirst(); // On se replace au début du curseur pour reparcourir celui-ci
+						while(rs2.next() && !conceptPereTrouve)
 						{
-							conceptPereTrouve = true; // pour sortir de la boucle
-							idPere = idSource;		  // pour savoir l'id du pere
+							Integer idSource = rs2.getInt("idSource");
+							Integer idTarget = rs2.getInt("idTarget");
+													
+							if(id == idTarget)
+							{
+								conceptPereTrouve = true; // pour sortir de la boucle
+								idPere = idSource;		  // pour savoir l'id du pere
+							}
 						}
+
+						// On test si un pere 
+						if(conceptPereTrouve && idPere!=null)
+						{
+							// On cherche le nom du pere avec une requete (statement) sans oublier de fermer le curseur
+							//Statement stat3 = trans.getConnexion().createStatement();
+							//String requete3 = "SELECT name FROM t_concept WHERE id = " + idPere.toString();
+							//ResultSet rs3 = stat3.executeQuery(requete3);
+							//rs3.first();
+							//String nomDuPere = rs3.getString("name");
+							//rs3.close();
+							// On a plus besoin du nom du pere pasque l'id owl est l'id de la base maintenant
+							
+							// On rajoute, à l'interieur de la balise du concept, une balise qui indique que ce concept est fils du concept "nomDuPere".. 
+							Element baliseSubClass = new Element(OwlConstants.subClassOf, OwlConstants.espNomRdfs);
+							baliseSubClass.setAttribute("resource", "#I" + idPere.toString(), OwlConstants.espNomRdf);
+							baliseConcept.addContent(baliseSubClass);
+							
+							//Element baliseConceptPere = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
+							//baliseConceptPere.setAttribute("resource", "#" + nomDuPere, OwlConstants.espNomRdf);
+							
+							//baliseSubClass.addContent(baliseConceptPere);
+						}
+						
+						// On s'occupe de générer les labels des termes en relation avec le concept
+						Statement stat3 = trans.getConnexion().createStatement();
+						String req = "SELECT t.value FROM l_term2concept c, t_term t WHERE c.idTarget=" + id + " AND c.idSource=t.id";
+						System.out.println(req);
+						ResultSet rs3 = stat3.executeQuery(req);
+						while(rs3.next())
+						{
+							String nomduterme = rs3.getString(1);
+							System.out.println(nomduterme);
+							Element labelTerme = new Element(OwlConstants.label, OwlConstants.espNomRdfs);
+							labelTerme.setAttribute(OwlConstants.lang, "fr");
+							labelTerme.addContent(nomduterme);
+							baliseConcept.addContent(labelTerme);
+						}
+						rs3.close();
+						stat3.close();
 					}
 
-					// On test si un pere 
-					if(conceptPereTrouve && idPere!=null)
-					{
-						// On cherche le nom du pere avec une requete (statement) sans oublier de fermer le curseur
-						//Statement stat3 = trans.getConnexion().createStatement();
-						//String requete3 = "SELECT name FROM t_concept WHERE id = " + idPere.toString();
-						//ResultSet rs3 = stat3.executeQuery(requete3);
-						//rs3.first();
-						//String nomDuPere = rs3.getString("name");
-						//rs3.close();
-						// On a plus besoin du nom du pere pasque l'id owl est l'id de la base maintenant
-						
-						// On rajoute, à l'interieur de la balise du concept, une balise qui indique que ce concept est fils du concept "nomDuPere".. 
-						Element baliseSubClass = new Element(OwlConstants.subClassOf, OwlConstants.espNomRdfs);
-						baliseSubClass.setAttribute("resource", "#I" + idPere.toString(), OwlConstants.espNomRdf);
-						baliseConcept.addContent(baliseSubClass);
-						
-						//Element baliseConceptPere = new Element(OwlConstants.classe, OwlConstants.espNomOwl);
-						//baliseConceptPere.setAttribute("resource", "#" + nomDuPere, OwlConstants.espNomRdf);
-						
-						//baliseSubClass.addContent(baliseConceptPere);
-					}
+					// On peut fermer rs et rs2
+					rs.close();
+					rs2.close();
+					
+					// On fermes les états
+					stat2.close();
+					stat.close();
+					
+					// On ferme la connexion et on commit la transaction !
+					trans.commit();
+					trans.getConnexion().close();
 				}
 
-				// On peut fermer rs et rs2
-				rs.close();
-				rs2.close();
+				// On écrit notre document XML dans le fichier
+				XMLOutputter outputter = new XMLOutputter();
+				outputter.output(myDocument, writer);
 				
-				// On ferme la connexion et on commit la transaction !
-				trans.getConnexion().close();
-				trans.commit();
+				// On ferme l'accès au fichier !
+				writer.close();
+				
+				// On avertit l'ulisateur que le referentiel par défaut peut etre changé afin d'identifier les objets
+				JOptionPane.showMessageDialog(DisplayManager.mainFrame,ApplicationManager.getApplicationManager().getTraduction("refxmltitle"),ApplicationManager.getApplicationManager().getTraduction("refxml"),JOptionPane.OK_OPTION);
 			}
-
-			// On écrit notre document XML dans le fichier
-			XMLOutputter outputter = new XMLOutputter();
-			outputter.output(myDocument, writer);
-			
-			// On ferme l'accès au fichier !
-			writer.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.toString());
+			catch(Exception e)
+			{
+				System.out.println(e.toString());
+			}
 		}
 	}
 			
