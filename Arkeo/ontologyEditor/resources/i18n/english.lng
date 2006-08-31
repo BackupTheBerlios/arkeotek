@@ -8,6 +8,7 @@ newontology=New ontology
 openontology=Open
 importtermontoontology=Import a Termonto ontology
 saveontology=Save
+saveontologyowl=OWL Exporter
 quit=Quit
 
 # Edition Menu
@@ -36,7 +37,8 @@ spanish=Spanish
 
 # Search Menu
 search=Search
-findterm=Find a term...
+findterm=Find term
+findconcept= Find concept
 
 # Help Menu
 aboutarkeotek=About Ark\u00e9otek

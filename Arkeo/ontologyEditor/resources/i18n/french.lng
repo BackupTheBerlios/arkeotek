@@ -8,6 +8,7 @@ newontology=Nouvelle ontologie
 openontology=Ouvrir
 importtermontoontology=Importer une ontologie Termonto
 saveontology=Enregistrer
+saveontologyowl=Exporter En OWL
 quit=Quitter
 
 # Edition Menu
@@ -37,6 +38,7 @@ spanish=Espagnol
 # Search Menu
 search=Rechercher
 findterm=Rechercher des termes
+findconcept= Rechercher un concept
 
 # Help Menu
 aboutarkeotek=A propos d\u0027Arkeotek

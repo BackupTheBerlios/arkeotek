@@ -58,7 +58,7 @@ public class MenuBar extends JMenuBar
         
         JMenuItem miExportOWL = new JMenuItem(ActionManager.getActionManager().getAction(
                 Constants.ACTION_EXPORTOWL));
-		miExportOWL.setText(ApplicationManager.getApplicationManager().getTraduction("exportowlontology"));
+		miExportOWL.setText(ApplicationManager.getApplicationManager().getTraduction("saveontologyowl"));
         mFile.add(miExportOWL);
 
 		mFile.addSeparator();
@@ -187,7 +187,7 @@ public class MenuBar extends JMenuBar
                 Constants.ACTION_SEARCH_CONCEPT));
 		miSearchLemma.setText(ApplicationManager.getApplicationManager().getTraduction("findterm"));
         mSearch.add(miSearchLemma);
-        miSearchConcept.setText(/*ApplicationManager.getApplicationManager().getTraduction("findterm")*/"Rechercher un concept");
+        miSearchConcept.setText(ApplicationManager.getApplicationManager().getTraduction("findconcept"));
         mSearch.add(miSearchConcept);
         this.add(mSearch);
 
