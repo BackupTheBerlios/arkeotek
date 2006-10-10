@@ -107,7 +107,7 @@ public class Exporter extends AbstractExporter
 				}
 				if (file.exists())
 				{
-					int rep = JOptionPane.showConfirmDialog(null,VarGlobales.resTerm.getString("Ce_fichier_existe_d_j"));
+					int rep = JOptionPane.showConfirmDialog(null,ApplicationManager.getApplicationManager().getTraduction("alreadyexist"));
 					bool = rep == JOptionPane.YES_OPTION;
 				}
 				else
@@ -116,7 +116,6 @@ public class Exporter extends AbstractExporter
 				}
 			} while(!bool);
 			
-			System.out.println("beeeeed");
 
 			FileWriter writer;
 			try

@@ -202,3 +202,4 @@ savebeforeexporttitle=Do you want to save ?
 savebeforeexport=Current ontologie need to be saved before OWL export, do you want to save it now ?
 refxmltitle=Reference frame of the OWL document
 refxml=You can change the reference frame of the OWL document
+alreadyexist=This file already exist, please choose an other destination file
